@@ -1,2 +1,2 @@
 # TekkPort
-Parallel port access for 64-bit systems via Python
+Tekkport is a python package for working with parallel ports in a 64-bit system environment
