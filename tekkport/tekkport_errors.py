@@ -47,5 +47,3 @@ class BitIndexError(TekkPortMultiError):
         
     def getIndexAttempted(self):
         return self.index_attempted
-        
-class In
