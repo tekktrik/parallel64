@@ -1,6 +1,8 @@
 import ctypes
 import json
+from enum import Enum
 from parallel64 import SimplePort
+from parallel64 import port_errors
 
 class ExtendedPort(SimplePort):
 
@@ -21,20 +23,29 @@ class ExtendedPort(SimplePort):
         @classmethod
         def int_to_binstr(cls, int_data):
             return '{:08b}'.format(int_data)
-
-    def __init__(self, spp_base_address, ecp_base_address, windll_location):
-    
-        self._spp_data_address = int(spp_base_address, 16)
-        self._status_address = int(spp_base_address, 16) + 1
-        self._control_address = int(spp_base_address, 16) + 2
-        self._epp_address_address = int(spp_base_address, 16) + 3
-        self._epp_data_address = int(spp_base_address, 16) + 4
-        self._ecr_address = int(ecp_base_address, 16) + 2
-        self._parallel_port = ctypes.WinDLL(windll_location)
+            
+    class CommunicationMode(Enum):
         
-        set_epp_mode = (1 << 7)
-        self._parallel_port.DlPortWritePortUchar(self._ecr_address, set_epp_mode)
-        self._parallel_port.DlPortWritePortUchar(self._ecr_address)
+        SPP = 0
+        EPP = 1
+            
+    def __init__(self, spp_base_address, ecp_base_address, windll_location, start_mode=None):
+        super.__init__(spp_base_address, windll_location)
+        self._ecr_address = int(ecp_base_address, 16) + 2
+        
+    def setCommunicationMode(self, comm_mode):
+        if comm_mode is self.CommunicationMode.SPP:
+            self.setSPPCommunicationMode()
+        elif comm_mode os self.CommunicationMode.EPP
+            self.setEPPCommunicationMode()
+        else:
+            raise port_errors.InvalidCommunicationMode("Received invalid communication mode, mode not changed", comm_mode)
+        
+    def setSPPCommunicationMode(self):
+        self._parallel_port.DlPortWritePortUchar(self._ecr_address, 0)
+        
+    def setEPPCommunicationMode(self):
+        self._parallel_port.DlPortWritePortUchar(self._ecr_address, (1 << 7))
         
     @classmethod
     def fromJSON(cls, json_filepath):

@@ -1,20 +1,11 @@
 from enum import Enum
 
-class TekkPortError:
-    '''Base class for TekkPort errors
+class ParallelPortError(Exception):
+    '''Base class for parallel64 errors
     '''
     
-    def __init__(self, message):
-        self.message = message
-        
-    def getMessage(self):
-        return self.message
-        
-    def setMessage(self, message)
-        self.message = message
-    
-class TekkPortMutliError(TekkPortError):
-    '''Base class for TekkPort errors that can hold multiple errors
+class ParallelPortMutliError(ParallelPortError):
+    '''Base class for parallel64 errors that can hold multiple errors
     '''
     
     def __init__(self, message):
@@ -33,7 +24,7 @@ class TekkPortMutliError(TekkPortError):
     def hasAnyErrors(self):
         return not (self.error_sum == 0)
     
-class BitIndexError(TekkPortMultiError):
+class BitIndexError(ParallelPortMultiError):
     '''Exception raised when bit not available in byte, usually for reading/writing bits in the data line
     '''
     
@@ -47,3 +38,14 @@ class BitIndexError(TekkPortMultiError):
         
     def getIndexAttempted(self):
         return self.index_attempted
+        
+class InvalidCommunicationMode(ParallelPortError):
+    '''Exception when an invalid communication protocol is requested
+    '''
+    
+    def __init__(self, message, requested_comm_mode):
+        super().__init__(message)
+        self.comm_mode = comm_mode
+        
+    def getRequestedCommunicationMode(self):
+        return self.comm_mode
