@@ -1,7 +1,8 @@
 import ctypes
 import json
+from parallel64 import SimplePort
 
-class ExtendedPort:
+class ExtendedPort(SimplePort):
 
     class DataConverter:
         
@@ -56,20 +57,3 @@ class ExtendedPort:
     def readEPPData(self):
         self._parallel_port.DlPortWritePortUchar(self._control_address, 0b00100100)
         return self._parallel_port.DlPortReadPortUchar(self._epp_data_address)
-    
-    def writeControlRegister(self, control_byte):
-        self._parallel_port.DlPortWritePortUchar(self._control_address, control_byte)
-        
-    def readControlRegister(self):
-        return self._parallel_port.DlPortReadPortUchar(self._control_address)
-        
-    def readStatusRegister(self):
-        return self._parallel_port.DlPortReadPortUchar(self._status_address)
-        
-    def writeSPPData(self, data):
-        self._parallel_port.DlPortWritePortUchar(self._control_address, 0b00000100)
-        self._parallel_port.DlPortWritePortUchar(self._spp_data_address, data)
-        
-    def readSPPData(self):
-        self._parallel_port.DlPortWritePortUchar(self._control_address, 0b00100100)
-        return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)

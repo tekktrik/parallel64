@@ -1,7 +1,23 @@
-from parallel_port import ParallelPort
-from tekkport import tekkport_errors
+from parallel_port import port_errors
 
-class SimplePort(ParallelPort):
+class SimplePort:
+
+    def writeControlRegister(self, control_byte):
+        self._parallel_port.DlPortWritePortUchar(self._control_address, control_byte)
+        
+    def readControlRegister(self):
+        return self._parallel_port.DlPortReadPortUchar(self._control_address)
+        
+    def readStatusRegister(self):
+        return self._parallel_port.DlPortReadPortUchar(self._status_address)
+        
+    def writeSPPData(self, data):
+        self._parallel_port.DlPortWritePortUchar(self._control_address, 0b00000100)
+        self._parallel_port.DlPortWritePortUchar(self._spp_data_address, data)
+        
+    def readSPPData(self):
+        self._parallel_port.DlPortWritePortUchar(self._control_address, 0b00100100)
+        return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
 
     def readDataBitIndex(self, bit_index):
         if (bit_index >= 0) and (bit_index <=7) and isinstance(bit_index, int):
