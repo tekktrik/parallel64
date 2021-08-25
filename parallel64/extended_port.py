@@ -50,7 +50,13 @@ class ExtendedPort(SimplePort):
     def fromJSON(cls, json_filepath):
         with open(json_filepath, 'r') as json_file:
             json_contents = json.load(json_file)
-        return cls(json_contents["spp_base_address"], json_contents["ecp_base_address"], json_contents["windll_location"])
+        try:
+            spp_base_add = json_contents["spp_base_address"]
+            ecp_base_add = json_contents["ecp_base_address"]
+            windll_loc = json_contents["windll_location"]
+            return cls(spp_base_add, ecp_base_add, windll_location)
+        except KeyError as err:
+            raise KeyError("Unable to find " + str(err) + " in the JSON file, see reference documentation")
         
     def writeEPPAddress(self, address):
         self._parallel_port.DlPortWritePortUchar(self._control_address, 0b00000100)
