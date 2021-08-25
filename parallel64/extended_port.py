@@ -1,7 +1,7 @@
 import ctypes
 import json
 
-class ParallelPort:
+class ExtendedPort:
 
     class DataConverter:
         
