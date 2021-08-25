@@ -1,8 +1,7 @@
-import ctypes
 import json
 from enum import Enum
-from parallel64 import SimplePort
-from parallel64 import port_errors
+from simple_port import SimplePort
+import port_errors
 
 class ExtendedPort(SimplePort):
 

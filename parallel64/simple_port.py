@@ -1,4 +1,5 @@
-from parallel_port import port_errors
+import ctypes
+import json
 
 class SimplePort:
 
@@ -40,16 +41,15 @@ class SimplePort:
             bit_mask = (1 << bit_index)
             return (bit_mask & byte_read) >> bit_index
         else:
-            data_bit_error = tekkport_errors.BitIndexError("Bad bit index given")
             if (bit_index < 0) or (bit_index > 7):
-                data_bit_error.addError(data_bit_error.BitIndexErrorCodes.INDEX_OUT_OF_RANGE)
+                raise IndexError("Bit requested "+str(bit_index)+"is not accessible")
             if not isinstance(bit_index, int):
-                data_bit_error.addError(data_bit_error.BitIndexErrorCodes.NON_INTEGER_INDEX)
-            raise data_bit_error
+                raise TypeError("Bit requested must be an integer")
     
     def readPin(self, pin_number):
-        if (pin_number >= 2) and (pin_number <= 9):
-            try:
+        try:
+            if (pin_number >= 2) and (pin_number <= 9):
                 return self.readDataBitIndex(pin_number - 1)
-            except tekkport_errors.BitIndexError as bierror
+        except TypeError:
+            raise TypeError("Pin requested must be an integer")
                 
