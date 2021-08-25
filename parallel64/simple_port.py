@@ -2,6 +2,21 @@ from parallel_port import port_errors
 
 class SimplePort:
 
+    def __init__(self, spp_base_address, ecp_base_address, windll_location):
+    
+        self._spp_data_address = int(spp_base_address, 16)
+        self._status_address = int(spp_base_address, 16) + 1
+        self._control_address = int(spp_base_address, 16) + 2
+        self._epp_address_address = int(spp_base_address, 16) + 3
+        self._epp_data_address = int(spp_base_address, 16) + 4
+        self._parallel_port = ctypes.WinDLL(windll_location)
+        
+    @classmethod
+    def fromJSON(cls, json_filepath):
+        with open(json_filepath, 'r') as json_file:
+            json_contents = json.load(json_file)
+        return cls(json_contents["spp_base_address"], json_contents["windll_location"])
+
     def writeControlRegister(self, control_byte):
         self._parallel_port.DlPortWritePortUchar(self._control_address, control_byte)
         
