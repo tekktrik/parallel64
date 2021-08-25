@@ -1,7 +1,7 @@
 from parallel_port import ParallelPort
 from tekkport import tekkport_errors
 
-class TekkPort(ParallelPort):
+class SimplePort(ParallelPort):
 
     def readDataBitIndex(self, bit_index):
         if (bit_index >= 0) and (bit_index <=7) and isinstance(bit_index, int):
