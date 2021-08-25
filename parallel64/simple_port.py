@@ -3,13 +3,29 @@ import json
 
 class SimplePort:
 
-    def __init__(self, spp_base_address, ecp_base_address, windll_location):
+    class DataConverter:
+        
+        @classmethod
+        def hexstr_to_int(cls, trimmed_hex_str):
+            return int("0x" + trimmed_hex_str, 16)
+        
+        @classmethod
+        def binstr_to_int(cls, trimmed_bin_str):
+            return int("0b" + trimmed_bin_str, 2)
+            
+        @classmethod
+        def int_to_hexstr(cls, int_data):
+            return ''.join('%02x'%int(hex(int_data), 16))
+            
+        @classmethod
+        def int_to_binstr(cls, int_data):
+            return '{:08b}'.format(int_data)
+
+    def __init__(self, spp_base_address, windll_location):
     
         self._spp_data_address = spp_base_address
         self._status_address = spp_base_address + 1
         self._control_address = spp_base_address + 2
-        self._epp_address_address = spp_base_address + 3
-        self._epp_data_address = spp_base_address + 4
         self._parallel_port = ctypes.WinDLL(windll_location)
         
     @classmethod
