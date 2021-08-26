@@ -1,7 +1,7 @@
 import ctypes
 import json
 
-class SimplePort:
+class StandardPort:
 
     class DataConverter:
         
