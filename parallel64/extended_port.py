@@ -1,9 +1,8 @@
 import json
 from enum import Enum
-from simple_port import SimplePort
-import port_errors
+from simple_port import EnhancedPort
 
-class ExtendedPort(SimplePort):
+class ExtendedPort(EnhancedPort):
             
     class CommunicationMode(Enum):
         
@@ -36,25 +35,7 @@ class ExtendedPort(SimplePort):
     def setCommunicationMode(self, comm_mode):
         self.writeECR(comm_mode.value << 5)
         
-    def writeEPPAddress(self, address):
-        self.resetControlForSPPHandshake()
-        self.setForwardDirection()
-        self._parallel_port.DlPortWritePortUchar(self._epp_address_address, address)
-        
-    def readEPPAddress(self):
-        self.resetControlForSPPHandshake()
-        self.setReverseDirection()
         return self._parallel_port.DlPortReadPortUchar(self._epp_address_address)
-        
-    def writeEPPData(self, data):
-        self.resetControlForSPPHandshake()
-        self.setForwardDirection()
-        self._parallel_port.DlPortWritePortUchar(self._epp_data_address, data)
-        
-    def readEPPData(self):
-        self.resetControlForSPPHandshake()
-        self.setReverseDirection()
-        return self._parallel_port.DlPortReadPortUchar(self._epp_data_address)
         
     def writeECR(self, data):
         self._parallel_port.DlPortWritePortUchar(self._ecr_address, (1 << 7))
