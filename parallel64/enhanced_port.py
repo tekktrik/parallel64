@@ -1,7 +1,6 @@
 import json
 from enum import Enum
 from simple_port import StandardPort
-import port_errors
 
 class EnhancedPort(StandardPort):
             
