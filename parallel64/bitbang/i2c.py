@@ -6,5 +6,5 @@ class I2C:
         self.baudrate = baudrate
         self._delay = (1/self.baudrate)/2
         
-    def _startComm(self)
+    #def _startComm(self)
     
