@@ -3,12 +3,9 @@ import json
 import inspect
 from enum import Enum
 from parallel64.standard_port import StandardPort
+from parallel64.bitbang.i2c import I2C
 
 class GPIOPort(StandardPort):
-
-    _data_address = 0
-    _status_address = 1
-    _control_address = 2
     
     class Pins:
     
@@ -54,7 +51,7 @@ class GPIOPort(StandardPort):
         
         def getNamedPinList(self):
             pin_dict = self.__dict__.items()
-            return [pin_name for pin_name in pin_dict]
+            return [pin_name for pin_name in pin_dict if pin[0] != "_parallel_port"]
             
         def getPinList(self):
             return [pin[1] for pin in self.getNamedPinList()]
@@ -65,7 +62,7 @@ class GPIOPort(StandardPort):
     def __init__(self, data_address, windll_location=None):
         super().__init__(data_address, windll_location)
         self.Pins = self.Pins(self._spp_data_address, self._status_address, self._control_address)
-    
+        
     def readPin(self, pin):
         if pin.isInputAllowed():
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
@@ -84,3 +81,6 @@ class GPIOPort(StandardPort):
                 bit_mask = 1 << pin.bit_index
                 byte_result = (bit_mask ^ register_byte)
                 register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
+                
+    def setupI2C(self, sda_pin, scl_pin, baudrate=400000):
+        return I2C(self, sda_pin, scl_pin, baudrate)
