@@ -29,10 +29,10 @@ class GPIOPort(StandardPort):
                 return self._hw_inverted
         
         def __init__(self, data_address, status_address, control_address):
-            self.STROBE = self.Pin(1, 0, control_address, False, True, True)
-            self.AUTO_LINEFEED = self.Pin(14, 1, control_address, False, True, True)
-            self.INITIALIZE = self.Pin(16, 2, control_address, False, True)
-            self.SELECT_PRINTER = self.Pin(17, 3, control_address, False, True, True)
+            self.STROBE = self.Pin(1, 0, control_address, True, True, True)
+            self.AUTO_LINEFEED = self.Pin(14, 1, control_address, True, True, True)
+            self.INITIALIZE = self.Pin(16, 2, control_address, True, True)
+            self.SELECT_PRINTER = self.Pin(17, 3, control_address, True, True, True)
             
             self.ACK = self.Pin(10, 6, status_address, True, False)
             self.BUSY = self.Pin(11, 7, status_address, True, False, True)
