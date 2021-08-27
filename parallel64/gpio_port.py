@@ -2,9 +2,9 @@ import ctypes
 import json
 import inspect
 from enum import Enum
-from simple_port import SimplePort
+from parallel64.standard_port import StandardPort
 
-class GPIOPort(SimplePort):
+class GPIOPort(StandardPort):
 
     _data_address = 0
     _status_address = 1
@@ -62,15 +62,25 @@ class GPIOPort(SimplePort):
         def getPinNames(self):
             return [pin[0] for pin in self.getNamedPinList()]
                 
-    def __init__(self, data_address, status_address, control_address):
-        self.Pins = self.Pins(data_address, status_address, control_address)
+    def __init__(self, data_address, windll_location=None):
+        super().__init__(data_address, windll_location)
+        self.Pins = self.Pins(self._spp_data_address, self._status_address, self._control_address)
     
     def readPin(self, pin):
-        try:
-            if True:
-                bit_index = bit_index - 2
-                byte_read = self._parallel_port.readSPPData()
-                bit_mask = (1 << bit_index)
-                return (bit_mask & byte_read) >> bit_index
-        except TypeError:
-            raise TypeError("Pin requested must be an integer")
+        if pin.isInputAllowed():
+            register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
+            bit_mask = 1 << pin.bit_index
+            bit_result = bool((bit_mask & register_byte) >> pin.bit_index)
+            return (not bit_result) if pin.isHardwareInverted() else bit_result
+        else:
+            raise Exception("Input now allowed on pin " + str(pin.pin_number))
+            
+    def writePin(self, pin, value):
+        if pin.isOutputAllowed():
+            register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
+            current_bit = ((1 << pin.bit_index) & register_byte) >> pin.bit_index
+            current_value = (not current_bit) if pin.isHardwareInverted() else current_bit
+            if bool(current_value) != value:
+                bit_mask = 1 << pin.bit_index
+                byte_result = (bit_mask ^ register_byte)
+                register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)

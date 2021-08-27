@@ -1,13 +1,22 @@
 import ctypes
 import json
+import os
+import sys
 
 class StandardPort:
 
-    def __init__(self, spp_base_address, windll_location):
+    def __init__(self, spp_base_address, windll_location=None):
     
         self._spp_data_address = spp_base_address
         self._status_address = spp_base_address + 1
         self._control_address = spp_base_address + 2
+        if windll_location == None:
+            parent_folder = os.path.join(__file__, "..", "..")
+            inpout_folder = [os.path.abspath(folder) for folder in os.listdir(parent_folder) if folder.startswith("InpOutBinaries")][0]
+            if sys.maxsize > 2**32:
+                windll_location = os.path.join(inpout_folder, "x64", "inpoutx64.dll")
+            else:
+                windll_location = os.path.join(inpout_folder, "Win32", "inpout32.dll")
         self._parallel_port = ctypes.WinDLL(windll_location)
         
     @classmethod
@@ -31,7 +40,7 @@ class StandardPort:
         new_control_byte = 0b00100000 | control_byte
         self.writeControlRegister(new_control_byte)
         
-    def resetControlForSPPHandshake(self)
+    def resetControlForSPPHandshake(self):
         control_byte = self.readControlRegister()
         pre_control_byte = 0b11110000 & control_byte
         new_control_byte = 0b00000100 | pre_control_byte
