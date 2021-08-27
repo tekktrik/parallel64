@@ -50,6 +50,7 @@ class StandardPort:
         self._parallel_port.DlPortWritePortUchar(self._control_address, control_byte)
         
     def readControlRegister(self):
+        # Check to see if reverse mode is possible
         return self._parallel_port.DlPortReadPortUchar(self._control_address)
         
     def readStatusRegister(self):
