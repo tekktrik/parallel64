@@ -70,7 +70,7 @@ class GPIOPort(StandardPort):
             bit_result = bool((bit_mask & register_byte) >> pin.bit_index)
             return (not bit_result) if pin.isHardwareInverted() else bit_result
         else:
-            raise Exception("Input now allowed on pin " + str(pin.pin_number))
+            raise Exception("Input not allowed on pin " + str(pin.pin_number))
             
     def writePin(self, pin, value):
         if pin.isOutputAllowed():
@@ -81,6 +81,8 @@ class GPIOPort(StandardPort):
                 bit_mask = 1 << pin.bit_index
                 byte_result = (bit_mask ^ register_byte)
                 register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
+        else:
+            raise Exception("Output not allowed on pin " + str(pin.pin_number))
                 
     def setupI2C(self, sda_pin, scl_pin, baudrate=400000):
         return I2C(self, sda_pin, scl_pin, baudrate)
