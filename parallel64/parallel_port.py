@@ -20,7 +20,7 @@ class ParallelPort:
             if mode.lower() == "epp":
                 self.EnhancedPort = EnhancedPort(spp_base_address, windll_location)
             if mode.lower() == "ecp":
-                self.ExtendedPort = ExtendedPort(spp_base_address, windll_location)
+                self.ExtendedPort = ExtendedPort(ecp_base_address, windll_location)
             if mode.lower() == "gpio":
                 self.GPIOPort = GPIOPort(spp_base_address, windll_location)
         

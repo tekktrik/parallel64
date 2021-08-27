@@ -48,8 +48,6 @@ class GPIOPort(StandardPort):
             self.D5 = self.Pin(7, 5, data_address, True, True)
             self.D6 = self.Pin(8, 6, data_address, True, True)
             self.D7 = self.Pin(9, 7, data_address, True, True)
-            
-            self.resetOutputs()
         
         def getNamedPinList(self):
             pin_dict = self.__dict__.items()
@@ -64,6 +62,19 @@ class GPIOPort(StandardPort):
     def __init__(self, data_address, windll_location=None):
         super().__init__(data_address, windll_location)
         self.Pins = self.Pins(self._spp_data_address)
+        self.writeDataRegister(0)
+        self.resetControlPins()
+            
+    @classmethod
+    def fromJSON(cls, json_filepath):
+        with open(json_filepath, 'r') as json_file:
+            json_contents = json.load(json_file)
+        try:
+            spp_base_add = int(json_contents["spp_base_address"], 16)
+            windll_loc = json_contents["windll_location"], 16
+            return cls(spp_base_add, windll_location)
+        except KeyError as err:
+            raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
     def readPin(self, pin):
         if pin.isInputAllowed():
@@ -86,10 +97,10 @@ class GPIOPort(StandardPort):
         else:
             raise Exception("Output not allowed on pin " + str(pin.pin_number))
             
-    def resetOutputs(self):
-    
+    def resetDataPins(self):
         self.writeSPPData(0)
-    
+        
+    def resetControlPins(self):
         control_byte = self.readControlRegister()
         pre_control_byte = 0b11110000 & control_byte
         new_control_byte = 0b00001011 | pre_control_byte
