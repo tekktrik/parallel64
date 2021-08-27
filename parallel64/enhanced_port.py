@@ -1,10 +1,10 @@
 import json
 from enum import Enum
-from simple_port import StandardPort
+from parallel64.standard_port import StandardPort
 
 class EnhancedPort(StandardPort):
             
-    def __init__(self, spp_base_address, windll_location):
+    def __init__(self, spp_base_address, windll_location=None):
         super.__init__(spp_base_address, windll_location)
         self._epp_address_address = spp_base_address + 3
         self._epp_data_address = spp_base_address + 4
