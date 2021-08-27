@@ -77,4 +77,10 @@ class GPIOPort(StandardPort):
             
     def writePin(self, pin, value):
         if pin.isOutputAllowed():
-            
+            register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
+            current_bit = ((1 << pin.bit_index) & register_byte) >> pin.bit_index
+            current_value = (not current_bit) if pin.isHardwareInverted() else current_bit
+            if bool(current_value) != value:
+                bit_mask = 1 << pin.bit_index
+                byte_result = (bit_mask ^ register_byte)
+                register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
