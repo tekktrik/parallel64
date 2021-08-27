@@ -1,8 +1,9 @@
 import json
+import os
+import sys
 from enum import Enum
-from parallel64.enhanced_port import EnhancedPort
 
-class ExtendedPort(EnhancedPort):
+class ExtendedPort:
             
     class CommunicationMode(Enum):
         
@@ -14,23 +15,16 @@ class ExtendedPort(EnhancedPort):
         #FIFO_TEST = 6
         #CONFIG = 7
             
-    def __init__(self, spp_base_address, ecp_base_address, windll_location=None):
-        super.__init__(spp_base_address, windll_location)
-        self._epp_address_address = spp_base_address + 3
-        self._epp_data_address = spp_base_address + 4
+    def __init__(self, ecp_base_address, windll_location=None):
         self._ecr_address = ecp_base_address + 2
-        
-    @classmethod
-    def fromJSON(cls, json_filepath):
-        with open(json_filepath, 'r') as json_file:
-            json_contents = json.load(json_file)
-        try:
-            spp_base_add = int(json_contents["spp_base_address"], 16)
-            ecp_base_add = int(json_contents["ecp_base_address"], 16)
-            windll_loc = json_contents["windll_location"], 16
-            return cls(spp_base_add, ecp_base_add, windll_location)
-        except KeyError as err:
-            raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
+        if windll_location == None:
+            parent_folder = os.path.join(__file__, "..", "..")
+            inpout_folder = [os.path.abspath(folder) for folder in os.listdir(parent_folder) if folder.startswith("InpOutBinaries")][0]
+            if sys.maxsize > 2**32:
+                windll_location = os.path.join(inpout_folder, "x64", "inpoutx64.dll")
+            else:
+                windll_location = os.path.join(inpout_folder, "Win32", "inpout32.dll")
+        self._parallel_port = ctypes.WinDLL(windll_location)
         
     def setCommunicationMode(self, comm_mode):
         self.writeECR(comm_mode.value << 5)

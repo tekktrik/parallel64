@@ -1,12 +1,9 @@
-import ctypes
-import json
 import os
 import sys
 
 class StandardPort:
-
-    def __init__(self, spp_base_address, windll_location=None):
     
+    def __init__(self, spp_base_address, windll_loc=None):
         self._spp_data_address = spp_base_address
         self._status_address = spp_base_address + 1
         self._control_address = spp_base_address + 2
@@ -18,18 +15,7 @@ class StandardPort:
             else:
                 windll_location = os.path.join(inpout_folder, "Win32", "inpout32.dll")
         self._parallel_port = ctypes.WinDLL(windll_location)
-        
-    @classmethod
-    def fromJSON(cls, json_filepath):
-        with open(json_filepath, 'r') as json_file:
-            json_contents = json.load(json_file)
-        try:
-            spp_base_add = int(json_contents["spp_base_address"], 16)
-            windll_loc = json_contents["windll_location"], 16
-            return cls(spp_base_add, windll_location)
-        except KeyError as err:
-            raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
-            
+    
     def setForwardDirection(self):
         control_byte = self.readControlRegister()
         new_control_byte = 0b11011111 & control_byte

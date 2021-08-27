@@ -2,6 +2,7 @@ import sys
 
 if sys.platform == 'win32':
     #if platform.architecture()[0] == '64bit':
+    from parallel64.parallel_port import ParallelPort
     from parallel64.standard_port import StandardPort
     from parallel64.enhanced_port import EnhancedPort
     from parallel64.extended_port import ExtendedPort

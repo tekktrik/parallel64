@@ -28,17 +28,17 @@ class GPIOPort(StandardPort):
             def isHardwareInverted(self):
                 return self._hw_inverted
         
-        def __init__(self, data_address, status_address, control_address):
-            self.STROBE = self.Pin(1, 0, control_address, True, True, True)
-            self.AUTO_LINEFEED = self.Pin(14, 1, control_address, True, True, True)
-            self.INITIALIZE = self.Pin(16, 2, control_address, True, True)
-            self.SELECT_PRINTER = self.Pin(17, 3, control_address, True, True, True)
+        def __init__(self, data_address):
+            self.STROBE = self.Pin(1, 0, data_address+2, True, True, True)
+            self.AUTO_LINEFEED = self.Pin(14, 1, data_address+2, True, True, True)
+            self.INITIALIZE = self.Pin(16, 2, data_address+2, True, True)
+            self.SELECT_PRINTER = self.Pin(17, 3, data_address+2, True, True, True)
             
-            self.ACK = self.Pin(10, 6, status_address, True, False)
-            self.BUSY = self.Pin(11, 7, status_address, True, False, True)
-            self.PAPER_OUT = self.Pin(12, 5, status_address, True, False)
-            self.SELECT_IN = self.Pin(13, 4, status_address, True, False)
-            self.ERROR = self.Pin(15, 3, status_address, True, False)
+            self.ACK = self.Pin(10, 6, data_address+1, True, False)
+            self.BUSY = self.Pin(11, 7, data_address+1, True, False, True)
+            self.PAPER_OUT = self.Pin(12, 5, data_address+1, True, False)
+            self.SELECT_IN = self.Pin(13, 4, data_address+1, True, False)
+            self.ERROR = self.Pin(15, 3, data_address+1, True, False)
 
             self.D0 = self.Pin(2, 0, data_address, True, True)
             self.D1 = self.Pin(3, 1, data_address, True, True)
@@ -48,6 +48,8 @@ class GPIOPort(StandardPort):
             self.D5 = self.Pin(7, 5, data_address, True, True)
             self.D6 = self.Pin(8, 6, data_address, True, True)
             self.D7 = self.Pin(9, 7, data_address, True, True)
+            
+            self.resetOutputs()
         
         def getNamedPinList(self):
             pin_dict = self.__dict__.items()
@@ -61,7 +63,7 @@ class GPIOPort(StandardPort):
                 
     def __init__(self, data_address, windll_location=None):
         super().__init__(data_address, windll_location)
-        self.Pins = self.Pins(self._spp_data_address, self._status_address, self._control_address)
+        self.Pins = self.Pins(self._spp_data_address)
         
     def readPin(self, pin):
         if pin.isInputAllowed():
@@ -83,6 +85,15 @@ class GPIOPort(StandardPort):
                 register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
         else:
             raise Exception("Output not allowed on pin " + str(pin.pin_number))
+            
+    def resetOutputs(self):
+    
+        self.writeSPPData(0)
+    
+        control_byte = self.readControlRegister()
+        pre_control_byte = 0b11110000 & control_byte
+        new_control_byte = 0b00001011 | pre_control_byte
+        self.writeControlRegister(new_control_byte)
                 
     def setupI2C(self, sda_pin, scl_pin, baudrate=400000):
         return I2C(self, sda_pin, scl_pin, baudrate)
