@@ -1,4 +1,5 @@
 import time
+import multiprocessing
 
 class PWM:
     
@@ -29,4 +30,7 @@ class PWM:
             self._duty_cycle = duty_cycle
         else:
             raise ValueError("Duty cycle must be between 0 and 1")
+            
+    def startCycle(self):
+        pass
             
