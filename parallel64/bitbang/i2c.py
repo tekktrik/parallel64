@@ -1,8 +1,10 @@
 from time import monotonic
+import warnings
 
 class I2C:
     
     def __init__(self, gpio_port, sda_pin, scl_pin, baudrate):
+        self._port = gpio_port
         self._SDA = sda_pin
         self._SCL = scl_pin
         self._baudrate = baudrate

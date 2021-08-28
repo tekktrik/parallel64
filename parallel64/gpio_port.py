@@ -98,6 +98,3 @@ class GPIOPort(StandardPort):
             bit_mask = 1 << pin.bit_index
             byte_result = (bit_mask ^ register_byte)
             register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
-                
-    def setupI2C(self, sda_pin, scl_pin, baudrate=400000):
-        return I2C(self, sda_pin, scl_pin, baudrate)
