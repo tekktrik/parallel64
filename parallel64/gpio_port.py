@@ -47,16 +47,16 @@ class GPIOPort(StandardPort):
                 self._allow_output = True
         
         def __init__(self, data_address):
-            self.STROBE = self.Pin(1, 0, data_address+2, True, True, True)
-            self.AUTO_LINEFEED = self.Pin(14, 1, data_address+2, True, True, True)
-            self.INITIALIZE = self.Pin(16, 2, data_address+2, True, True)
-            self.SELECT_PRINTER = self.Pin(17, 3, data_address+2, True, True, True)
+            self.STROBE = self.Pin(1, 0, data_address+2, True)
+            self.AUTO_LINEFEED = self.Pin(14, 1, data_address+2, True)
+            self.INITIALIZE = self.Pin(16, 2, data_address+2)
+            self.SELECT_PRINTER = self.Pin(17, 3, data_address+2, True)
             
-            self.ACK = self.Pin(10, 6, data_address+1, True, False)
-            self.BUSY = self.Pin(11, 7, data_address+1, True, False, True)
-            self.PAPER_OUT = self.Pin(12, 5, data_address+1, True, False)
-            self.SELECT_IN = self.Pin(13, 4, data_address+1, True, False)
-            self.ERROR = self.Pin(15, 3, data_address+1, True, False)
+            self.ACK = self.Pin(10, 6, data_address+1)
+            self.BUSY = self.Pin(11, 7, data_address+1, True)
+            self.PAPER_OUT = self.Pin(12, 5, data_address+1)
+            self.SELECT_IN = self.Pin(13, 4, data_address+1)
+            self.ERROR = self.Pin(15, 3, data_address+1)
 
             self.D0 = self.DataPin(2, 0, data_address, is_bidir)
             self.D1 = self.DataPin(3, 1, data_address, is_bidir)
