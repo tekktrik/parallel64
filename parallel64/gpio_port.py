@@ -46,7 +46,7 @@ class GPIOPort(StandardPort):
                 self._allow_input = True
                 self._allow_output = True
         
-        def __init__(self, data_address):
+        def __init__(self, data_address, is_bidir):
             self.STROBE = self.Pin(1, 0, data_address+2, True)
             self.AUTO_LINEFEED = self.Pin(14, 1, data_address+2, True)
             self.INITIALIZE = self.Pin(16, 2, data_address+2)
@@ -79,7 +79,7 @@ class GPIOPort(StandardPort):
                 
     def __init__(self, data_address, windll_location=None):
         super().__init__(data_address, windll_location)
-        self.Pins = self.Pins(self._spp_data_address)
+        self.Pins = self.Pins(self._spp_data_address, self.isBidirectional())
         self.writeDataRegister(0)
         self.resetControlPins()
             
