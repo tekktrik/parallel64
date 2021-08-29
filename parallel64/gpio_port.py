@@ -77,8 +77,8 @@ class GPIOPort(StandardPort):
         def getPinNames(self):
             return [pin[0] for pin in self.getNamedPinList()]
                 
-    def __init__(self, data_address, windll_location=None, clear_gpio=True):
-        super().__init__(data_address, windll_location)
+    def __init__(self, data_address, windll_location=None, clear_gpio=True, reset_control=False):
+        super().__init__(data_address, windll_location, reset_control)
         self.Pins = self.Pins(self._spp_data_address, self.isBidirectional())
         if clear_gpio:
             self.writeDataRegister(0)
