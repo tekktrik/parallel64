@@ -29,7 +29,7 @@ class I2C:
     
     @SCL.setter
     def SCL(self, scl_pin):
-        if scl_pin.isOutputAllowed()
+        if scl_pin.isOutputAllowed():
             self._scl = scl_pin
         else:
             raise Exception("Cannot set this pin as SCL: output is not allowed")

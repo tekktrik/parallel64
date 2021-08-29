@@ -42,7 +42,7 @@ class PWM:
                 pass
             self._port.writePin(self._pin, False)
             off_delay = time.monotonic() + off_time
-            while time.monotonic() < off_delay
+            while time.monotonic() < off_delay:
                 pass
             
             
