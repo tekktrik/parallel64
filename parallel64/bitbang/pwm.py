@@ -13,8 +13,10 @@ class PWM:
             self._pwm_thread.start()
             
         def runCycle(self):
+            
             on_time = self._pwm_object.cycle_time*self._pwm_object._duty_cycle
             off_time = self._pwm_object.cycle_time - on_time
+            
             while not self._end_cycle.is_set():
                 self._pwm_object._port.writePin(self._pwm_object._pin, True)
                 on_delay = time.monotonic() + on_time
