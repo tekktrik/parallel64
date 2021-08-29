@@ -46,17 +46,17 @@ class GPIOPort(StandardPort):
                 self._allow_input = True
                 self._allow_output = True
         
-        def __init__(self, data_address, status_address, control_address, is_bidir):
-            self.STROBE = self.ControlPin(1, 0, control_address, hw_inverted=True)
-            self.AUTO_LINEFEED = self.ControlPin(14, 1, control_address, hw_inverted=True)
-            self.INITIALIZE = self.ControlPin(16, 2, control_address)
-            self.SELECT_PRINTER = self.ControlPin(17, 3, control_address, hw_inverted=True)
+        def __init__(self, data_address):
+            self.STROBE = self.Pin(1, 0, data_address+2, True, True, True)
+            self.AUTO_LINEFEED = self.Pin(14, 1, data_address+2, True, True, True)
+            self.INITIALIZE = self.Pin(16, 2, data_address+2, True, True)
+            self.SELECT_PRINTER = self.Pin(17, 3, data_address+2, True, True, True)
             
-            self.ACK = self.StatusPin(10, 6, status_address)
-            self.BUSY = self.StatusPin(11, 7, status_address, hw_inverted=True)
-            self.PAPER_OUT = self.StatusPin(12, 5, status_address)
-            self.SELECT_IN = self.StatusPin(13, 4, status_address)
-            self.ERROR = self.StatusPin(15, 3, status_address)
+            self.ACK = self.Pin(10, 6, data_address+1, True, False)
+            self.BUSY = self.Pin(11, 7, data_address+1, True, False, True)
+            self.PAPER_OUT = self.Pin(12, 5, data_address+1, True, False)
+            self.SELECT_IN = self.Pin(13, 4, data_address+1, True, False)
+            self.ERROR = self.Pin(15, 3, data_address+1, True, False)
 
             self.D0 = self.DataPin(2, 0, data_address, is_bidir)
             self.D1 = self.DataPin(3, 1, data_address, is_bidir)
@@ -79,7 +79,20 @@ class GPIOPort(StandardPort):
                 
     def __init__(self, data_address, windll_location=None):
         super().__init__(data_address, windll_location)
-        self.Pins = self.Pins(self._spp_data_address, self._status_address, self._control_address, self.isBidirectional())
+        self.Pins = self.Pins(self._spp_data_address)
+        self.writeDataRegister(0)
+        self.resetControlPins()
+            
+    @classmethod
+    def fromJSON(cls, json_filepath):
+        with open(json_filepath, 'r') as json_file:
+            json_contents = json.load(json_file)
+        try:
+            spp_base_add = int(json_contents["spp_base_address"], 16)
+            windll_loc = json_contents["windll_location"], 16
+            return cls(spp_base_add, windll_location)
+        except KeyError as err:
+            raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
     def readPin(self, pin):
         if pin.isInputAllowed():
@@ -91,10 +104,25 @@ class GPIOPort(StandardPort):
             raise Exception("Input not allowed on pin " + str(pin.pin_number))
             
     def writePin(self, pin, value):
-        register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
-        current_bit = ((1 << pin.bit_index) & register_byte) >> pin.bit_index
-        current_value = (not current_bit) if pin.isHardwareInverted() else current_bit
-        if bool(current_value) != value:
-            bit_mask = 1 << pin.bit_index
-            byte_result = (bit_mask ^ register_byte)
-            register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
+        if pin.isOutputAllowed():
+            register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
+            current_bit = ((1 << pin.bit_index) & register_byte) >> pin.bit_index
+            current_value = (not current_bit) if pin.isHardwareInverted() else current_bit
+            if bool(current_value) != value:
+                bit_mask = 1 << pin.bit_index
+                byte_result = (bit_mask ^ register_byte)
+                register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
+        else:
+            raise Exception("Output not allowed on pin " + str(pin.pin_number))
+            
+    def resetDataPins(self):
+        self.writeSPPData(0)
+        
+    def resetControlPins(self):
+        control_byte = self.readControlRegister()
+        pre_control_byte = 0b11110000 & control_byte
+        new_control_byte = 0b00001011 | pre_control_byte
+        self.writeControlRegister(new_control_byte)
+                
+    def setupI2C(self, sda_pin, scl_pin, baudrate=400000):
+        return I2C(self, sda_pin, scl_pin, baudrate)
