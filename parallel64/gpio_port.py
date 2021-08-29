@@ -11,43 +11,61 @@ class GPIOPort(StandardPort):
     
         class Pin:
 
-            def __init__(self, pin_number, bit_index, register, allow_input, allow_output, hw_inverted=False):
+            def __init__(self, pin_number, bit_index, register, hw_inverted=False):
                 self.pin_number = pin_number
                 self.bit_index = bit_index
                 self.register = register
-                self._allow_input = allow_input
-                self._allow_output = allow_output
                 self._hw_inverted = hw_inverted
-                
-            def isInputAllowed(self):
-                return self._allow_input
-                
-            def isOutputAllowed(self):
-                return self._allow_output
+                self._allow_input = None
+                self._allow_output = None
                 
             def isHardwareInverted(self):
                 return self._hw_inverted
-        
-        def __init__(self, data_address):
-            self.STROBE = self.Pin(1, 0, data_address+2, True, True, True)
-            self.AUTO_LINEFEED = self.Pin(14, 1, data_address+2, True, True, True)
-            self.INITIALIZE = self.Pin(16, 2, data_address+2, True, True)
-            self.SELECT_PRINTER = self.Pin(17, 3, data_address+2, True, True, True)
+                
+            def isOutputAllowed(self):
+                return self._allow_output
             
-            self.ACK = self.Pin(10, 6, data_address+1, True, False)
-            self.BUSY = self.Pin(11, 7, data_address+1, True, False, True)
-            self.PAPER_OUT = self.Pin(12, 5, data_address+1, True, False)
-            self.SELECT_IN = self.Pin(13, 4, data_address+1, True, False)
-            self.ERROR = self.Pin(15, 3, data_address+1, True, False)
+        class DataPin(Pin):
+            
+            def __init__(self, pin_number, bit_index, register, is_bidir):
+                super().__init__(pin_number, bit_index, register, False)
+                self._allow_input = True if is_bidir else False
+                self._allow_output = True
+                
+        class StatusPin(Pin):
+            
+            def __init__(self, pin_number, bit_index, register, hw_inverted=False):
+                super().__init__(pin_number, bit_index, register, hw_inverted)
+                self._allow_input = True
+                self._allow_output = False
+                
+        class ControlPin(Pin):
+                
+            def __init__(self, pin_number, bit_index, register, hw_inverted=False):
+                super().__init__(pin_number, bit_index, register, hw_inverted)
+                self._allow_input = True
+                self._allow_output = True
+        
+        def __init__(self, data_address, is_bidir):
+            self.STROBE = self.ControlPin(1, 0, data_address+2, True)
+            self.AUTO_LINEFEED = self.ControlPin(14, 1, data_address+2, True)
+            self.INITIALIZE = self.ControlPin(16, 2, data_address+2)
+            self.SELECT_PRINTER = self.ControlPin(17, 3, data_address+2, True)
+            
+            self.ACK = self.StatusPin(10, 6, data_address+1)
+            self.BUSY = self.StatusPin(11, 7, data_address+1, True)
+            self.PAPER_OUT = self.StatusPin(12, 5, data_address+1)
+            self.SELECT_IN = self.StatusPin(13, 4, data_address+1)
+            self.ERROR = self.StatusPin(15, 3, data_address+1)
 
-            self.D0 = self.Pin(2, 0, data_address, True, True)
-            self.D1 = self.Pin(3, 1, data_address, True, True)
-            self.D2 = self.Pin(4, 2, data_address, True, True)
-            self.D3 = self.Pin(5, 3, data_address, True, True)
-            self.D4 = self.Pin(6, 4, data_address, True, True)
-            self.D5 = self.Pin(7, 5, data_address, True, True)
-            self.D6 = self.Pin(8, 6, data_address, True, True)
-            self.D7 = self.Pin(9, 7, data_address, True, True)
+            self.D0 = self.DataPin(2, 0, data_address, is_bidir)
+            self.D1 = self.DataPin(3, 1, data_address, is_bidir)
+            self.D2 = self.DataPin(4, 2, data_address, is_bidir)
+            self.D3 = self.DataPin(5, 3, data_address, is_bidir)
+            self.D4 = self.DataPin(6, 4, data_address, is_bidir)
+            self.D5 = self.DataPin(7, 5, data_address, is_bidir)
+            self.D6 = self.DataPin(8, 6, data_address, is_bidir)
+            self.D7 = self.DataPin(9, 7, data_address, is_bidir)
         
         def getNamedPinList(self):
             pin_dict = self.__dict__.items()
@@ -59,11 +77,12 @@ class GPIOPort(StandardPort):
         def getPinNames(self):
             return [pin[0] for pin in self.getNamedPinList()]
                 
-    def __init__(self, data_address, windll_location=None):
+    def __init__(self, data_address, windll_location=None, clear_gpio=True):
         super().__init__(data_address, windll_location)
-        self.Pins = self.Pins(self._spp_data_address)
-        self.writeDataRegister(0)
-        self.resetControlPins()
+        self.Pins = self.Pins(self._spp_data_address, self.isBidirectional())
+        if clear_gpio:
+            self.writeDataRegister(0)
+            self.resetControlPins()
             
     @classmethod
     def fromJSON(cls, json_filepath):
