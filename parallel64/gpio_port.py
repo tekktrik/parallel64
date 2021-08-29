@@ -77,8 +77,8 @@ class GPIOPort(StandardPort):
         def getPinNames(self):
             return [pin[0] for pin in self.getNamedPinList()]
                 
-    def __init__(self, data_address, windll_location=None, clear_gpio=True):
-        super().__init__(data_address, windll_location)
+    def __init__(self, data_address, windll_location=None, clear_gpio=True, reset_control=False):
+        super().__init__(data_address, windll_location, reset_control)
         self.Pins = self.Pins(self._spp_data_address, self.isBidirectional())
         if clear_gpio:
             self.writeDataRegister(0)
@@ -112,7 +112,7 @@ class GPIOPort(StandardPort):
             if bool(current_value) != value:
                 bit_mask = 1 << pin.bit_index
                 byte_result = (bit_mask ^ register_byte)
-                register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
+                self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
         else:
             raise Exception("Output not allowed on pin " + str(pin.pin_number))
             
