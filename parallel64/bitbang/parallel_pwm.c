@@ -54,3 +54,17 @@ static PyObject *method_pwmCycle(PyObject *self, PyObject *args)
 	}
 	return 1
 };
+static PyMethodDef ParallelPWMMethods[] = {
+    ...
+    {"pwmCycle",  method_pwmCycle, METH_VARARGS,
+     "Begin PWM cycle"},
+    ...
+    {NULL, NULL, 0, NULL}        /* Sentinel */
+};
+static struct PyModuleDef parallel_pwm = {
+    PyModuleDef_HEAD_INIT,
+    "parallel_pwm",
+    "Python interface for the pwmCycle C library function",
+    -1,
+    ParallelPWMMethods
+};
