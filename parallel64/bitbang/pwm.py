@@ -30,6 +30,9 @@ class PWM:
                     
         def stopCycle(self):
             self._end_cycle.set()
+            
+        def shouldStop(self):
+            return self._end_cycle.is_set()
     
     def __init__(self, gpio_port, pwm_pin, duty_cycle=0, cycle_time=0.03):
         self._port = gpio_port

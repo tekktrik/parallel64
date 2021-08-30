@@ -21,6 +21,7 @@ class StandardPort:
                 windll_location = os.path.join(inpout_folder, "x64", "inpoutx64.dll")
             else:
                 windll_location = os.path.join(inpout_folder, "Win32", "inpout32.dll")
+        self._windll_location = windll_location
         self._parallel_port = ctypes.WinDLL(windll_location)
         self._is_bidir = True if self._testBidirectional() else False
         if reset_control:
