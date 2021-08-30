@@ -1,5 +1,8 @@
 #include <Python.h>
 #include <windows.h>
+    
+    /*typedef short _stdcall (*ifuncPntr(short portRegister)*/
+    typedef void _stdcall (*ofuncPntr(short portRegister, short valueToWrite)
 
 static PyObject *method_pwmCycle(PyObject *self, PyObject *args)
 {
@@ -21,6 +24,9 @@ static PyObject *method_pwmCycle(PyObject *self, PyObject *args)
     PyObject* portregister = PyObject_GetAttrString(pwm_object,(char*)"register");
     PyObject* bitindex = PyObject_GetAttrString(pwm_object,(char*)"bit_index");
     PyObject* dllloc = PyObject_GetAttrString(pwm_object,(char*)"_windll_location");
+    
+    HISTNACE iolib = LoadLibrary(dllloc)
+    portOutput = (ofuncPntr) GetProcAddress(iolib, "DlPortReadPortUchar")
 	
 	int shouldBreak = 0
 	
