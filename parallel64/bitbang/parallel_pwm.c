@@ -1,17 +1,12 @@
 #include <Python.h>
 #include <windows.h>
     
-    /*typedef short _stdcall (*ifuncPntr(short portRegister)*/
+    typedef short _stdcall (*ifuncPntr(short portRegister)
     typedef void _stdcall (*ofuncPntr(short portRegister, short valueToWrite)
 
 static PyObject *method_pwmCycle(PyObject *self, PyObject *args)
 {
     const PyObject *pwm_cycle;
-    /*const PyObject *pwm_object;
-	const PyObject *dlllocation
-	const PyObject *portregister
-	const PyObject *bitindex*/
-    int sts;
 	
 	if (!PyArg_ParseTuple(args, "O", &pwm_cycle))
         return NULL;
@@ -21,21 +16,41 @@ static PyObject *method_pwmCycle(PyObject *self, PyObject *args)
 
     PyObject* pwm_object = PyObject_GetAttrString(pwm_cycle,(char*)"_pwm_object");
     PyObject* gpio_port = PyObject_GetAttrString(pwm_object,(char*)"_port");
-    PyObject* portregister = PyObject_GetAttrString(pwm_object,(char*)"register");
-    PyObject* bitindex = PyObject_GetAttrString(pwm_object,(char*)"bit_index");
-    PyObject* dllloc = PyObject_GetAttrString(pwm_object,(char*)"_windll_location");
+    PyObject* gpio_pin = PyObject_GetAttrString(gpio_port,(char*)"pin");
+    short portregister = PyLong_AsLong(PyObject_GetAttrString(gpio_pin,(char*)"register"));
+    unsigned int bitindex = PyLong_AsLong(PyObject_GetAttrString(gpio_pin,(char*)"bit_index"));
+    int onvalue = PyLong_AsLong(PyObject_GetAttrString(pwm_object,(char*)"_on_value"));
+    PyObject* dllloc = PyObject_GetAttrString(gpio_port,(char*)"_windll_location");
+	sleep(
+    double dutycycle = PyFloat_AsDouble(PyObject_GetAttrString(pwm_object,(char*)"duty_cycle"));
+    double cycletime = PyFloat_AsDouble(PyObject_GetAttrString(pwm_object,(char*)"cycle_time"));
     
-    HISTNACE iolib = LoadLibrary(dllloc)
-    portOutput = (ofuncPntr) GetProcAddress(iolib, "DlPortReadPortUchar")
+    HISTNACE iolib = LoadLibrary(dllloc);
+    portInput = (ifuncPntr) GetProcAddress(iolib, "Inp32");
+    portOutput = (ofuncPntr) GetProcAddress(iolib, "Out32");
 	
 	int shouldBreak = 0
+	short current_byte;
+	short bit_mask;
+	short byte_result;
+	unsigned double ontime = dutycycle*cycletime
+	unsigned double offtime = cycletime-ontime
 	
 	while (shouldBreak == 0)
 	{
+		register_byte = portInput(portregister);
+		bit_mask = onvalue << bit_index
+		byte_result = bit_mask ^ register_byte
+		portOutput(portregister, byte_result);
+		sleep(ontime)
 		
+		register_byte = portInput(portregister);
+		bit_mask = onvalue << bit_index
+		byte_result = bit_mask ^ register_byte
+		portOutput(portregister, byte_result);
+		sleep(offtime)
 		
-		
-		PyObject* myResult = PyObject_CallObject(shouldStop, args);
-		int result = PyFloat_AsDouble(myResult);
+		shouldBreak = PyLong_AsLong(PyObject_CallObject(shouldStop, args));
 	}
+	return 1
 };

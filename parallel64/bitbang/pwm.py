@@ -38,6 +38,7 @@ class PWM:
         self._port = gpio_port
         self._pin = pwm_pin
         self._duty_cycle = duty_cycle
+        self._on_value = False if self._pin.isHardwareInverted() else True
         self.cycle_time = cycle_time
         self._pwm_thread = None
         
