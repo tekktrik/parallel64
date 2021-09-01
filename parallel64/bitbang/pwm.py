@@ -1,4 +1,4 @@
-import parallel64.bitbang.cython_protocols.bitbang_pwm as pwm_mod
+import parallel64.bitbang.cython_protocols.bitbang_pwm as pwm_pyd
 
 class PWM:
     
@@ -33,7 +33,7 @@ class PWM:
             
     def startCycle(self):
         self._port.writePin(self._pin, False)
-        self._pwm_thread = pwm_mod.PWMCycle(self._port, self._pin, self._duty_cycle, self.cycle_time)
+        self._pwm_thread = pwm_pyd.PWMCycle(self._port, self._pin, self._duty_cycle, self.cycle_time)
         
     def endCycle(self):
         self._pwm_thread.stopCycle()
