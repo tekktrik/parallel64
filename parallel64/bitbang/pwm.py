@@ -1,4 +1,4 @@
-import parallel64.bitbang.gpioport_pwm as pwm_mod
+import parallel64.bitbang.cython_protocols.bitbang_pwm as pwm_mod
 
 class PWM:
     
