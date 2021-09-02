@@ -33,7 +33,7 @@ class StandardPort:
             json_contents = json.load(json_file)
         try:
             spp_base_add = int(json_contents["spp_base_address"], 16)
-            windll_loc = json_contents["windll_location"], 16
+            windll_loc = json_contents["windll_location"]
             return cls(spp_base_add, windll_location)
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
