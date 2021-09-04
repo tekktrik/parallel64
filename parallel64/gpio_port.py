@@ -1,6 +1,7 @@
 import ctypes
 import json
 import inspect
+import threading
 from enum import Enum
 from parallel64.standard_port import StandardPort
 from parallel64.bitbang.i2c import I2C
@@ -27,6 +28,8 @@ class GPIOPort(StandardPort):
             
         class DataPin(Pin):
             
+            register_lock = threading.Lock()
+            
             def __init__(self, pin_number, bit_index, register, is_bidir):
                 super().__init__(pin_number, bit_index, register, False)
                 self._allow_input = True if is_bidir else False
@@ -34,12 +37,16 @@ class GPIOPort(StandardPort):
                 
         class StatusPin(Pin):
             
+            register_lock = threading.Lock()
+            
             def __init__(self, pin_number, bit_index, register, hw_inverted=False):
                 super().__init__(pin_number, bit_index, register, hw_inverted)
                 self._allow_input = True
                 self._allow_output = False
                 
         class ControlPin(Pin):
+                
+            threading_lock = threading.Lock()
                 
             def __init__(self, pin_number, bit_index, register, hw_inverted=False):
                 super().__init__(pin_number, bit_index, register, hw_inverted)
@@ -124,6 +131,9 @@ class GPIOPort(StandardPort):
         pre_control_byte = 0b11110000 & control_byte
         new_control_byte = 0b00001011 | pre_control_byte
         self.writeControlRegister(new_control_byte)
+        
+    def setupPWM(self, pwm_pin, duty_cycle, cycle_time):
+        return PWM(self, pwm_pin, duty_cycle, cycle_time)
                 
-    def setupI2C(self, sda_pin, scl_pin, baudrate=400000):
+    def setupI2C(self, sda_pin, scl_pin):
         return I2C(self, sda_pin, scl_pin, baudrate)
