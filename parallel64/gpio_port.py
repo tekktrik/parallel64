@@ -25,6 +25,9 @@ class GPIOPort(StandardPort):
                 
             def isOutputAllowed(self):
                 return self._allow_output
+                
+            def isInputAllowed(self):
+                return self._allow_input
             
         class DataPin(Pin):
             
@@ -46,7 +49,7 @@ class GPIOPort(StandardPort):
                 
         class ControlPin(Pin):
                 
-            threading_lock = threading.Lock()
+            register_lock = threading.Lock()
                 
             def __init__(self, pin_number, bit_index, register, hw_inverted=False):
                 super().__init__(pin_number, bit_index, register, hw_inverted)
