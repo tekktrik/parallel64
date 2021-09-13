@@ -1,6 +1,7 @@
 import ctypes
 import json
 import inspect
+import threading
 from enum import Enum
 from parallel64.standard_port import StandardPort
 from parallel64.bitbang.i2c import I2C
@@ -24,8 +25,13 @@ class GPIOPort(StandardPort):
                 
             def isOutputAllowed(self):
                 return self._allow_output
+                
+            def isInputAllowed(self):
+                return self._allow_input
             
         class DataPin(Pin):
+            
+            register_lock = threading.Lock()
             
             def __init__(self, pin_number, bit_index, register, is_bidir):
                 super().__init__(pin_number, bit_index, register, False)
@@ -34,12 +40,16 @@ class GPIOPort(StandardPort):
                 
         class StatusPin(Pin):
             
+            register_lock = threading.Lock()
+            
             def __init__(self, pin_number, bit_index, register, hw_inverted=False):
                 super().__init__(pin_number, bit_index, register, hw_inverted)
                 self._allow_input = True
                 self._allow_output = False
                 
         class ControlPin(Pin):
+                
+            register_lock = threading.Lock()
                 
             def __init__(self, pin_number, bit_index, register, hw_inverted=False):
                 super().__init__(pin_number, bit_index, register, hw_inverted)
@@ -77,8 +87,8 @@ class GPIOPort(StandardPort):
         def getPinNames(self):
             return [pin[0] for pin in self.getNamedPinList()]
                 
-    def __init__(self, data_address, windll_location=None, clear_gpio=True):
-        super().__init__(data_address, windll_location)
+    def __init__(self, data_address, windll_location=None, clear_gpio=True, reset_control=False):
+        super().__init__(data_address, windll_location, reset_control)
         self.Pins = self.Pins(self._spp_data_address, self.isBidirectional())
         if clear_gpio:
             self.writeDataRegister(0)
@@ -112,7 +122,7 @@ class GPIOPort(StandardPort):
             if bool(current_value) != value:
                 bit_mask = 1 << pin.bit_index
                 byte_result = (bit_mask ^ register_byte)
-                register_byte =  self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
+                self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
         else:
             raise Exception("Output not allowed on pin " + str(pin.pin_number))
             
@@ -124,6 +134,9 @@ class GPIOPort(StandardPort):
         pre_control_byte = 0b11110000 & control_byte
         new_control_byte = 0b00001011 | pre_control_byte
         self.writeControlRegister(new_control_byte)
+        
+    def setupPWM(self, pwm_pin, duty_cycle, cycle_time):
+        return PWM(self, pwm_pin, duty_cycle, cycle_time)
                 
-    def setupI2C(self, sda_pin, scl_pin, baudrate=400000):
+    def setupI2C(self, sda_pin, scl_pin):
         return I2C(self, sda_pin, scl_pin, baudrate)

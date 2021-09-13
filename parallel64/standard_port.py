@@ -10,7 +10,7 @@ class StandardPort:
         REVERSE = 0
         FORWARD = 1
     
-    def __init__(self, spp_base_address, windll_location=None):
+    def __init__(self, spp_base_address, windll_location=None, reset_control=True):
         self._spp_data_address = spp_base_address
         self._status_address = spp_base_address + 1
         self._control_address = spp_base_address + 2
@@ -21,8 +21,11 @@ class StandardPort:
                 windll_location = os.path.join(inpout_folder, "x64", "inpoutx64.dll")
             else:
                 windll_location = os.path.join(inpout_folder, "Win32", "inpout32.dll")
+        self._windll_location = windll_location
         self._parallel_port = ctypes.WinDLL(windll_location)
         self._is_bidir = True if self._testBidirectional() else False
+        if reset_control:
+            self.resetControlForSPPHandshake()
         
     @classmethod
     def fromJSON(cls, json_filepath):
@@ -30,7 +33,7 @@ class StandardPort:
             json_contents = json.load(json_file)
         try:
             spp_base_add = int(json_contents["spp_base_address"], 16)
-            windll_loc = json_contents["windll_location"], 16
+            windll_loc = json_contents["windll_location"]
             return cls(spp_base_add, windll_location)
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
@@ -66,10 +69,14 @@ class StandardPort:
         self._parallel_port.DlPortWritePortUchar(self._spp_data_address, data_byte)
         
     def readDataRegister(self):
-        if self.isBidirectional():
-            return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
-        else:
-            raise Exception("This port was detected not to be bidirectional, data cannot be read using the data register/pins")
+        #if self.isBidirectional():
+        #    return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
+        #else:
+        #    raise Exception("This port was detected not to be bidirectional, data cannot be read using the data register/pins")
+        
+        # Maybe raise a warning instead?
+        
+        return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
 
     def writeControlRegister(self, control_byte):
         self._parallel_port.DlPortWritePortUchar(self._control_address, control_byte)
