@@ -1,1 +1,2 @@
 recursive-include parallel64 *.pyd
+recursive-include parallel64 *.dll
