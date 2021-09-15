@@ -8,7 +8,7 @@ setup(
     author = 'Alec Delaney',
     author_email = 'tekktrik@gmail.com',
     url = 'https://github.com/tekktrik/parallel64',
-    download_url = 'https://github.com/tekktrik/parallel64/archive/refs/tags/v0.4.0.tar.gz',
+    download_url = 'https://github.com/tekktrik/parallel64/archive/refs/tags/v0.4.1.tar.gz',
     keywords = ['parallel', 'port', 'spp', 'epp', 'ecp'],
     classifiers = [],
 )
