@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'parallel64',
-    packages = ['parallel64', 'parallel64.bitbang', 'parallel64.inpoutdlls']  # Ideally should be same as your GitHub release tag varsion
+    packages = ['parallel64', 'parallel64.bitbang', 'parallel64.inpoutdlls'],  # Ideally should be same as your GitHub release tag varsion
     description = 'Python package for working with parallel ports in a 64-bit Windows environment',
     author = 'Alec Delaney',
     author_email = 'tekktrik@gmail.com',
