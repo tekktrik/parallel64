@@ -75,8 +75,6 @@ class StandardPort:
         #else:
         #    raise Exception("This port was detected not to be bidirectional, data cannot be read using the data register/pins")
         
-        # Maybe raise a warning instead?
-        
         return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
 
     def writeControlRegister(self, control_byte):
@@ -90,15 +88,27 @@ class StandardPort:
         
     #-------------------------------- Need to write protocol for SPP
         
-    def writeSPPData(self, data):
+    def writeSPPData(self, data, hold_while_busy=True):
         self.resetControlForSPPHandshake()
         self.setForwardDirection()
         self.writeDataRegister(data)
+        if not bool((self.readStatusRegister() & (1 << 7)) >> 7):
+            raise OSError("Port is busy")
+        curr_control = self.readControlRegister()
+        self.writeControlRegister(curr_control | 0b00000001)
+        time.sleep(0.001)
+        self.writeControlRegister(curr_control)
+        if hold_while_busy:
+            while not bool((self.readStatusRegister() & (1 << 7)) >> 7):
+                pass
         
     def readSPPData(self):
-        self.resetControlForSPPHandshake()
-        self.setReverseDirection()
-        return self.readDataRegister()
+        if self.isBidirectional():
+            self.resetControlForSPPHandshake()
+            self.setReverseDirection()
+            return self.readDataRegister()
+        else:
+            raise OSError("This port was detected not to be bidirectional, data cannot be read using the data register/pins")
         
     def resetControlForSPPHandshake(self):
         control_byte = self.readControlRegister()
