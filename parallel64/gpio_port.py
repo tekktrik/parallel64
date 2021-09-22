@@ -138,5 +138,5 @@ class GPIOPort(StandardPort):
     def setupPWM(self, pwm_pin, duty_cycle, cycle_time):
         return PWM(self, pwm_pin, duty_cycle, cycle_time)
                 
-    def setupI2C(self, sda_pin, scl_pin):
-        return I2C(self, sda_pin, scl_pin, baudrate)
+    #def setupI2C(self, sda_pin, scl_pin):
+    #    return I2C(self, sda_pin, scl_pin, baudrate)
