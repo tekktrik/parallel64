@@ -47,7 +47,7 @@ class StandardPort:
     def setDirection(self, direction):
         direction_byte = direction.value << 5
         control_byte = self.readControlRegister()
-        new_control_byte = 0b00100000 | control_byte
+        new_control_byte = (1 << 5) | control_byte
         self.writeControlRegister(new_control_byte)
         
     def setReverseDirection(self):
