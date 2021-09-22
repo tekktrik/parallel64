@@ -4,7 +4,7 @@ import inspect
 import threading
 from enum import Enum
 from parallel64.standard_port import StandardPort
-from parallel64.bitbang.i2c import I2C
+from parallel64.bitbang.bitbang_pwm import PWM
 
 class GPIOPort(StandardPort):
     
