@@ -14,7 +14,8 @@ class ParallelPort:
         self.EnhancedPort = None
         self.ExtendedPort = None
         self.GPIOPort = None
-        for mode in modes:
+        self.modes = port_modes
+        for mode in self.modes:
             if mode.lower() == "spp":
                 self.StandardPort = StandardPort(spp_base_address, windll_location)
             if mode.lower() == "epp":
