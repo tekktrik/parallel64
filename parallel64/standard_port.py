@@ -118,4 +118,3 @@ class StandardPort:
         pre_control_byte = bidir_control_byte & control_byte
         new_control_byte = 0b00000100 | pre_control_byte
         self.writeControlRegister(new_control_byte)
-        print(bin(self.readControlRegister()))
