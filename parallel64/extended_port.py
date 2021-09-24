@@ -18,12 +18,13 @@ class ExtendedPort:
     def __init__(self, ecp_base_address, windll_location=None):
         self._ecr_address = ecp_base_address + 2
         if windll_location == None:
-            parent_folder = os.path.join(__file__, "..", "..")
-            inpout_folder = [os.path.abspath(folder) for folder in os.listdir(parent_folder) if folder.startswith("InpOutBinaries")][0]
+            parent_folder = os.path.join(__file__, "..")
+            inpout_folder = [os.path.abspath(os.path.join(parent_folder, folder)) for folder in os.listdir(__file__) if folder == "inpoutdlls"][0]
             if sys.maxsize > 2**32:
-                windll_location = os.path.join(inpout_folder, "x64", "inpoutx64.dll")
+                windll_location = os.path.join(inpout_folder, "inpoutx64.dll")
             else:
-                windll_location = os.path.join(inpout_folder, "Win32", "inpout32.dll")
+                windll_location = os.path.join(inpout_folder, "inpout32.dll")
+        self._windll_location = windll_location
         self._parallel_port = ctypes.WinDLL(windll_location)
         
     def setCommunicationMode(self, comm_mode):

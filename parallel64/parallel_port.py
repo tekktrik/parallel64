@@ -14,7 +14,8 @@ class ParallelPort:
         self.EnhancedPort = None
         self.ExtendedPort = None
         self.GPIOPort = None
-        for mode in modes:
+        self.modes = port_modes
+        for mode in self.modes:
             if mode.lower() == "spp":
                 self.StandardPort = StandardPort(spp_base_address, windll_location)
             if mode.lower() == "epp":
@@ -29,9 +30,12 @@ class ParallelPort:
         with open(json_filepath, 'r') as json_file:
             json_contents = json.load(json_file)
         try:
-            spp_base_add = int(json_contents["spp_base_address"], 16)
+            if json_contents["spp_base_address"] != None:
+                spp_base_add = int(json_contents["spp_base_address"], 16)
+            if json_contents["spp_base_address"] != None:
+                ecp_base_add = int(json_contents["spp_base_address"], 16)
             windll_loc = json_contents["windll_location"]
             port_modes = json_contents["port_modes"]
-            return cls(spp_base_add, windll_location)
+            return cls(spp_base_add, ecp_base_add, windll_location, port_modes)
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")

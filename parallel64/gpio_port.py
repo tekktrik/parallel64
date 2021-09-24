@@ -4,7 +4,7 @@ import inspect
 import threading
 from enum import Enum
 from parallel64.standard_port import StandardPort
-#from parallel64.bitbang.i2c import I2C
+from parallel64.bitbang.bitbang_pwm import PWM
 
 class GPIOPort(StandardPort):
     
@@ -131,8 +131,9 @@ class GPIOPort(StandardPort):
         
     def resetControlPins(self):
         control_byte = self.readControlRegister()
-        pre_control_byte = 0b11110000 & control_byte
-        new_control_byte = 0b00001011 | pre_control_byte
+        bidir_control_byte = 0b11110000 if self._is_bidir else 0b11010000
+        pre_control_byte = bidir_control_byte & control_byte
+        new_control_byte = 0b00000100 | pre_control_byte
         self.writeControlRegister(new_control_byte)
         
     def setupPWM(self, pwm_pin, duty_cycle, cycle_time):

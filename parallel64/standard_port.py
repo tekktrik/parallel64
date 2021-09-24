@@ -1,6 +1,7 @@
 import os
 import sys
 import ctypes
+import time
 from enum import Enum
 
 class StandardPort:
@@ -15,9 +16,9 @@ class StandardPort:
         self._status_address = spp_base_address + 1
         self._control_address = spp_base_address + 2
         if windll_location == None:
-            #parent_folder = os.path.join(__file__, "..", "..")
+            parent_folder = os.path.join(__file__, "..")
             #inpout_folder = [os.path.abspath(folder) for folder in os.listdir(parent_folder) if folder.startswith("InpOutBinaries")][0]
-            inpout_folder = [os.path.abspath(folder) for folder in os.listdir(__file__) if folder == "inpoutdlls"][0]
+            inpout_folder = [os.path.abspath(os.path.join(parent_folder, folder)) for folder in os.listdir(parent_folder) if folder == "inpoutdlls"][0]
             if sys.maxsize > 2**32:
                 windll_location = os.path.join(inpout_folder, "inpoutx64.dll")
             else:
@@ -47,7 +48,7 @@ class StandardPort:
     def setDirection(self, direction):
         direction_byte = direction.value << 5
         control_byte = self.readControlRegister()
-        new_control_byte = 0b00100000 | control_byte
+        new_control_byte = (1 << 5) | control_byte
         self.writeControlRegister(new_control_byte)
         
     def setReverseDirection(self):
@@ -75,8 +76,6 @@ class StandardPort:
         #else:
         #    raise Exception("This port was detected not to be bidirectional, data cannot be read using the data register/pins")
         
-        # Maybe raise a warning instead?
-        
         return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
 
     def writeControlRegister(self, control_byte):
@@ -90,18 +89,32 @@ class StandardPort:
         
     #-------------------------------- Need to write protocol for SPP
         
-    def writeSPPData(self, data):
+    def writeSPPData(self, data, hold_while_busy=True):
         self.resetControlForSPPHandshake()
-        self.setForwardDirection()
+        if self.isBidirectional():
+            self.setForwardDirection()
         self.writeDataRegister(data)
+        if not bool((self.readStatusRegister() & (1 << 7)) >> 7):
+            raise OSError("Port is busy")
+        curr_control = self.readControlRegister()
+        self.writeControlRegister(curr_control | 0b00000001)
+        time.sleep(0.001)
+        self.writeControlRegister(curr_control)
+        if hold_while_busy:
+            while not bool((self.readStatusRegister() & (1 << 7)) >> 7):
+                pass
         
     def readSPPData(self):
-        self.resetControlForSPPHandshake()
-        self.setReverseDirection()
-        return self.readDataRegister()
+        if self.isBidirectional():
+            self.resetControlForSPPHandshake()
+            self.setReverseDirection()
+            return self.readDataRegister()
+        else:
+            raise OSError("This port was detected not to be bidirectional, data cannot be read using the data register/pins")
         
     def resetControlForSPPHandshake(self):
         control_byte = self.readControlRegister()
-        pre_control_byte = 0b11110000 & control_byte
+        bidir_control_byte = 0b11110000 if self._is_bidir else 0b11010000
+        pre_control_byte = bidir_control_byte & control_byte
         new_control_byte = 0b00000100 | pre_control_byte
         self.writeControlRegister(new_control_byte)
