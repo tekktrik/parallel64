@@ -131,9 +131,11 @@ class GPIOPort(StandardPort):
         
     def resetControlPins(self):
         control_byte = self.readControlRegister()
-        pre_control_byte = 0b11110000 & control_byte
-        new_control_byte = 0b00001011 | pre_control_byte
+        bidir_control_byte = 0b11110000 if self._is_bidir else 0b11010000
+        pre_control_byte = bidir_control_byte & control_byte
+        new_control_byte = 0b00000100 | pre_control_byte
         self.writeControlRegister(new_control_byte)
+        print(bin(self.readControlRegister()))
         
     def setupPWM(self, pwm_pin, duty_cycle, cycle_time):
         return PWM(self, pwm_pin, duty_cycle, cycle_time)
