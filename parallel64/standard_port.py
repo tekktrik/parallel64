@@ -1,6 +1,7 @@
 import os
 import sys
 import ctypes
+import time
 from enum import Enum
 
 class StandardPort:
@@ -90,7 +91,8 @@ class StandardPort:
         
     def writeSPPData(self, data, hold_while_busy=True):
         self.resetControlForSPPHandshake()
-        self.setForwardDirection()
+        if self.isBidirectional():
+            self.setForwardDirection()
         self.writeDataRegister(data)
         if not bool((self.readStatusRegister() & (1 << 7)) >> 7):
             raise OSError("Port is busy")
