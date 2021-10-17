@@ -1,7 +1,4 @@
-import ctypes
 import json
-import os
-import sys
 from .standard_port import StandardPort
 from .enhanced_port import EnhancedPort
 from .extended_port import ExtendedPort

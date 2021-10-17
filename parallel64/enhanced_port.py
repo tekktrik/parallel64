@@ -1,5 +1,3 @@
-import json
-from enum import Enum
 from .standard_port import StandardPort
 
 class EnhancedPort(StandardPort):

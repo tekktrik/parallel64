@@ -1,8 +1,4 @@
-import ctypes
-import json
-import inspect
 import threading
-from enum import Enum
 from .standard_port import StandardPort
 
 class GPIOPort(StandardPort):
