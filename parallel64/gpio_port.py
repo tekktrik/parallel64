@@ -135,10 +135,4 @@ class GPIOPort(StandardPort):
         bidir_control_byte = 0b11110000 if self._is_bidir else 0b11010000
         pre_control_byte = bidir_control_byte & control_byte
         new_control_byte = 0b00000100 | pre_control_byte
-        self.writeControlRegister(new_control_byte)
-        
-    def setupPWM(self, pwm_pin, duty_cycle, cycle_time):
-        return bitbang.PWM(self, pwm_pin, duty_cycle, cycle_time)
-                
-    #def setupI2C(self, sda_pin, scl_pin):
-    #    return I2C(self, sda_pin, scl_pin, baudrate)
+        self.write_control_register(new_control_byte)
