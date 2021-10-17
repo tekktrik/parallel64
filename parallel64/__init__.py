@@ -2,12 +2,12 @@ import sys
 
 if sys.platform == 'win32':
     #if platform.architecture()[0] == '64bit':
-    from parallel64.parallel_port import ParallelPort
-    from parallel64.standard_port import StandardPort
-    from parallel64.enhanced_port import EnhancedPort
-    from parallel64.extended_port import ExtendedPort
-    from parallel64.gpio_port import GPIOPort
-    import parallel64.bitbang
+    from .parallel_port import ParallelPort
+    from .standard_port import StandardPort
+    from .enhanced_port import EnhancedPort
+    from .extended_port import ExtendedPort
+    from .gpio_port import GPIOPort
+    from . import bitbang
     #else:
     #    raise Exception("parallel64 is mean for 64-bit systems only, 32-bit systems may still be able to use packages like pyparallel")
 else:
