@@ -1,4 +1,5 @@
 import threading
+from typing import List, Tuple, Optional
 from .standard_port import StandardPort
 
 class GPIOPort(StandardPort):
@@ -7,7 +8,7 @@ class GPIOPort(StandardPort):
     
         class Pin:
 
-            def __init__(self, pin_number, bit_index, register, hw_inverted=False):
+            def __init__(self, pin_number: int, bit_index: int, register: int, hw_inverted: bool = False):
                 self.pin_number = pin_number
                 self.bit_index = bit_index
                 self.register = register
@@ -15,13 +16,13 @@ class GPIOPort(StandardPort):
                 self._allow_input = None
                 self._allow_output = None
                 
-            def isHardwareInverted(self):
+            def is_hw_inverted(self) -> bool:
                 return self._hw_inverted
                 
-            def isOutputAllowed(self):
+            def is_output_allowed(self) -> bool:
                 return self._allow_output
                 
-            def isInputAllowed(self):
+            def iw_input_allowed(self) -> bool:
                 return self._allow_input
             
         class DataPin(Pin):
@@ -51,7 +52,7 @@ class GPIOPort(StandardPort):
                 self._allow_input = True
                 self._allow_output = True
         
-        def __init__(self, data_address, is_bidir):
+        def __init__(self, data_address: int, is_bidir: bool):
             self.STROBE = self.ControlPin(1, 0, data_address+2, True)
             self.AUTO_LINEFEED = self.ControlPin(14, 1, data_address+2, True)
             self.INITIALIZE = self.ControlPin(16, 2, data_address+2)
@@ -72,26 +73,26 @@ class GPIOPort(StandardPort):
             self.D6 = self.DataPin(8, 6, data_address, is_bidir)
             self.D7 = self.DataPin(9, 7, data_address, is_bidir)
         
-        def getNamedPinList(self):
+        def get_named_pin_list(self) -> List[Tuple(str, Pin)]:
             pin_dict = self.__dict__.items()
             return [pin_name for pin_name in pin_dict if pin[0] != "_parallel_port"]
             
-        def getPinList(self):
-            return [pin[1] for pin in self.getNamedPinList()]
+        def get_pin_list(self) -> List[Pin]:
+            return [pin[1] for pin in self.get_named_pin_list()]
             
-        def getPinNames(self):
-            return [pin[0] for pin in self.getNamedPinList()]
+        def get_pin_name_list(self) -> List(str):
+            return [pin[0] for pin in self.get_named_pin_list()]
                 
-    def __init__(self, data_address, windll_location=None, clear_gpio=True, reset_control=False):
+    def __init__(self, data_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False):
         super().__init__(data_address, windll_location, reset_control)
-        self.Pins = self.Pins(self._spp_data_address, self.isBidirectional())
+        self.Pins = self.Pins(self._spp_data_address, self.is_bidirectional())
         if clear_gpio:
-            self.writeDataRegister(0)
-            self.resetControlPins()
-            
+            self.write_data_register(0)
+            self.reset_control_pins()
+    
     '''
     @classmethod
-    def fromJSON(cls, json_filepath):
+    def fromJSON(cls, json_filepath: str) -> 'GPIOPort':
         with open(json_filepath, 'r') as json_file:
             json_contents = json.load(json_file)
         try:
@@ -102,20 +103,20 @@ class GPIOPort(StandardPort):
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
     '''
         
-    def readPin(self, pin):
-        if pin.isInputAllowed():
+    def read_pin(self, pin: Pins.Pin) -> bool:
+        if pin.iw_input_allowed():
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
             bit_mask = 1 << pin.bit_index
             bit_result = bool((bit_mask & register_byte) >> pin.bit_index)
-            return (not bit_result) if pin.isHardwareInverted() else bit_result
+            return (not bit_result) if pin.is_hw_inverted() else bit_result
         else:
             raise Exception("Input not allowed on pin " + str(pin.pin_number))
             
-    def writePin(self, pin, value):
-        if pin.isOutputAllowed():
+    def write_pin(self, pin: Pins.Pin, value: bool):
+        if pin.is_output_allowed():
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
             current_bit = ((1 << pin.bit_index) & register_byte) >> pin.bit_index
-            current_value = (not current_bit) if pin.isHardwareInverted() else current_bit
+            current_value = (not current_bit) if pin.is_hw_inverted() else current_bit
             if bool(current_value) != value:
                 bit_mask = 1 << pin.bit_index
                 byte_result = (bit_mask ^ register_byte)
@@ -123,11 +124,11 @@ class GPIOPort(StandardPort):
         else:
             raise Exception("Output not allowed on pin " + str(pin.pin_number))
             
-    def resetDataPins(self):
-        self.writeSPPData(0)
+    def reset_data_pins(self):
+        self.write_spp_data(0)
         
-    def resetControlPins(self):
-        control_byte = self.readControlRegister()
+    def reset_control_pins(self):
+        control_byte = self.read_control_register()
         bidir_control_byte = 0b11110000 if self._is_bidir else 0b11010000
         pre_control_byte = bidir_control_byte & control_byte
         new_control_byte = 0b00000100 | pre_control_byte
