@@ -30,9 +30,12 @@ class ParallelPort:
         try:
             if json_contents["spp_base_address"] != None:
                 spp_base_add = int(json_contents["spp_base_address"], 16)
-            if json_contents["spp_base_address"] != None:
-                ecp_base_add = int(json_contents["spp_base_address"], 16)
-            windll_loc = json_contents["windll_location"]
+            if json_contents["ecp_base_address"] != None:
+                ecp_base_add = int(json_contents["ecp_base_address"], 16)
+            try:
+                windll_loc = json_contents["windll_location"]
+            except KeyError:
+                windll_loc = None
             port_modes = json_contents["port_modes"]
             return cls(spp_base_add, ecp_base_add, windll_location, port_modes)
         except KeyError as err:
