@@ -7,6 +7,7 @@ class EnhancedPort(StandardPort):
         self._epp_address_address = spp_base_address + 3
         self._epp_data_address = spp_base_address + 4
         
+    '''
     @classmethod
     def fromJSON(cls, json_filepath):
         with open(json_filepath, 'r') as json_file:
@@ -17,6 +18,7 @@ class EnhancedPort(StandardPort):
             return cls(spp_base_add, windll_location)
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
+    '''
         
     def writeEPPAddress(self, address):
         self.resetControlForSPPHandshake()

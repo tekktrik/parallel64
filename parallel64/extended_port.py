@@ -26,6 +26,20 @@ class ExtendedPort:
                 windll_location = os.path.join(inpout_folder, "inpout32.dll")
         self._windll_location = windll_location
         self._parallel_port = ctypes.WinDLL(windll_location)
+    
+    @classmethod
+    def from_json(cls, json_filepath: str) -> 'ExtendedPort':
+        with open(json_filepath, 'r') as json_file:
+            json_contents = json.load(json_file)
+        try:
+            ecp_base_add = int(json_contents["ecp_base_address"], 16)
+            try:
+                windll_loc = json_contents["windll_location"]
+            except KeyError:
+                windll_loc = None
+            return cls(ecp_base_add, windll_loc)
+        except KeyError as err:
+            raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
     def setCommunicationMode(self, comm_mode):
         self.writeECR(comm_mode.value << 5)

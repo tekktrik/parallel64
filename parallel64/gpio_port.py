@@ -89,6 +89,7 @@ class GPIOPort(StandardPort):
             self.writeDataRegister(0)
             self.resetControlPins()
             
+    '''
     @classmethod
     def fromJSON(cls, json_filepath):
         with open(json_filepath, 'r') as json_file:
@@ -99,6 +100,7 @@ class GPIOPort(StandardPort):
             return cls(spp_base_add, windll_location)
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
+    '''
         
     def readPin(self, pin):
         if pin.isInputAllowed():
