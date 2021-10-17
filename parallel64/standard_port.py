@@ -52,7 +52,6 @@ class StandardPort:
         return self.Direction(direction_byte >> 5)
     
     def set_direction(self, direction: Direction):
-        #direction_byte = direction.value << 5
         control_byte = self.read_control_register()
         new_control_byte = (direction << 5) | control_byte
         self.write_control_register(new_control_byte)
