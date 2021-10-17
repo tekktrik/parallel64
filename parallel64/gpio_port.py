@@ -3,8 +3,8 @@ import json
 import inspect
 import threading
 from enum import Enum
-from parallel64.standard_port import StandardPort
-from parallel64.bitbang.bitbang_pwm import PWM
+from .standard_port import StandardPort
+from . import bitbang
 
 class GPIOPort(StandardPort):
     
@@ -137,7 +137,7 @@ class GPIOPort(StandardPort):
         self.writeControlRegister(new_control_byte)
         
     def setupPWM(self, pwm_pin, duty_cycle, cycle_time):
-        return PWM(self, pwm_pin, duty_cycle, cycle_time)
+        return bitbang.PWM(self, pwm_pin, duty_cycle, cycle_time)
                 
     #def setupI2C(self, sda_pin, scl_pin):
     #    return I2C(self, sda_pin, scl_pin, baudrate)

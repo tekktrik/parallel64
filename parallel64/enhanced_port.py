@@ -1,6 +1,6 @@
 import json
 from enum import Enum
-from parallel64.standard_port import StandardPort
+from .standard_port import StandardPort
 
 class EnhancedPort(StandardPort):
             

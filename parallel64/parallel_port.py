@@ -2,10 +2,10 @@ import ctypes
 import json
 import os
 import sys
-from parallel64.standard_port import StandardPort
-from parallel64.enhanced_port import EnhancedPort
-from parallel64.extended_port import ExtendedPort
-from parallel64.gpio_port import GPIOPort
+from .standard_port import StandardPort
+from .enhanced_port import EnhancedPort
+from .extended_port import ExtendedPort
+from .gpio_port import GPIOPort
 
 class ParallelPort:
     
