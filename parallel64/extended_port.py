@@ -2,6 +2,7 @@ import json
 import os
 import sys
 from enum import Enum
+import ctypes
 
 class ExtendedPort:
             
