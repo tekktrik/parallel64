@@ -4,6 +4,8 @@ import ctypes
 import time
 import json
 from enum import Enum
+from typing import Optional
+
 
 class StandardPort:
 
@@ -12,7 +14,7 @@ class StandardPort:
         REVERSE = 0
         FORWARD = 1
     
-    def __init__(self, spp_base_address, windll_location=None, reset_control=True):
+    def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, reset_control: bool = True):
         self._spp_data_address = spp_base_address
         self._status_address = spp_base_address + 1
         self._control_address = spp_base_address + 2
@@ -26,12 +28,12 @@ class StandardPort:
                 windll_location = os.path.join(inpout_folder, "inpout32.dll")
         self._windll_location = windll_location
         self._parallel_port = ctypes.WinDLL(windll_location)
-        self._is_bidir = True if self._testBidirectional() else False
+        self._is_bidir = True if self._test_bidirectional() else False
         if reset_control:
-            self.resetControlForSPPHandshake()
+            self.spp_handshake_control_reset()
         
     @classmethod
-    def fromJSON(cls, json_filepath):
+    def from_json(cls, json_filepath: str) -> 'StandardPort':
         with open(json_filepath, 'r') as json_file:
             json_contents = json.load(json_file)
         try:
@@ -41,34 +43,35 @@ class StandardPort:
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
-    def getDirection(self):
-        control_byte = self.readControlRegister()
+    def get_direction(self) -> Direction:
+        control_byte = self.read_control_register()
         direction_byte = (1 << 5) & control_byte
         return self.Direction(direction_byte >> 5)
     
-    def setDirection(self, direction):
         direction_byte = direction.value << 5
-        control_byte = self.readControlRegister()
-        new_control_byte = (1 << 5) | control_byte
-        self.writeControlRegister(new_control_byte)
+    def set_direction(self, direction: Direction):
+        #direction_byte = direction.value << 5
+        control_byte = self.read_control_register()
+        new_control_byte = (direction << 5) | control_byte
+        self.write_control_register(new_control_byte)
         
-    def setReverseDirection(self):
-        self.setDirection(self.Direction.REVERSE)
+    def set_reverse(self):
+        self.set_direction(self.Direction.REVERSE)
         
-    def setForwardDirection(self):
-        self.setDirection(self.Direction.FORWARD)
+    def set_forward(self):
+        self.set_direction(self.Direction.FORWARD)
         
-    def _testBidirectional(self):
-        curr_dir = self.getDirection()
-        self.setReverseDirection()
-        isBidir = not bool(self.getDirection().value)
-        self.setDirection(curr_dir)
+    def _test_bidirectional(self) -> bool:
+        curr_dir = self.get_direction()
+        self.set_reverse()
+        isBidir = not bool(self.get_direction().value)
+        self.set_direction(curr_dir)
         return isBidir
         
-    def isBidirectional(self):
+    def is_bidirectional(self) -> bool:
         return self._is_bidir
         
-    def writeDataRegister(self, data_byte):
+    def write_data_register(self, data_byte: int):
         self._parallel_port.DlPortWritePortUchar(self._spp_data_address, data_byte)
         
     def readDataRegister(self):
@@ -79,43 +82,43 @@ class StandardPort:
         
         return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
 
-    def writeControlRegister(self, control_byte):
+    def write_control_register(self, control_byte: int):
         self._parallel_port.DlPortWritePortUchar(self._control_address, control_byte)
         
-    def readControlRegister(self):
+    def read_control_register(self) -> int:
         return self._parallel_port.DlPortReadPortUchar(self._control_address)
         
-    def readStatusRegister(self):
+    def read_status_register(self) -> int:
         return self._parallel_port.DlPortReadPortUchar(self._status_address)
         
     #-------------------------------- Need to write protocol for SPP
         
-    def writeSPPData(self, data, hold_while_busy=True):
-        self.resetControlForSPPHandshake()
-        if self.isBidirectional():
-            self.setForwardDirection()
-        self.writeDataRegister(data)
-        if not bool((self.readStatusRegister() & (1 << 7)) >> 7):
+    def write_spp_data(self, data: int, hold_while_busy: bool = True):
+        self.spp_handshake_control_reset()
+        if self.is_bidirectional():
+            self.set_forward()
+        self.write_data_register(data)
+        if not bool((self.read_status_register() & (1 << 7)) >> 7):
             raise OSError("Port is busy")
-        curr_control = self.readControlRegister()
-        self.writeControlRegister(curr_control | 0b00000001)
+        curr_control = self.read_control_register()
+        self.write_control_register(curr_control | 0b00000001)
         time.sleep(0.001)
-        self.writeControlRegister(curr_control)
+        self.write_control_register(curr_control)
         if hold_while_busy:
-            while not bool((self.readStatusRegister() & (1 << 7)) >> 7):
+            while not bool((self.read_status_register() & (1 << 7)) >> 7):
                 pass
         
-    def readSPPData(self):
-        if self.isBidirectional():
-            self.resetControlForSPPHandshake()
-            self.setReverseDirection()
-            return self.readDataRegister()
+    def read_spp_data(self) -> int:
+        if self.is_bidirectional():
+            self.spp_handshake_control_reset()
+            self.set_reverse()
+            return self.read_data_register()
         else:
             raise OSError("This port was detected not to be bidirectional, data cannot be read using the data register/pins")
         
-    def resetControlForSPPHandshake(self):
-        control_byte = self.readControlRegister()
+    def spp_handshake_control_reset(self):
+        control_byte = self.read_control_register()
         bidir_control_byte = 0b11110000 if self._is_bidir else 0b11010000
         pre_control_byte = bidir_control_byte & control_byte
         new_control_byte = 0b00000100 | pre_control_byte
-        self.writeControlRegister(new_control_byte)
+        self.write_control_register(new_control_byte)
