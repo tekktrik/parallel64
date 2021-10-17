@@ -7,7 +7,6 @@ if sys.platform == 'win32':
     from .enhanced_port import EnhancedPort
     from .extended_port import ExtendedPort
     from .gpio_port import GPIOPort
-    from . import bitbang
     #else:
     #    raise Exception("parallel64 is mean for 64-bit systems only, 32-bit systems may still be able to use packages like pyparallel")
 else:

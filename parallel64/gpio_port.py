@@ -4,7 +4,6 @@ import inspect
 import threading
 from enum import Enum
 from .standard_port import StandardPort
-from . import bitbang
 
 class GPIOPort(StandardPort):
     
