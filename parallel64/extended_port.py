@@ -21,7 +21,8 @@ class ExtendedPort:
         self._ecr_address = ecp_base_address + 2
         if windll_location == None:
             parent_folder = os.path.join(__file__, "..")
-            inpout_folder = [os.path.abspath(os.path.join(parent_folder, folder)) for folder in os.listdir(__file__) if folder == "inpoutdlls"][0]
+            inpout_folder = [os.path.abspath(os.path.join(parent_folder, folder)) for folder in os.listdir(parent_folder) if folder == "inpoutdlls"][0]
+            
             if sys.maxsize > 2**32:
                 windll_location = os.path.join(inpout_folder, "inpoutx64.dll")
             else:
