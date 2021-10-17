@@ -1,4 +1,5 @@
 import json
+from typing import List, Optional
 from .standard_port import StandardPort
 from .enhanced_port import EnhancedPort
 from .extended_port import ExtendedPort
@@ -6,7 +7,7 @@ from .gpio_port import GPIOPort
 
 class ParallelPort:
     
-    def __init__(self, spp_base_address=None, ecp_base_address=None, windll_location=None, port_modes=[]):
+    def __init__(self, spp_base_address: int = None, ecp_base_address: int = None, windll_location: Optional[str] = None, port_modes: List[str] = []):
         self.StandardPort = None
         self.EnhancedPort = None
         self.ExtendedPort = None
@@ -23,7 +24,7 @@ class ParallelPort:
                 self.GPIOPort = GPIOPort(spp_base_address, windll_location)
         
     @classmethod
-    def fromJSON(cls, json_filepath):
+    def from_json(cls, json_filepath: str) -> 'ParallelPort':
         with open(json_filepath, 'r') as json_file:
             json_contents = json.load(json_file)
         try:
