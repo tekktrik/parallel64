@@ -3,6 +3,7 @@ import os
 import sys
 from enum import Enum
 import ctypes
+from typing import Optional
 
 class ExtendedPort:
             
@@ -16,7 +17,7 @@ class ExtendedPort:
         #FIFO_TEST = 6
         #CONFIG = 7
             
-    def __init__(self, ecp_base_address, windll_location=None):
+    def __init__(self, ecp_base_address: int, windll_location: Optional[str] = None):
         self._ecr_address = ecp_base_address + 2
         if windll_location == None:
             parent_folder = os.path.join(__file__, "..")
@@ -42,13 +43,13 @@ class ExtendedPort:
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
-    def setCommunicationMode(self, comm_mode):
-        self.writeECR(comm_mode.value << 5)
+    def set_comm_mode(self, comm_mode: CommunicationMode):
+        self.write_ecr_register(comm_mode.value << 5)
         
         return self._parallel_port.DlPortReadPortUchar(self._epp_address_address)
         
-    def writeECR(self, data):
-        self._parallel_port.DlPortWritePortUchar(self._ecr_address, (1 << 7))
+    def write_ecr_register(self, data: int):
+        self._parallel_port.DlPortWritePortUchar(self._ecr_address, data)
         
-    def readECR(self):
+    def read_ecr_register(self) -> int:
         return self._parallel_port.DlPortReadPortUchar(self._ecr_address)
