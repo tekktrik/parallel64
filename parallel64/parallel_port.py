@@ -37,6 +37,6 @@ class ParallelPort:
             except KeyError:
                 windll_loc = None
             port_modes = json_contents["port_modes"]
-            return cls(spp_base_add, ecp_base_add, windll_location, port_modes)
+            return cls(spp_base_add, ecp_base_add, windll_loc, port_modes)
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
