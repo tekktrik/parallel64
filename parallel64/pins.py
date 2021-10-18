@@ -36,6 +36,9 @@ class Pin:
 
 class DataPin(Pin):
     '''Class representing an individual data pin, including a class-wide threading.Lock for I/O operations
+
+    :ivar register_lock: A class-wide thread lock useful for making I/O safe code
+    :vartype register_lock: threading.Lock
     '''
     
     register_lock = threading.Lock()
@@ -47,6 +50,9 @@ class DataPin(Pin):
         
 class StatusPin(Pin):
     '''Class representing an individual status pin, including a class-wide threading.Lock for I/O operations
+
+    :ivar register_lock: A class-wide thread lock useful for making I/O safe code
+    :vartype register_lock: threading.Lock
     '''
     
     register_lock = threading.Lock()
@@ -58,6 +64,9 @@ class StatusPin(Pin):
         
 class ControlPin(Pin):
     '''Class representing an individual control pin, including a class-wide threading.Lock for I/O operations
+
+    :ivar register_lock: A class-wide thread lock useful for making I/O safe code
+    :vartype register_lock: threading.Lock
     '''
         
     register_lock = threading.Lock()
