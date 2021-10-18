@@ -255,7 +255,7 @@ class ExtendedPort:
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
-    def set_comm_mode(self, mode: CommunicationMode):
+    def set_comm_mode(self, mode: CommMode):
         '''Set the communication mode in the ECR
 
         :param mode: The mode to set in the ECR
