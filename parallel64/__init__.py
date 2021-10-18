@@ -9,7 +9,7 @@ import time
 import json
 from enum import Enum
 from typing import Optional, List, Tuple
-import threading
+from .pins import Pins, Pin
 
 
 class StandardPort:
@@ -372,136 +372,6 @@ class GPIOPort(StandardPort):
     :param reset_control: Whether to reset the control register (according to SPP handshake protocol) upon initialization, \
     default is not to reset the register (False). Note this takes place BEFORE clearing the pins via the clear_gpio argument.
     '''
-    
-    class Pins:
-        '''Class representing all the pins for the port (connected to registers)
-
-        Data Pins:
-        D0, D1, D2, D3, D4, D5, D6, D7
-
-        Status Pins:
-        ACK, BUSY, PAPER_OUT, SELECT_IN, ERROR
-
-        Control Pins:
-        STROBE, AUTO_LINEFEED, INITIALIZE, SELECT_PRINTER
-        '''
-    
-        class Pin:
-            '''Class representing a pin
-            '''
-
-            def __init__(self, pin_number: int, bit_index: int, register: int, hw_inverted: bool = False):
-                self.pin_number = pin_number
-                self.bit_index = bit_index
-                self.register = register
-                self._hw_inverted = hw_inverted
-                self._allow_input = None
-                self._allow_output = None
-                
-            def is_hw_inverted(self) -> bool:
-                '''Returns whether a pin is hardware inverted
-                
-                :rtype: bool
-                '''
-                return self._hw_inverted
-                
-            def is_output_allowed(self) -> bool:
-                '''Returns whether a pin allows output
-                
-                :rtype: bool
-                '''
-                return self._allow_output
-                
-            def iw_input_allowed(self) -> bool:
-                '''Returns whether a pin allows input
-                
-                :rtype: bool
-                '''
-                return self._allow_input
-            
-        class DataPin(Pin):
-            '''Class representing the data pins, including a class-wide threading.Lock for I/O operations
-            '''
-            
-            register_lock = threading.Lock()
-            
-            def __init__(self, pin_number, bit_index, register, is_bidir):
-                super().__init__(pin_number, bit_index, register, False)
-                self._allow_input = True if is_bidir else False
-                self._allow_output = True
-                
-        class StatusPin(Pin):
-            '''Class representing the status pins, including a class-wide threading.Lock for I/O operations
-            '''
-            
-            register_lock = threading.Lock()
-            
-            def __init__(self, pin_number, bit_index, register, hw_inverted=False):
-                super().__init__(pin_number, bit_index, register, hw_inverted)
-                self._allow_input = True
-                self._allow_output = False
-                
-        class ControlPin(Pin):
-            '''Class representing the control pins, including a class-wide threading.Lock for I/O operations
-            '''
-                
-            register_lock = threading.Lock()
-                
-            def __init__(self, pin_number, bit_index, register, hw_inverted=False):
-                super().__init__(pin_number, bit_index, register, hw_inverted)
-                self._allow_input = True
-                self._allow_output = True
-        
-        def __init__(self, data_address: int, is_bidir: bool):
-            self.STROBE = self.ControlPin(1, 0, data_address+2, True)
-            self.AUTO_LINEFEED = self.ControlPin(14, 1, data_address+2, True)
-            self.INITIALIZE = self.ControlPin(16, 2, data_address+2)
-            self.SELECT_PRINTER = self.ControlPin(17, 3, data_address+2, True)
-            
-            self.ACK = self.StatusPin(10, 6, data_address+1)
-            self.BUSY = self.StatusPin(11, 7, data_address+1, True)
-            self.PAPER_OUT = self.StatusPin(12, 5, data_address+1)
-            self.SELECT_IN = self.StatusPin(13, 4, data_address+1)
-            self.ERROR = self.StatusPin(15, 3, data_address+1)
-
-            self.D0 = self.DataPin(2, 0, data_address, is_bidir)
-            self.D1 = self.DataPin(3, 1, data_address, is_bidir)
-            self.D2 = self.DataPin(4, 2, data_address, is_bidir)
-            self.D3 = self.DataPin(5, 3, data_address, is_bidir)
-            self.D4 = self.DataPin(6, 4, data_address, is_bidir)
-            self.D5 = self.DataPin(7, 5, data_address, is_bidir)
-            self.D6 = self.DataPin(8, 6, data_address, is_bidir)
-            self.D7 = self.DataPin(9, 7, data_address, is_bidir)
-        
-        def get_named_pin_list(self) -> List[Tuple[str, Pin]]:
-            '''Returns a list of pins and their names
-            
-            :rtype: list((str, GPIOPort.Pins.Pin))
-            '''
-            return list(self.__dict__.items())
-            #return [pin_name for pin_name in pin_dict if pin_name != "_parallel_port"]
-            
-        def get_pin_list(self) -> List[Pin]:
-            '''Returns a list of pins
-
-            :rtype: list(GPIOPort.Pins.Pin)
-            '''
-            return [pin[1] for pin in self.get_named_pin_list()]
-            
-        def get_pin_name_list(self) -> List[str]:
-            '''Return a list of pin names
-            
-            :rtype: list(str)
-            '''
-            return [pin[0] for pin in self.get_named_pin_list()]
-
-        def get_pin_by_number(self, pin_number: int) -> Pin:
-            '''Returns a pin based off of the pin number
-            
-            :rtype: GPIOPort.Pins.Pin
-            '''
-            pin_list = self.get_pin_list()
-            return [pin for pin in pin_list if pin.pin_number == pin_number][0]
                 
     def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False):
         super().__init__(spp_base_address, windll_location, reset_control)
@@ -510,11 +380,11 @@ class GPIOPort(StandardPort):
             self.write_data_register(0)
             self.reset_control_pins()
         
-    def read_pin(self, pin: Pins.Pin) -> bool:
+    def read_pin(self, pin: Pin) -> bool:
         '''Read the state of the given pin
 
         :param pin: The pin to read
-        :type pin: GPIOPort.Pins.Pin
+        :type pin: Pin
         :return: The state of the pin
         :rtype: bool
         '''
@@ -527,11 +397,11 @@ class GPIOPort(StandardPort):
         else:
             raise Exception("Input not allowed on pin " + str(pin.pin_number))
             
-    def write_pin(self, pin: Pins.Pin, value: bool):
+    def write_pin(self, pin: Pin, value: bool):
         '''Set the state of the given pin
 
         :param pin: The pin to set
-        :type pin: GPIOPort.Pins.Pin
+        :type pin: Pin
         :param value: The state to set the pin
         :type value: bool
         '''
