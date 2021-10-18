@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>parallel64 package &mdash; parallel64  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="parallel64" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> parallel64
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">parallel64</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">parallel64 package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parallel64-pins-module">parallel64.pins module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parallel64-constants-module">parallel64.constants module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">parallel64</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">parallel64</a> &raquo;</li>
+      <li>parallel64 package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/parallel64.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="parallel64-package">
+<h1>parallel64 package<a class="headerlink" href="#parallel64-package" title="Permalink to this headline"></a></h1>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.StandardPort">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.</span></span><span class="sig-name descname"><span class="pre">StandardPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spp_base_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windll_location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_control</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.StandardPort" title="Permalink to this definition"></a></dt>
+<dd><p>The class for representing the SPP port</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spp_base_address</strong> (<em>int</em>) – The base address for the port, representing the SPP port data register</p></li>
+<li><p><strong>windll_location</strong> (<em>str</em><em>, </em><em>optional</em>) – The location of the DLL required to use the parallel port, default is to use the one     included in this package</p></li>
+<li><p><strong>reset_control</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the control register should be reset upon initialization, default is to reset it (True)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.from_json">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_filepath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#parallel64.StandardPort" title="parallel64.StandardPort"><span class="pre">parallel64.StandardPort</span></a></span></span><a class="headerlink" href="#parallel64.StandardPort.from_json" title="Permalink to this definition"></a></dt>
+<dd><p>Factory method for creating and instance of StandardPort from a JSON file containing the necessary information</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>json_filepath</strong> (<em>str</em>) – Filepath to the JSON</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instance of StandardPort</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#parallel64.StandardPort" title="parallel64.StandardPort">StandardPort</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.get_direction">
+<span class="sig-name descname"><span class="pre">get_direction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#parallel64.constants.Direction" title="parallel64.constants.Direction"><span class="pre">parallel64.constants.Direction</span></a></span></span><a class="headerlink" href="#parallel64.StandardPort.get_direction" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current direction of the port</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Direction of the port</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#parallel64.constants.Direction" title="parallel64.constants.Direction">Direction</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.is_bidirectional">
+<span class="sig-name descname"><span class="pre">is_bidirectional</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#parallel64.StandardPort.is_bidirectional" title="Permalink to this definition"></a></dt>
+<dd><p>Returns whether the port is bidirectional, based on the test performed during __init__</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Whether the port was confirmed to be bidirectional</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.read_control_register">
+<span class="sig-name descname"><span class="pre">read_control_register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#parallel64.StandardPort.read_control_register" title="Permalink to this definition"></a></dt>
+<dd><p>Reads from the Control register</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The information in the Control register</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.read_data_register">
+<span class="sig-name descname"><span class="pre">read_data_register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#parallel64.StandardPort.read_data_register" title="Permalink to this definition"></a></dt>
+<dd><p>Reads from the data register</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The information in the Data register</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>Exception</strong> – if the port is unable to read due to lack of bidirectionality support</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.read_spp_data">
+<span class="sig-name descname"><span class="pre">read_spp_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#parallel64.StandardPort.read_spp_data" title="Permalink to this definition"></a></dt>
+<dd><p>Reads data on the SPP data register, while managing the SPP handshake resources similar to a write operation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The data on the Data pins</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.read_status_register">
+<span class="sig-name descname"><span class="pre">read_status_register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#parallel64.StandardPort.read_status_register" title="Permalink to this definition"></a></dt>
+<dd><p>Reads from the Status register</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The information in the Status register</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.set_direction">
+<span class="sig-name descname"><span class="pre">set_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#parallel64.constants.Direction" title="parallel64.constants.Direction"><span class="pre">parallel64.constants.Direction</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.StandardPort.set_direction" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the direction of the port</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>direction</strong> (<a class="reference internal" href="#parallel64.constants.Direction" title="parallel64.constants.Direction"><em>Direction</em></a>) – The direction to set the port</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.set_forward">
+<span class="sig-name descname"><span class="pre">set_forward</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.StandardPort.set_forward" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the port to forward (output)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.set_reverse">
+<span class="sig-name descname"><span class="pre">set_reverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.StandardPort.set_reverse" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the port to reverse (input)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.spp_handshake_control_reset">
+<span class="sig-name descname"><span class="pre">spp_handshake_control_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.StandardPort.spp_handshake_control_reset" title="Permalink to this definition"></a></dt>
+<dd><p>Resets the Control register for the SPP handshake</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.write_control_register">
+<span class="sig-name descname"><span class="pre">write_control_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_byte</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.StandardPort.write_control_register" title="Permalink to this definition"></a></dt>
+<dd><p>Writes to the Control register</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>control_byte</strong> (<em>int</em>) – A byte of data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.write_data_register">
+<span class="sig-name descname"><span class="pre">write_data_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_byte</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.StandardPort.write_data_register" title="Permalink to this definition"></a></dt>
+<dd><p>Writes to the Data register</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data_byte</strong> (<em>int</em>) – A byte of data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.StandardPort.write_spp_data">
+<span class="sig-name descname"><span class="pre">write_spp_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hold_while_busy</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.StandardPort.write_spp_data" title="Permalink to this definition"></a></dt>
+<dd><p>Writes data via SPP</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>int</em>) – The data to be transmitted</p></li>
+<li><p><strong>hold_while_busy</strong> (<em>bool</em>) – Whether code should be blocked until the Busy line communicates the device is done receiving the data,         default behavior is blocking (True)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.EnhancedPort">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.</span></span><span class="sig-name descname"><span class="pre">EnhancedPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spp_base_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windll_location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.EnhancedPort" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parallel64.StandardPort" title="parallel64.StandardPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">parallel64.StandardPort</span></code></a></p>
+<p>The class for representing the EPP port.  It is an extension of the StandardPort (SPP), so it’s methods can be used as well</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spp_base_address</strong> (<em>int</em>) – The base address for the port, representing the SPP port data register</p></li>
+<li><p><strong>windll_location</strong> (<em>str</em><em>, </em><em>optional</em>) – The location of the DLL required to use the parallel port, default is to use the one     included in this package</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.EnhancedPort.read_epp_address">
+<span class="sig-name descname"><span class="pre">read_epp_address</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#parallel64.EnhancedPort.read_epp_address" title="Permalink to this definition"></a></dt>
+<dd><p>Read data from the EPP Address register (Address Read Cycle)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The information read</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.EnhancedPort.read_epp_data">
+<span class="sig-name descname"><span class="pre">read_epp_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#parallel64.EnhancedPort.read_epp_data" title="Permalink to this definition"></a></dt>
+<dd><p>Read data from the EPP Data register (Data Read Cycle)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The information read</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.EnhancedPort.write_epp_address">
+<span class="sig-name descname"><span class="pre">write_epp_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.EnhancedPort.write_epp_address" title="Permalink to this definition"></a></dt>
+<dd><p>Write data to the EPP Address register (Address Write Cycle)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>address</strong> (<em>int</em>) – The information to write</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.EnhancedPort.write_epp_data">
+<span class="sig-name descname"><span class="pre">write_epp_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.EnhancedPort.write_epp_data" title="Permalink to this definition"></a></dt>
+<dd><p>Write data to the EPP Data register (Data Write Cycle)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>int</em>) – The information to write</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.ExtendedPort">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.</span></span><span class="sig-name descname"><span class="pre">ExtendedPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecp_base_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windll_location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.ExtendedPort" title="Permalink to this definition"></a></dt>
+<dd><p>The class for representing the ECP port.  Currently, this class only works with the Extended Capabilities Register as opposed to the ECP port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ecp_base_address</strong> (<em>int</em>) – The base address for the port, representing the ECP port data register</p></li>
+<li><p><strong>windll_location</strong> (<em>str</em><em>, </em><em>optional</em>) – The location of the DLL required to use the parallel port, default is to use the one     included in this package</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.ExtendedPort.from_json">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_filepath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#parallel64.ExtendedPort" title="parallel64.ExtendedPort"><span class="pre">parallel64.ExtendedPort</span></a></span></span><a class="headerlink" href="#parallel64.ExtendedPort.from_json" title="Permalink to this definition"></a></dt>
+<dd><p>Factory method for creating and instance of ExtendedPort from a JSON file containing the necessary information</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>json_filepath</strong> (<em>str</em>) – Filepath to the JSON</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instance of ExtendedPort</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#parallel64.ExtendedPort" title="parallel64.ExtendedPort">ExtendedPort</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.ExtendedPort.read_ecr_register">
+<span class="sig-name descname"><span class="pre">read_ecr_register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#parallel64.ExtendedPort.read_ecr_register" title="Permalink to this definition"></a></dt>
+<dd><p>Read data in the Extended Capabilities Register (ECR)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The data in the register</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.ExtendedPort.set_comm_mode">
+<span class="sig-name descname"><span class="pre">set_comm_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#parallel64.constants.CommMode" title="parallel64.constants.CommMode"><span class="pre">parallel64.constants.CommMode</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.ExtendedPort.set_comm_mode" title="Permalink to this definition"></a></dt>
+<dd><p>Set the communication mode in the ECR</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>ExtendedPort.CommunicationMode</em>) – The mode to set in the ECR</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.ExtendedPort.write_ecr_register">
+<span class="sig-name descname"><span class="pre">write_ecr_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.ExtendedPort.write_ecr_register" title="Permalink to this definition"></a></dt>
+<dd><p>Write data to the Extended Capabilities Register (ECR)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>int</em>) – The data to write to the register</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.GPIOPort">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.</span></span><span class="sig-name descname"><span class="pre">GPIOPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spp_base_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windll_location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clear_gpio</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_control</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.GPIOPort" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parallel64.StandardPort" title="parallel64.StandardPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">parallel64.StandardPort</span></code></a></p>
+<p>The class for representing GPIO-like functionality of the port, useful for interacting with connected devices in ways
+outside of established parallel port communication protocols.  It inherits from the StandardPort class, however, so those
+methods are available as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spp_base_address</strong> (<em>int</em>) – The base address for the port, representing the SPP port data register</p></li>
+<li><p><strong>windll_location</strong> (<em>str</em><em>, </em><em>optional</em>) – The location of the DLL required to use the parallel port, default is to use the one     included in this package</p></li>
+<li><p><strong>clear_gpio</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to clear pins and reset to low upon initialization, default is to reset pins(True)</p></li>
+<li><p><strong>reset_control</strong> – Whether to reset the control register (according to SPP handshake protocol) upon initialization,     default is not to reset the register (False). Note this takes place BEFORE clearing the pins via the <cite>clear_gpio</cite> argument.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.GPIOPort.read_pin">
+<span class="sig-name descname"><span class="pre">read_pin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><span class="pre">parallel64.pins.Pin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#parallel64.GPIOPort.read_pin" title="Permalink to this definition"></a></dt>
+<dd><p>Read the state of the given pin</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pin</strong> (<a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><em>Pin</em></a>) – The pin to read</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The state of the pin</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.GPIOPort.reset_control_pins">
+<span class="sig-name descname"><span class="pre">reset_control_pins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.GPIOPort.reset_control_pins" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the control pins (to low)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.GPIOPort.reset_data_pins">
+<span class="sig-name descname"><span class="pre">reset_data_pins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.GPIOPort.reset_data_pins" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the data pins (to low)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.GPIOPort.write_pin">
+<span class="sig-name descname"><span class="pre">write_pin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><span class="pre">parallel64.pins.Pin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.GPIOPort.write_pin" title="Permalink to this definition"></a></dt>
+<dd><p>Set the state of the given pin</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pin</strong> (<a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><em>Pin</em></a>) – The pin to set</p></li>
+<li><p><strong>value</strong> (<em>bool</em>) – The state to set the pin</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.ParallelPort">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.</span></span><span class="sig-name descname"><span class="pre">ParallelPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spp_base_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecp_base_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windll_location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_modes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.ParallelPort" title="Permalink to this definition"></a></dt>
+<dd><p>The class represent multifunction ports.  If a port has multiple functionalities (or use desire such functionality, such as
+a port the can perform EPP protocol as well as GPIO-like pin manipulation), this class is essential a wrapper class for holding
+all such ports:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">parallel64</span>
+<span class="n">port</span> <span class="o">=</span> <span class="n">parallel64</span><span class="o">.</span><span class="n">ParallelPort</span><span class="p">(</span><span class="mh">0x1234</span><span class="p">,</span> <span class="n">port_modes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spp&#39;</span><span class="p">,</span> <span class="s1">&#39;gpio&#39;</span><span class="p">])</span>
+<span class="n">strobe_pin</span> <span class="o">=</span> <span class="n">port</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">pins</span><span class="o">.</span><span class="n">STROBE</span>
+<span class="n">port</span><span class="o">.</span><span class="n">spp</span><span class="o">.</span><span class="n">write_data_register</span><span class="p">(</span><span class="mh">0x1A</span><span class="p">)</span>
+<span class="n">port</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">write_pin</span><span class="p">(</span><span class="n">strobe_pin</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spp_base_address</strong> (<em>int</em><em>, </em><em>optional</em>) – The SPP base address, only needed for ports that require it</p></li>
+<li><p><strong>ecp_base_address</strong> (<em>int</em><em>, </em><em>optional</em>) – The ECP base address, only needed for ports that require it</p></li>
+<li><p><strong>windll_location</strong> (<em>str</em><em>, </em><em>optional</em>) – The location of the DLL required to use the parallel port, default is to use the one     included in this package</p></li>
+<li><p><strong>port_modes</strong> (<em>list</em><em>(</em><em>str</em><em>)</em><em>, </em><em>optional</em>) – The modes to be stored in the ParallelPort object</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.ParallelPort.from_json">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_filepath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#parallel64.ParallelPort" title="parallel64.ParallelPort"><span class="pre">parallel64.ParallelPort</span></a></span></span><a class="headerlink" href="#parallel64.ParallelPort.from_json" title="Permalink to this definition"></a></dt>
+<dd><p>Factory method for creating and instance of ParallelPort from a JSON file containing the necessary information</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>json_filepath</strong> (<em>str</em>) – Filepath to the JSON</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instance of ParallelPort</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#parallel64.ParallelPort" title="parallel64.ParallelPort">ParallelPort</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="parallel64-pins-module">
+<h2>parallel64.pins module<a class="headerlink" href="#parallel64-pins-module" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.pins.Pins">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.pins.</span></span><span class="sig-name descname"><span class="pre">Pins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_bidir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.pins.Pins" title="Permalink to this definition"></a></dt>
+<dd><p>Class representing all the pins for a given port (connected to registers).  Interaction with this class typically
+takes place by manipulating the ‘pins’ attribute of an instance of ‘GPIOPort’:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">parallel64</span>
+<span class="n">gpio</span> <span class="o">=</span> <span class="n">parallel64</span><span class="o">.</span><span class="n">GPIOPort</span><span class="p">(</span><span class="mh">0x1234</span><span class="p">)</span>
+<span class="n">input_pin</span> <span class="o">=</span> <span class="n">gpio</span><span class="o">.</span><span class="n">pins</span><span class="o">.</span><span class="n">D0</span>
+<span class="n">pin_value</span> <span class="o">=</span> <span class="n">gpio</span><span class="o">.</span><span class="n">read_pin</span><span class="p">(</span><span class="n">input_pin</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Data Pins:
+D0, D1, D2, D3, D4, D5, D6, D7</p>
+<p>Status Pins:
+ACK, BUSY, PAPER_OUT, SELECT_IN, ERROR</p>
+<p>Control Pins:
+STROBE, AUTO_LINEFEED, INITIALIZE, SELECT_PRINTER</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.pins.Pins.get_named_pin_list">
+<span class="sig-name descname"><span class="pre">get_named_pin_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><span class="pre">parallel64.pins.Pin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#parallel64.pins.Pins.get_named_pin_list" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of pins and their names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list((str, <a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin">Pin</a>))</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.pins.Pins.get_pin_by_number">
+<span class="sig-name descname"><span class="pre">get_pin_by_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pin_number</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><span class="pre">parallel64.pins.Pin</span></a></span></span><a class="headerlink" href="#parallel64.pins.Pins.get_pin_by_number" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a pin based off of the pin number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin">Pin</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.pins.Pins.get_pin_list">
+<span class="sig-name descname"><span class="pre">get_pin_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><span class="pre">parallel64.pins.Pin</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#parallel64.pins.Pins.get_pin_list" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of pins</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list(<a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin">Pin</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.pins.Pins.get_pin_name_list">
+<span class="sig-name descname"><span class="pre">get_pin_name_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#parallel64.pins.Pins.get_pin_name_list" title="Permalink to this definition"></a></dt>
+<dd><p>Return a list of pin names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.pins.Pin">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.pins.</span></span><span class="sig-name descname"><span class="pre">Pin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pin_number</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hw_inverted</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.pins.Pin" title="Permalink to this definition"></a></dt>
+<dd><p>Class representing a pin</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.pins.Pin.is_hw_inverted">
+<span class="sig-name descname"><span class="pre">is_hw_inverted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#parallel64.pins.Pin.is_hw_inverted" title="Permalink to this definition"></a></dt>
+<dd><p>Returns whether a pin is hardware inverted</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.pins.Pin.is_output_allowed">
+<span class="sig-name descname"><span class="pre">is_output_allowed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#parallel64.pins.Pin.is_output_allowed" title="Permalink to this definition"></a></dt>
+<dd><p>Returns whether a pin allows output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parallel64.pins.Pin.iw_input_allowed">
+<span class="sig-name descname"><span class="pre">iw_input_allowed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#parallel64.pins.Pin.iw_input_allowed" title="Permalink to this definition"></a></dt>
+<dd><p>Returns whether a pin allows input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.pins.DataPin">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.pins.</span></span><span class="sig-name descname"><span class="pre">DataPin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pin_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_bidir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.pins.DataPin" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><code class="xref py py-class docutils literal notranslate"><span class="pre">parallel64.pins.Pin</span></code></a></p>
+<p>Class representing an individual data pin, including a class-wide threading.Lock for I/O operations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>register_lock</strong> (<em>threading.Lock</em>) – A class-wide thread lock useful for making I/O safe code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.pins.StatusPin">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.pins.</span></span><span class="sig-name descname"><span class="pre">StatusPin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pin_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hw_inverted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.pins.StatusPin" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><code class="xref py py-class docutils literal notranslate"><span class="pre">parallel64.pins.Pin</span></code></a></p>
+<p>Class representing an individual status pin, including a class-wide threading.Lock for I/O operations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>register_lock</strong> (<em>threading.Lock</em>) – A class-wide thread lock useful for making I/O safe code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.pins.ControlPin">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.pins.</span></span><span class="sig-name descname"><span class="pre">ControlPin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pin_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hw_inverted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.pins.ControlPin" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parallel64.pins.Pin" title="parallel64.pins.Pin"><code class="xref py py-class docutils literal notranslate"><span class="pre">parallel64.pins.Pin</span></code></a></p>
+<p>Class representing an individual control pin, including a class-wide threading.Lock for I/O operations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>register_lock</strong> (<em>threading.Lock</em>) – A class-wide thread lock useful for making I/O safe code</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="parallel64-constants-module">
+<h2>parallel64.constants module<a class="headerlink" href="#parallel64-constants-module" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.constants.Direction">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.constants.</span></span><span class="sig-name descname"><span class="pre">Direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.constants.Direction" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Enum class representing the current direction of the port</p>
+<p>Used with <a class="reference internal" href="#parallel64.StandardPort" title="parallel64.StandardPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">parallel64.StandardPort</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parallel64.constants.Direction.FORWARD">
+<span class="sig-name descname"><span class="pre">FORWARD</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#parallel64.constants.Direction.FORWARD" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parallel64.constants.Direction.REVERSE">
+<span class="sig-name descname"><span class="pre">REVERSE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#parallel64.constants.Direction.REVERSE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parallel64.constants.CommMode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">parallel64.constants.</span></span><span class="sig-name descname"><span class="pre">CommMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parallel64.constants.CommMode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Enum class representing the various protocols the ECR might be configureable for (port-dependent). 
+Note that more available modes may be added as this project progresses.</p>
+<p>Used with <a class="reference internal" href="#parallel64.ExtendedPort" title="parallel64.ExtendedPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">parallel64.ExtendedPort</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parallel64.constants.CommMode.BYTE">
+<span class="sig-name descname"><span class="pre">BYTE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#parallel64.constants.CommMode.BYTE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parallel64.constants.CommMode.EPP">
+<span class="sig-name descname"><span class="pre">EPP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#parallel64.constants.CommMode.EPP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parallel64.constants.CommMode.SPP">
+<span class="sig-name descname"><span class="pre">SPP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#parallel64.constants.CommMode.SPP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="parallel64" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Alec Delaney.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
