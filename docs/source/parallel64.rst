@@ -43,17 +43,14 @@ parallel64.pins module
    
 .. autoclass:: parallel64.pins.DataPin
    :members:
-   :undoc-members:
    :show-inheritance:
    
 .. autoclass:: parallel64.pins.StatusPin
    :members:
-   :undoc-members:
    :show-inheritance:
    
 .. autoclass:: parallel64.pins.ControlPin
    :members:
-   :undoc-members:
    :show-inheritance:
 
 parallel64.constants module
