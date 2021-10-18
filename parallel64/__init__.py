@@ -451,6 +451,10 @@ class GPIOPort(StandardPort):
             
         def get_pin_name_list(self) -> List[str]:
             return [pin[0] for pin in self.get_named_pin_list()]
+
+        def get_pin_by_number(self, pin_number: int) -> Pin:
+            pin_list = self.get_pin_list()
+            return [pin for pin in pin_list if pin.pin_number == pin_number][0]
                 
     def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False):
         super().__init__(spp_base_address, windll_location, reset_control)
