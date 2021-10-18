@@ -4,7 +4,27 @@ parallel64 package
 Module contents
 ---------------
 
-.. automodule:: parallel64
+.. autoclass:: parallel64.StandardPort
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: parallel64.EnhancedPort
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: parallel64.ExtendedPort
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: parallel64.GPIOPort
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: parallel64.ParallelPort
    :members:
    :undoc-members:
    :show-inheritance:
