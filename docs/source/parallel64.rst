@@ -7,7 +7,6 @@ Module contents
 .. autoclass:: parallel64.StandardPort
    :members:
    :undoc-members:
-   :show-inheritance:
 
 .. autoclass:: parallel64.EnhancedPort
    :members:
@@ -17,7 +16,6 @@ Module contents
 .. autoclass:: parallel64.ExtendedPort
    :members:
    :undoc-members:
-   :show-inheritance:
 
 .. autoclass:: parallel64.GPIOPort
    :members:
@@ -27,7 +25,6 @@ Module contents
 .. autoclass:: parallel64.ParallelPort
    :members:
    :undoc-members:
-   :show-inheritance:
 
 
 Submodules
@@ -39,12 +36,10 @@ parallel64.pins module
 .. autoclass:: parallel64.pins.Pins
    :members:
    :undoc-members:
-   :show-inheritance:
    
 .. autoclass:: parallel64.pins.Pin
    :members:
    :undoc-members:
-   :show-inheritance:
    
 .. autoclass:: parallel64.pins.DataPin
    :members:
