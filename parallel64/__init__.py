@@ -434,20 +434,20 @@ class ParallelPort:
     '''
     
     def __init__(self, spp_base_address: Optional[int] = None, ecp_base_address: Optional[int] = None, windll_location: Optional[str] = None, port_modes: List[str] = []):
-        self.StandardPort = None
-        self.EnhancedPort = None
-        self.ExtendedPort = None
-        self.GPIOPort = None
+        self.spp = None
+        self.epp = None
+        self.ecp = None
+        self.gpio = None
         self.modes = port_modes
         for mode in self.modes:
             if mode.lower() == "spp":
-                self.StandardPort = StandardPort(spp_base_address, windll_location)
+                self.spp = StandardPort(spp_base_address, windll_location)
             if mode.lower() == "epp":
-                self.EnhancedPort = EnhancedPort(spp_base_address, windll_location)
+                self.epp = EnhancedPort(spp_base_address, windll_location)
             if mode.lower() == "ecp":
-                self.ExtendedPort = ExtendedPort(ecp_base_address, windll_location)
+                self.ecp = ExtendedPort(ecp_base_address, windll_location)
             if mode.lower() == "gpio":
-                self.GPIOPort = GPIOPort(spp_base_address, windll_location)
+                self.gpio = GPIOPort(spp_base_address, windll_location)
         
     @classmethod
     def from_json(cls, json_filepath: str) -> 'ParallelPort':
