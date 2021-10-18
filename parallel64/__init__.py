@@ -354,7 +354,7 @@ class GPIOPort(StandardPort):
     :param clear_gpio: Whether to clear pins and reset to low upon initialization, default is to reset pins(True)
     :type clear_gpio: bool, optional
     :param reset_control: Whether to reset the control register (according to SPP handshake protocol) upon initialization, \
-    default is not to reset the register (False). Note this takes place BEFORE clearing the pins via the clear_gpio argument.
+    default is not to reset the register (False). Note this takes place BEFORE clearing the pins via the `clear_gpio` argument.
     '''
                 
     def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False):
