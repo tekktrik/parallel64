@@ -55,3 +55,16 @@ parallel64.pins module
    :members:
    :undoc-members:
    :show-inheritance:
+
+parallel64.constants module
+---------------------------
+
+.. autoclass:: parallel64.constants.Direction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   
+.. autoclass:: parallel64.constants.CommMode
+   :members:
+   :undoc-members:
+   :show-inheritance:
