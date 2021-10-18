@@ -359,7 +359,7 @@ class GPIOPort(StandardPort):
                 
     def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False):
         super().__init__(spp_base_address, windll_location, reset_control)
-        self.Pins = self.Pins(self._spp_data_address, self.is_bidirectional())
+        self.pins = self.Pins(self._spp_data_address, self.is_bidirectional())
         if clear_gpio:
             self.write_data_register(0)
             self.reset_control_pins()
