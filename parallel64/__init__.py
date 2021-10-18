@@ -10,6 +10,7 @@ import json
 from enum import Enum
 from typing import Optional, List, Tuple
 from .pins import Pins, Pin
+from .constants import Direction, CommMode
 
 
 class StandardPort:
@@ -23,13 +24,6 @@ class StandardPort:
     :param reset_control: Whether the control register should be reset upon initialization, default is to reset it (True)
     :type reset_control: bool, optional
     '''
-
-    class Direction(Enum):
-        '''Enum class representing the current direction of the port
-        '''
-    
-        REVERSE = 0
-        FORWARD = 1
     
     def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, reset_control: bool = True):
         self._spp_data_address = spp_base_address
@@ -79,7 +73,7 @@ class StandardPort:
 
         control_byte = self.read_control_register()
         direction_byte = (1 << 5) & control_byte
-        return self.Direction(direction_byte >> 5)
+        return Direction(direction_byte >> 5)
     
     def set_direction(self, direction: Direction):
         '''Sets the direction of the port
@@ -95,12 +89,12 @@ class StandardPort:
     def set_reverse(self):
         '''Sets the port to reverse (input)
         '''
-        self.set_direction(self.Direction.REVERSE)
+        self.set_direction(Direction.REVERSE)
         
     def set_forward(self):
         '''Sets the port to forward (output)
         '''
-        self.set_direction(self.Direction.FORWARD)
+        self.set_direction(Direction.FORWARD)
         
     def _test_bidirectional(self) -> bool:
         '''Tests whether the port has bidirectional support
@@ -226,16 +220,6 @@ class ExtendedPort:
     included in this package
     :type windll_location: str, optional
     '''
-            
-    class CommunicationMode(Enum):
-        
-        SPP = 0
-        BYTE = 1
-        #SPP_FIFO = 2
-        #ECP_FIFO = 3
-        EPP = 4
-        #FIFO_TEST = 6
-        #CONFIG = 7
             
     def __init__(self, ecp_base_address: int, windll_location: Optional[str] = None):
         self._ecr_address = ecp_base_address + 2
