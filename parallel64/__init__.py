@@ -374,8 +374,21 @@ class GPIOPort(StandardPort):
     '''
     
     class Pins:
+        '''Class representing all the pins for the port (connected to registers)
+
+        Data Pins:
+        D0, D1, D2, D3, D4, D5, D6, D7
+
+        Status Pins:
+        ACK, BUSY, PAPER_OUT, SELECT_IN, ERROR
+
+        Control Pins:
+        STROBE, AUTO_LINEFEED, INITIALIZE, SELECT_PRINTER
+        '''
     
         class Pin:
+            '''Class representing a pin
+            '''
 
             def __init__(self, pin_number: int, bit_index: int, register: int, hw_inverted: bool = False):
                 self.pin_number = pin_number
@@ -386,15 +399,29 @@ class GPIOPort(StandardPort):
                 self._allow_output = None
                 
             def is_hw_inverted(self) -> bool:
+                '''Returns whether a pin is hardware inverted
+                
+                :rtype: bool
+                '''
                 return self._hw_inverted
                 
             def is_output_allowed(self) -> bool:
+                '''Returns whether a pin allows output
+                
+                :rtype: bool
+                '''
                 return self._allow_output
                 
             def iw_input_allowed(self) -> bool:
+                '''Returns whether a pin allows input
+                
+                :rtype: bool
+                '''
                 return self._allow_input
             
         class DataPin(Pin):
+            '''Class representing the data pins, including a class-wide threading.Lock for I/O operations
+            '''
             
             register_lock = threading.Lock()
             
@@ -404,6 +431,8 @@ class GPIOPort(StandardPort):
                 self._allow_output = True
                 
         class StatusPin(Pin):
+            '''Class representing the status pins, including a class-wide threading.Lock for I/O operations
+            '''
             
             register_lock = threading.Lock()
             
@@ -413,6 +442,8 @@ class GPIOPort(StandardPort):
                 self._allow_output = False
                 
         class ControlPin(Pin):
+            '''Class representing the control pins, including a class-wide threading.Lock for I/O operations
+            '''
                 
             register_lock = threading.Lock()
                 
@@ -443,16 +474,32 @@ class GPIOPort(StandardPort):
             self.D7 = self.DataPin(9, 7, data_address, is_bidir)
         
         def get_named_pin_list(self) -> List[Tuple[str, Pin]]:
+            '''Returns a list of pins and their names
+            
+            :rtype: list((str, GPIOPort.Pins.Pin))
+            '''
             return list(self.__dict__.items())
             #return [pin_name for pin_name in pin_dict if pin_name != "_parallel_port"]
             
         def get_pin_list(self) -> List[Pin]:
+            '''Returns a list of pins
+
+            :rtype: list(GPIOPort.Pins.Pin)
+            '''
             return [pin[1] for pin in self.get_named_pin_list()]
             
         def get_pin_name_list(self) -> List[str]:
+            '''Return a list of pin names
+            
+            :rtype: list(str)
+            '''
             return [pin[0] for pin in self.get_named_pin_list()]
 
         def get_pin_by_number(self, pin_number: int) -> Pin:
+            '''Returns a pin based off of the pin number
+            
+            :rtype: GPIOPort.Pins.Pin
+            '''
             pin_list = self.get_pin_list()
             return [pin for pin in pin_list if pin.pin_number == pin_number][0]
                 
