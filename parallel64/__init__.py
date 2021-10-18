@@ -368,8 +368,8 @@ class GPIOPort(StandardPort):
             self.D7 = self.DataPin(9, 7, data_address, is_bidir)
         
         def get_named_pin_list(self) -> List[Tuple[str, Pin]]:
-            pin_dict = self.__dict__.items()
-            return [pin_name for pin_name in pin_dict if pin_name != "_parallel_port"]
+            return list(self.__dict__.items())
+            #return [pin_name for pin_name in pin_dict if pin_name != "_parallel_port"]
             
         def get_pin_list(self) -> List[Pin]:
             return [pin[1] for pin in self.get_named_pin_list()]
