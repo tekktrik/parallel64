@@ -218,6 +218,14 @@ class StandardPort:
 
 
 class ExtendedPort:
+    '''The class for representing the ECP port.  Currently, this class only works with the Extended Capabilities Register as opposed to the ECP port.
+
+    :param ecp_base_address: The base address for the port, representing the ECP port data register
+    :type ecp_base_address: int
+    :param windll_location: The location of the DLL required to use the parallel port, default is to use the one \
+    included in this package
+    :type windll_location: str, optional
+    '''
             
     class CommunicationMode(Enum):
         
@@ -244,6 +252,13 @@ class ExtendedPort:
     
     @classmethod
     def from_json(cls, json_filepath: str) -> 'ExtendedPort':
+        '''Factory method for creating and instance of ExtendedPort from a JSON file containing the necessary information
+
+        :param json_filepath: Filepath to the JSON
+        :type json_filepath: str
+        :return: An instance of ExtendedPort
+        :rtype: ExtendedPort
+        '''
         with open(json_filepath, 'r') as json_file:
             json_contents = json.load(json_file)
         try:
@@ -256,19 +271,42 @@ class ExtendedPort:
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
-    def set_comm_mode(self, comm_mode: CommunicationMode):
-        self.write_ecr_register(comm_mode.value << 5)
+    def set_comm_mode(self, mode: CommunicationMode):
+        '''Set the communication mode in the ECR
+
+        :param mode: The mode to set in the ECR
+        :type mode: ExtendedPort.CommunicationMode
+        '''
+        self.write_ecr_register(mode.value << 5)
         
         return self._parallel_port.DlPortReadPortUchar(self._epp_address_address)
         
     def write_ecr_register(self, data: int):
+        '''Write data to the Extended Capabilities Register (ECR)
+        
+        :param data: The data to write to the register
+        :type data: int
+        '''
         self._parallel_port.DlPortWritePortUchar(self._ecr_address, data)
         
     def read_ecr_register(self) -> int:
+        '''Read data in the Extended Capabilities Register (ECR)
+        
+        :return: The data in the register
+        :rtype: int
+        '''
         return self._parallel_port.DlPortReadPortUchar(self._ecr_address)
 
 
 class EnhancedPort(StandardPort):
+    '''The class for representing the EPP port.  It is an extension of the StandardPort (SPP), so it's methods can be used as well
+
+    :param spp_base_address: The base address for the port, representing the SPP port data register
+    :type spp_base_address: int
+    :param windll_location: The location of the DLL required to use the parallel port, default is to use the one \
+    included in this package
+    :type windll_location: str, optional
+    '''
             
     def __init__(self, spp_base_address: int, windll_location: Optional[str] = None):
         super().__init__(spp_base_address, windll_location)
@@ -276,27 +314,64 @@ class EnhancedPort(StandardPort):
         self._epp_data_address = spp_base_address + 4
         
     def write_epp_address(self, address: int):
+        '''Write data to the EPP Address register (Address Write Cycle)
+        
+        :param address: The information to write
+        :type address: int
+        '''
+
         self.spp_handshake_control_reset()
         self.set_forward()
         self._parallel_port.DlPortWritePortUchar(self._epp_address_address, address)
         
     def read_epp_address(self) -> int:
+        '''Read data from the EPP Address register (Address Read Cycle)
+        
+        :return: The information read
+        :rtype: int
+        '''
+
         self.spp_handshake_control_reset()
         self.set_reverse()
         return self._parallel_port.DlPortReadPortUchar(self._epp_address_address)
         
     def write_epp_data(self, data: int):
+        '''Write data to the EPP Data register (Data Write Cycle)
+        
+        :param data: The information to write
+        :type data: int
+        '''
+
         self.spp_handshake_control_reset()
         self.set_forward()
         self._parallel_port.DlPortWritePortUchar(self._epp_data_address, data)
         
     def read_epp_data(self) -> int:
+        '''Read data from the EPP Data register (Data Read Cycle)
+        
+        :return: The information read
+        :rtype: int
+        '''
         self.spp_handshake_control_reset()
         self.set_reverse()
         return self._parallel_port.DlPortReadPortUchar(self._epp_data_address)
 
 
 class GPIOPort(StandardPort):
+    '''The class for representing GPIO-like functionality of the port, useful for interacting with connected devices in ways
+    outside of established parallel port communication protocols.  It inherits from the StandardPort class, however, so those
+    methods are available as well.
+    
+    :param spp_base_address: The base address for the port, representing the SPP port data register
+    :type spp_base_address: int
+    :param windll_location: The location of the DLL required to use the parallel port, default is to use the one \
+    included in this package
+    :type windll_location: str, optional
+    :param clear_gpio: Whether to clear pins and reset to low upon initialization, default is to reset pins(True)
+    :type clear_gpio: bool, optional
+    :param reset_control: Whether to reset the control register (according to SPP handshake protocol) upon initialization, \
+    default is not to reset the register (False). Note this takes place BEFORE clearing the pins via the clear_gpio argument.
+    '''
     
     class Pins:
     
@@ -377,14 +452,22 @@ class GPIOPort(StandardPort):
         def get_pin_name_list(self) -> List[str]:
             return [pin[0] for pin in self.get_named_pin_list()]
                 
-    def __init__(self, data_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False):
-        super().__init__(data_address, windll_location, reset_control)
+    def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False):
+        super().__init__(spp_base_address, windll_location, reset_control)
         self.Pins = self.Pins(self._spp_data_address, self.is_bidirectional())
         if clear_gpio:
             self.write_data_register(0)
             self.reset_control_pins()
         
     def read_pin(self, pin: Pins.Pin) -> bool:
+        '''Read the state of the given pin
+
+        :param pin: The pin to read
+        :type pin: GPIOPort.Pins.Pin
+        :return: The state of the pin
+        :rtype: bool
+        '''
+
         if pin.iw_input_allowed():
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
             bit_mask = 1 << pin.bit_index
@@ -394,6 +477,14 @@ class GPIOPort(StandardPort):
             raise Exception("Input not allowed on pin " + str(pin.pin_number))
             
     def write_pin(self, pin: Pins.Pin, value: bool):
+        '''Set the state of the given pin
+
+        :param pin: The pin to set
+        :type pin: GPIOPort.Pins.Pin
+        :param value: The state to set the pin
+        :type value: bool
+        '''
+
         if pin.is_output_allowed():
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
             current_bit = ((1 << pin.bit_index) & register_byte) >> pin.bit_index
@@ -406,9 +497,14 @@ class GPIOPort(StandardPort):
             raise Exception("Output not allowed on pin " + str(pin.pin_number))
             
     def reset_data_pins(self):
+        '''Reset the data pins (to low)
+        '''
         self.write_spp_data(0)
         
     def reset_control_pins(self):
+        '''Reset the control pins (to low)
+        '''
+
         control_byte = self.read_control_register()
         bidir_control_byte = 0b11110000 if self._is_bidir else 0b11010000
         pre_control_byte = bidir_control_byte & control_byte
@@ -417,8 +513,22 @@ class GPIOPort(StandardPort):
 
 
 class ParallelPort:
+    '''The class represent multifunction ports.  If a port has multiple functionalities (or use desire such functionality, such as
+    a port the can perform EPP protocol as well as GPIO-like pin manipulation), this class is essential a wrapper class for holding
+    all such ports.
+
+    :param spp_base_address: The SPP base address, only needed for ports that require it
+    :type spp_base_address: int, optional
+    :param ecp_base_address: The ECP base address, only needed for ports that require it
+    :type ecp_base_address: int, optional
+    :param windll_location: The location of the DLL required to use the parallel port, default is to use the one \
+    included in this package
+    :type windll_location: str, optional
+    :param port_modes: The modes to be stored in the ParallelPort object
+    :type port_modes: list(str), optional
+    '''
     
-    def __init__(self, spp_base_address: int = None, ecp_base_address: int = None, windll_location: Optional[str] = None, port_modes: List[str] = []):
+    def __init__(self, spp_base_address: Optional[int] = None, ecp_base_address: Optional[int] = None, windll_location: Optional[str] = None, port_modes: List[str] = []):
         self.StandardPort = None
         self.EnhancedPort = None
         self.ExtendedPort = None
@@ -436,6 +546,13 @@ class ParallelPort:
         
     @classmethod
     def from_json(cls, json_filepath: str) -> 'ParallelPort':
+        '''Factory method for creating and instance of ParallelPort from a JSON file containing the necessary information
+
+        :param json_filepath: Filepath to the JSON
+        :type json_filepath: str
+        :return: An instance of ParallelPort
+        :rtype: ParallelPort
+        '''
         with open(json_filepath, 'r') as json_file:
             json_contents = json.load(json_file)
         try:
