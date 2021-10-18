@@ -420,7 +420,15 @@ class GPIOPort(StandardPort):
 class ParallelPort:
     '''The class represent multifunction ports.  If a port has multiple functionalities (or use desire such functionality, such as
     a port the can perform EPP protocol as well as GPIO-like pin manipulation), this class is essential a wrapper class for holding
-    all such ports.
+    all such ports:
+
+    .. code-block::
+
+        import parallel64
+        port = parallel64.ParallelPort(0x1234, port_modes=['spp', 'gpio'])
+        strobe_pin = port.gpio.pins.STROBE
+        port.spp.write_data_register(0x1A)
+        port.gpio.write_pin(strobe_pin, True)
 
     :param spp_base_address: The SPP base address, only needed for ports that require it
     :type spp_base_address: int, optional

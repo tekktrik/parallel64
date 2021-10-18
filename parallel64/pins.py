@@ -68,7 +68,15 @@ class ControlPin(Pin):
         self._allow_output = True
 
 class Pins:
-    '''Class representing all the pins for the port (connected to registers)
+    '''Class representing all the pins for a given port (connected to registers).  Interaction with this class typically
+    takes place by manipulating the 'pins' attribute of an instance of 'GPIOPort':
+
+    .. code-block::
+
+        import parallel64
+        gpio = parallel64.GPIOPort(0x1234)
+        input_pin = gpio.pins.D0
+        pin_value = gpio.read_pin(input_pin)
 
     Data Pins:
     D0, D1, D2, D3, D4, D5, D6, D7
