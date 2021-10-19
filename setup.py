@@ -1,10 +1,16 @@
 from setuptools import setup, find_packages
 
+# read the contents of your README file
+from pathlib import Path
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
+
 setup(
     name = 'parallel64',
     packages = ['parallel64', 'parallel64.inpoutdlls'],
-    version = 'v0.5.0',  # Ideally should be same as your GitHub release tag varsion
+    version = 'v0.6.1',  # Ideally should be same as your GitHub release tag varsion
     description = 'Python package for working with parallel ports in a 64-bit Windows environment',
+    long_description = long_description,
     author = 'Alec Delaney',
     author_email = 'tekktrik@gmail.com',
     url = 'https://github.com/tekktrik/parallel64',
