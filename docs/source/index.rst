@@ -7,9 +7,11 @@ Welcome to parallel64's documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
+   installation
+   parallel64
 
 
 Indices and tables
