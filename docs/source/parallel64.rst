@@ -31,7 +31,7 @@ Submodules
 ----------
 
 parallel64.pins module
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: parallel64.pins.Pins
    :members:
@@ -54,7 +54,7 @@ parallel64.pins module
    :show-inheritance:
 
 parallel64.constants module
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: parallel64.constants.Direction
    :members:
