@@ -195,7 +195,7 @@ class StandardPort(_BasePort):
         :param data_byte: A byte of data
         :type data_byte: int
         """
-        self._parallel_port.DlPortWritePortUchar(self._spp_data_address, data_byte)
+        self._port.DlPortWritePortUchar(self._spp_data_address, data_byte)
 
     def read_data_register(self) -> int:
         """Reads from the data register
@@ -207,7 +207,7 @@ class StandardPort(_BasePort):
         """
 
         if self._is_bidir:
-            return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
+            return self._port.DlPortReadPortUchar(self._spp_data_address)
 
         raise OSError(
             "This port was detected not to be bidirectional, data cannot be "
@@ -220,7 +220,7 @@ class StandardPort(_BasePort):
         :param control_byte: A byte of data
         :type control_byte: int
         """
-        self._parallel_port.DlPortWritePortUchar(self._control_address, control_byte)
+        self._port.DlPortWritePortUchar(self._control_address, control_byte)
 
     def read_control_register(self) -> int:
         """Reads from the Control register
@@ -228,7 +228,7 @@ class StandardPort(_BasePort):
         :return: The information in the Control register
         :rtype: int
         """
-        return self._parallel_port.DlPortReadPortUchar(self._control_address)
+        return self._port.DlPortReadPortUchar(self._control_address)
 
     def read_status_register(self) -> int:
         """Reads from the Status register
@@ -236,7 +236,7 @@ class StandardPort(_BasePort):
         :return: The information in the Status register
         :rtype: int
         """
-        return self._parallel_port.DlPortReadPortUchar(self._status_address)
+        return self._port.DlPortReadPortUchar(self._status_address)
 
     def write_spp_data(self, data: int, hold_while_busy: bool = True) -> None:
         """Writes data via SPP
@@ -336,7 +336,7 @@ class ExtendedPort(_BasePort):
         :param data: The data to write to the register
         :type data: int
         """
-        self._parallel_port.DlPortWritePortUchar(self._ecr_address, data)
+        self._port.DlPortWritePortUchar(self._ecr_address, data)
 
     def read_ecr_register(self) -> int:
         """Read data in the Extended Capabilities Register (ECR)
@@ -344,7 +344,7 @@ class ExtendedPort(_BasePort):
         :return: The data in the register
         :rtype: int
         """
-        return self._parallel_port.DlPortReadPortUchar(self._ecr_address)
+        return self._port.DlPortReadPortUchar(self._ecr_address)
 
 
 class EnhancedPort(StandardPort):
@@ -374,7 +374,7 @@ class EnhancedPort(StandardPort):
 
         self.spp_handshake_control_reset()
         self.set_forward()
-        self._parallel_port.DlPortWritePortUchar(self._epp_address_address, address)
+        self._port.DlPortWritePortUchar(self._epp_address_address, address)
 
     def read_epp_address(self) -> int:
         """Read data from the EPP Address register (Address Read Cycle)
@@ -385,7 +385,7 @@ class EnhancedPort(StandardPort):
 
         self.spp_handshake_control_reset()
         self.set_reverse()
-        return self._parallel_port.DlPortReadPortUchar(self._epp_address_address)
+        return self._port.DlPortReadPortUchar(self._epp_address_address)
 
     def write_epp_data(self, data: int) -> None:
         """Write data to the EPP Data register (Data Write Cycle)
@@ -396,7 +396,7 @@ class EnhancedPort(StandardPort):
 
         self.spp_handshake_control_reset()
         self.set_forward()
-        self._parallel_port.DlPortWritePortUchar(self._epp_data_address, data)
+        self._port.DlPortWritePortUchar(self._epp_data_address, data)
 
     def read_epp_data(self) -> int:
         """Read data from the EPP Data register (Data Read Cycle)
@@ -406,7 +406,7 @@ class EnhancedPort(StandardPort):
         """
         self.spp_handshake_control_reset()
         self.set_reverse()
-        return self._parallel_port.DlPortReadPortUchar(self._epp_data_address)
+        return self._port.DlPortReadPortUchar(self._epp_data_address)
 
 
 class GPIOPort(StandardPort):
@@ -451,7 +451,7 @@ class GPIOPort(StandardPort):
         """
 
         if pin.input_allowed:
-            register_byte = self._parallel_port.DlPortReadPortUchar(pin.register)
+            register_byte = self._port.DlPortReadPortUchar(pin.register)
             bit_mask = 1 << pin.bit_index
             bit_result = bool((bit_mask & register_byte) >> pin.bit_index)
             return (not bit_result) if pin.hw_inverted else bit_result
@@ -465,13 +465,13 @@ class GPIOPort(StandardPort):
         """
 
         if pin.output_allowed:
-            register_byte = self._parallel_port.DlPortReadPortUchar(pin.register)
+            register_byte = self._port.DlPortReadPortUchar(pin.register)
             current_bit = ((1 << pin.bit_index) & register_byte) >> pin.bit_index
             current_value = (not current_bit) if pin.hw_inverted else current_bit
             if bool(current_value) != value:
                 bit_mask = 1 << pin.bit_index
                 byte_result = bit_mask ^ register_byte
-                self._parallel_port.DlPortWritePortUchar(pin.register, byte_result)
+                self._port.DlPortWritePortUchar(pin.register, byte_result)
         else:
             raise Exception("Output not allowed on pin " + str(pin.pin_number))
 
