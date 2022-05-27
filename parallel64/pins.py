@@ -164,4 +164,4 @@ class Pins:
         """
         if not 1 <= pin_number <= 17:
             raise ValueError("Only pins 1-17 are accessible")
-        return (pin for _, pin in self.pin_list if pin.pin_number == pin_number)[0]
+        return [pin for _, pin in self.pin_list if pin.pin_number == pin_number][0]
