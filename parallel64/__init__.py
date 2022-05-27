@@ -163,7 +163,6 @@ class StandardPort(_BasePort):
         new_control_byte = (direction.value << 5) | control_byte
         self.write_control_register(new_control_byte)
 
-
     def _test_bidirectional(self) -> bool:
         """Tests whether the port has bidirectional support
 
@@ -381,7 +380,7 @@ class EnhancedPort(StandardPort):
         """
 
         self.spp_handshake_control_reset()
-        self.set_reverse()
+        self.direction = Direction.REVERSE
         return self._port.DlPortReadPortUchar(self._epp_address_address)
 
     def write_epp_data(self, data: int) -> None:
