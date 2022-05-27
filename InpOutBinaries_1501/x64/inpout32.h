@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2000 logix4u.net
+//
+// SPDX-License-Identifier: MIT
+
+
 #pragma once
 
 //Functions exported from DLL.

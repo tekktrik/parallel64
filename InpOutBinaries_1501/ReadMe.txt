@@ -1,3 +1,6 @@
+SPDX-FileCopyrightText: 2003-2015 Phil Gibbons <www.highrez.co.uk>
+SPDX-License-Identifier: MIT
+
 InpOut32Drv Driver Interface DLL
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
