@@ -27,7 +27,7 @@ class Pin:
         '''
         return self._allow_output
         
-    def iw_input_allowed(self) -> bool:
+    def is_input_allowed(self) -> bool:
         '''Returns whether a pin allows input
         
         :rtype: bool

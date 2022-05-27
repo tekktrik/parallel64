@@ -366,7 +366,7 @@ class GPIOPort(StandardPort):
         :rtype: bool
         '''
 
-        if pin.iw_input_allowed():
+        if pin.is_input_allowed():
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
             bit_mask = 1 << pin.bit_index
             bit_result = bool((bit_mask & register_byte) >> pin.bit_index)
