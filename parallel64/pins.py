@@ -4,7 +4,6 @@
 
 """
 `parallel64.pins`
-======================
 
 Individual pin and pin collection functionalities used as part
 of a GPIO port

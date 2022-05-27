@@ -4,7 +4,6 @@
 
 """
 `parallel64.constants`
-======================
 
 Constants as enums used for during typical operation of a
 parrallel port
