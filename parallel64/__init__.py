@@ -2,13 +2,19 @@
 #
 # SPDX-License-Identifier: MIT
 
+"""
+`parallel64`
+============
+
+Functionality fo interfacing with a parallel port
+
+
+* Author(s): Alec Delaney
+
+"""
+
 import sys
-from typing import TYPE_CHECKING, Optional, Sequence, Literal
-
-if not TYPE_CHECKING:
-    if sys.platform != "win32":
-        raise Exception("parallel64 is meant for Windows systems only")
-
+from typing import TYPE_CHECKING, Optional, Sequence, Literal, Dict, List, Union
 import os
 import ctypes
 import time
@@ -16,8 +22,96 @@ import json
 from .pins import Pins, Pin
 from .constants import Direction, CommMode
 
+if not TYPE_CHECKING:
+    if sys.platform != "win32":
+        raise Exception("parallel64 is meant for Windows systems only")
 
-class StandardPort:
+# pylint: disable=too-few-public-methods
+class _BasePort:
+    """Base class for all ports
+
+    :param str|None windll_location: (optional) The location of the DLL required
+        to use the parallel port, default is to use the one included in this package
+    """
+
+    def __init__(self, windll_location: Optional[str] = None) -> None:
+
+        if windll_location is None:
+            parent_folder = os.path.join(__file__, "..")
+            inpout_folder = None
+            for folder in os.listdir(parent_folder):
+                if folder == "inpoutdlls":
+                    inpout_folder = os.path.abspath(os.path.join(parent_folder, folder))
+            if inpout_folder is None:
+                raise OSError("Could not find the default DLL folder path")
+            if sys.maxsize > 2**32:
+                windll_location = os.path.join(inpout_folder, "inpoutx64.dll")
+            else:
+                windll_location = os.path.join(inpout_folder, "inpout32.dll")
+        self._windll_location = windll_location
+
+    @staticmethod
+    def _parse_from_json(
+        json_filepath: str, port_params: List[str]
+    ) -> Dict[str, Union[int, str]]:
+        """Parses a JSON file for the given parameters
+
+        :param str json_filepath: The path to the JSON file
+        :param list port_params: A list of the parameters to get from
+            the JSON file as strings
+        :return: A dictionary containing the contents of the JSON file
+            that can be used to instance a _BasePort object
+        :rtype: dict
+        """
+
+        with open(json_filepath, mode="r", encoding="utf-8") as json_file:
+            json_contents: Dict[str, str] = json.load(json_file)
+            json_params = {}
+            for key in port_params:
+                try:
+                    json_params[key] = int(json_contents[key], 16)
+                except KeyError as err:
+                    raise KeyError(
+                        f"Unable to find {key} parameter in the JSON file, "
+                        "see reference documentation"
+                    ) from err
+                except (ValueError, TypeError) as err:
+                    raise TypeError(
+                        "Ports must be hex strings (e.g. '0x1C64'), see reference documentation"
+                    ) from err
+            json_params["windll_location"] = json_contents.get("windll_location", None)
+
+        return json_params
+
+    @classmethod
+    def _create_from_json(
+        cls, json_filepath: str, port_params: List[str]
+    ) -> "_BasePort":
+        """Create a _BasePort from a JSON containing the given parameters
+
+        :param str json_filepath: The filepath to the JSON file
+        :param list port_params: A list of the params to get from the
+            JSON file as strings
+        :return: An instance of a _BasePort
+        :rtype: _BasePort
+        """
+
+        json_params = cls._parse_from_json(json_filepath, port_params)
+        return cls(**json_params)
+
+    @classmethod
+    def from_json(cls, json_filepath: str) -> "_BasePort":
+        """Factory method for creating and instance of a port from a JSON
+        file containing the necessary information
+
+        :param str json_filepath: Filepath to the JSON
+        :return: An instance of a _BasePort
+        :rtype: _BasePort
+        """
+        raise NotImplementedError("Must be implemented in subclass")
+
+
+class StandardPort(_BasePort):
     """The class for representing the SPP port
 
     :param int spp_base_address: The base address for the port, representing the
@@ -34,23 +128,12 @@ class StandardPort:
         windll_location: Optional[str] = None,
         reset_control: bool = True,
     ) -> None:
+        super().__init__(windll_location)
         self._spp_data_address = spp_base_address
         self._status_address = spp_base_address + 1
         self._control_address = spp_base_address + 2
-        if windll_location == None:
-            parent_folder = os.path.join(__file__, "..")
-            inpout_folder = [
-                os.path.abspath(os.path.join(parent_folder, folder))
-                for folder in os.listdir(parent_folder)
-                if folder == "inpoutdlls"
-            ][0]
-            if sys.maxsize > 2**32:
-                windll_location = os.path.join(inpout_folder, "inpoutx64.dll")
-            else:
-                windll_location = os.path.join(inpout_folder, "inpout32.dll")
-        self._windll_location = windll_location
         self._parallel_port = ctypes.WinDLL(windll_location)
-        self._is_bidir = True if self._test_bidirectional() else False
+        self._is_bidir = self._test_bidirectional()
         if reset_control:
             self.spp_handshake_control_reset()
 
@@ -64,21 +147,9 @@ class StandardPort:
         :rtype: StandardPort
         """
 
-        with open(json_filepath, "r") as json_file:
-            json_contents = json.load(json_file)
-        try:
-            spp_base_add = int(json_contents["spp_base_address"], 16)
-            try:
-                windll_loc = json_contents["windll_location"]
-            except KeyError:
-                windll_loc = None
-            return cls(spp_base_add, windll_loc)
-        except KeyError as err:
-            raise KeyError(
-                "Unable to find "
-                + str(err)
-                + " parameter in the JSON file, see reference documentation"
-            )
+        port_params = ["spp_base_address"]
+
+        return cls._create_from_json(json_filepath, port_params)
 
     @property
     def direction(self) -> Direction:
@@ -112,9 +183,9 @@ class StandardPort:
 
         curr_dir = self.direction
         self.set_reverse()
-        isBidir = not bool(self.direction.value)
+        is_bidir = not bool(self.direction.value)
         self.direction = curr_dir
-        return isBidir
+        return is_bidir
 
     @property
     def is_bidirectional(self) -> bool:
@@ -142,11 +213,11 @@ class StandardPort:
 
         if self._is_bidir:
             return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
-        else:
-            raise OSError(
-                "This port was detected not to be bidirectional, data cannot be "
-                "read using the data register/pins"
-            )
+
+        raise OSError(
+            "This port was detected not to be bidirectional, data cannot be "
+            "read using the data register/pins"
+        )
 
     def write_control_register(self, control_byte: int) -> None:
         """Writes to the Control register
@@ -207,11 +278,11 @@ class StandardPort:
             self.spp_handshake_control_reset()
             self.set_reverse()
             return self.read_data_register()
-        else:
-            raise OSError(
-                "This port was detected not to be bidirectional, data cannot be "
-                "read using the data register/pins"
-            )
+
+        raise OSError(
+            "This port was detected not to be bidirectional, data cannot be "
+            "read using the data register/pins"
+        )
 
     def spp_handshake_control_reset(self) -> None:
         """Resets the Control register for the SPP handshake"""
@@ -223,7 +294,7 @@ class StandardPort:
         self.write_control_register(new_control_byte)
 
 
-class ExtendedPort:
+class ExtendedPort(_BasePort):
     """The class for representing the ECP port.  Currently, this class only works
     with the Extended Capabilities Register as opposed to the ECP port.
 
@@ -237,20 +308,8 @@ class ExtendedPort:
     def __init__(
         self, ecp_base_address: int, windll_location: Optional[str] = None
     ) -> None:
+        super().__init__(windll_location)
         self._ecr_address = ecp_base_address + 2
-        if windll_location == None:
-            parent_folder = os.path.join(__file__, "..")
-            inpout_folder = [
-                os.path.abspath(os.path.join(parent_folder, folder))
-                for folder in os.listdir(parent_folder)
-                if folder == "inpoutdlls"
-            ][0]
-
-            if sys.maxsize > 2**32:
-                windll_location = os.path.join(inpout_folder, "inpoutx64.dll")
-            else:
-                windll_location = os.path.join(inpout_folder, "inpout32.dll")
-        self._windll_location = windll_location
         self._parallel_port = ctypes.WinDLL(windll_location)
 
     @classmethod
@@ -262,34 +321,19 @@ class ExtendedPort:
         :return: An instance of ExtendedPort
         :rtype: ExtendedPort
         """
-        with open(json_filepath, "r") as json_file:
-            json_contents = json.load(json_file)
-        try:
-            ecp_base_add = int(json_contents["ecp_base_address"], 16)
-            try:
-                windll_loc = json_contents["windll_location"]
-            except KeyError:
-                windll_loc = None
-            return cls(ecp_base_add, windll_loc)
-        except KeyError as err:
-            raise KeyError(
-                "Unable to find "
-                + str(err)
-                + " parameter in the JSON file, see reference documentation"
-            )
+
+        port_params = ["ecp_base_address"]
+
+        return cls._create_from_json(json_filepath, port_params)
 
     @property
     def comm_mode(self) -> CommMode:
+        """The communication mode in the ECR"""
         mode = self.read_ecr_register()
         return CommMode(mode >> 5)
 
     @comm_mode.setter
     def comm_mode(self, mode: CommMode) -> None:
-        """Set the communication mode in the ECR
-
-        :param mode: The mode to set in the ECR
-        :type mode: ExtendedPort.CommunicationMode
-        """
         self.write_ecr_register(mode.value << 5)
 
     def write_ecr_register(self, data: int) -> None:
@@ -417,8 +461,7 @@ class GPIOPort(StandardPort):
             bit_mask = 1 << pin.bit_index
             bit_result = bool((bit_mask & register_byte) >> pin.bit_index)
             return (not bit_result) if pin.hw_inverted else bit_result
-        else:
-            raise Exception("Input not allowed on pin " + str(pin.pin_number))
+        raise OSError("Input not allowed on pin " + str(pin.pin_number))
 
     def write_pin(self, pin: Pin, value: bool) -> None:
         """Set the state of the given pin
@@ -450,81 +493,3 @@ class GPIOPort(StandardPort):
         pre_control_byte = bidir_control_byte & control_byte
         new_control_byte = 0b00000100 | pre_control_byte
         self.write_control_register(new_control_byte)
-
-
-class ParallelPort:
-    """The class represent multifunction ports.  If a port has multiple
-    functionalities (or use desire such functionality, such as a port
-    the can perform EPP protocol as well as GPIO-like pin manipulation),
-    this class is essential a wrapper class for holding all such ports:
-
-    .. code-block::
-
-        import parallel64
-        port = parallel64.ParallelPort(0x1234, port_modes=['spp', 'gpio'])
-        strobe_pin = port.gpio.pins.STROBE
-        port.spp.write_data_register(0x1A)
-        port.gpio.write_pin(strobe_pin, True)
-
-    :param int spp_base_address: (optional) The SPP base address, only
-        needed for ports that require it
-    :param int ecp_base_address: (optional) The ECP base address, only
-        needed for ports that require it
-    :param str|None windll_location: (optional) The location of the DLL
-        required to use the parallel port, default is to use the one
-        included in this package
-    :param list|tuple port_modes: The modes to be stored in the ParallelPort
-        object as a list or tuple of strings; valid options are "spp", "epp",
-        "ecp", and "gpio"
-    """
-
-    def __init__(
-        self,
-        spp_base_address: Optional[int] = None,
-        ecp_base_address: Optional[int] = None,
-        windll_location: Optional[str] = None,
-        port_modes: Sequence[Literal["spp", "epp", "ecp", "gpio"]] = ("spp"),
-    ) -> None:
-        self.spp = None
-        self.epp = None
-        self.ecp = None
-        self.gpio = None
-        self.modes = port_modes
-        for mode in self.modes:
-            if mode.lower() == "spp":
-                self.spp = StandardPort(spp_base_address, windll_location)
-            if mode.lower() == "epp":
-                self.epp = EnhancedPort(spp_base_address, windll_location)
-            if mode.lower() == "ecp":
-                self.ecp = ExtendedPort(ecp_base_address, windll_location)
-            if mode.lower() == "gpio":
-                self.gpio = GPIOPort(spp_base_address, windll_location)
-
-    @classmethod
-    def from_json(cls, json_filepath: str) -> "ParallelPort":
-        """Factory method for creating and instance of ParallelPort from a
-        JSON file containing the necessary information
-
-        :param str json_filepath: Filepath to the JSON
-        :return: An instance of ParallelPort
-        :rtype: ParallelPort
-        """
-        with open(json_filepath, "r") as json_file:
-            json_contents = json.load(json_file)
-        try:
-            if json_contents["spp_base_address"] != None:
-                spp_base_add = int(json_contents["spp_base_address"], 16)
-            if json_contents["ecp_base_address"] != None:
-                ecp_base_add = int(json_contents["ecp_base_address"], 16)
-            try:
-                windll_loc = json_contents["windll_location"]
-            except KeyError:
-                windll_loc = None
-            port_modes = json_contents["port_modes"]
-            return cls(spp_base_add, ecp_base_add, windll_loc, port_modes)
-        except KeyError as err:
-            raise KeyError(
-                "Unable to find "
-                + str(err)
-                + " parameter in the JSON file, see reference documentation"
-            )
