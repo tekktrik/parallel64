@@ -248,15 +248,19 @@ class ExtendedPort:
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
-    def set_comm_mode(self, mode: CommMode) -> None:
+    @property
+    def comm_mode(self) -> CommMode:
+        mode = self.read_ecr_register()
+        return CommMode(mode >> 5)
+    
+    @comm_mode.setter
+    def comm_mode(self, mode: CommMode) -> None:
         '''Set the communication mode in the ECR
 
         :param mode: The mode to set in the ECR
         :type mode: ExtendedPort.CommunicationMode
         '''
         self.write_ecr_register(mode.value << 5)
-        
-        return self._parallel_port.DlPortReadPortUchar(self._epp_address_address)
         
     def write_ecr_register(self, data: int) -> None:
         '''Write data to the Extended Capabilities Register (ECR)
