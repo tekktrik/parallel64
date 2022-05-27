@@ -37,14 +37,8 @@ class _BasePort:
     def __init__(self, windll_location: Optional[str] = None) -> None:
 
         if windll_location is None:
-            parent_folder = os.path.dirname(__file__)
-            inpout_folder = None
-            for folder in os.listdir(parent_folder):
-                if folder == "inpoutdlls":
-                    inpout_folder = os.path.abspath(os.path.join(parent_folder, folder))
-                    break
-            if inpout_folder is None:
-                raise OSError("Could not find the default DLL folder path")
+            relative_dll_path = os.path.join(os.path.dirname(__file__), "inpoutdlls")
+            inpout_folder = os.path.abspath(relative_dll_path)
             if sys.maxsize > 2**32:
                 windll_location = os.path.join(inpout_folder, "inpoutx64.dll")
             else:
