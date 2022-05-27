@@ -143,8 +143,9 @@ class StandardPort:
         if self._is_bidir:
             return self._parallel_port.DlPortReadPortUchar(self._spp_data_address)
         else:
-            raise Exception(
-                "This port was detected not to be bidirectional, data cannot be read using the data register/pins"
+            raise OSError(
+                "This port was detected not to be bidirectional, data cannot be "
+                "read using the data register/pins"
             )
 
     def write_control_register(self, control_byte: int) -> None:
