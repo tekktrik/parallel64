@@ -34,7 +34,7 @@ author = "Alec Delaney"
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
-    #"autoapi.extension",
+    # "autoapi.extension",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
 ]
