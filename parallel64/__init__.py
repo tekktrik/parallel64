@@ -37,7 +37,7 @@ class _BasePort:
     def __init__(self, windll_location: Optional[str] = None) -> None:
 
         if windll_location is None:
-            parent_folder = os.path.join(__file__, "..")
+            parent_folder = os.path.dirname(__file__)
             inpout_folder = None
             for folder in os.listdir(parent_folder):
                 if folder == "inpoutdlls":
