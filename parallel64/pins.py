@@ -5,7 +5,7 @@ class Pin:
     '''Class representing a pin
     '''
 
-    def __init__(self, pin_number: int, bit_index: int, register: int, hw_inverted: bool = False):
+    def __init__(self, pin_number: int, bit_index: int, register: int, hw_inverted: bool = False) -> None:
         self.pin_number = pin_number
         self.bit_index = bit_index
         self.register = register
@@ -43,7 +43,7 @@ class DataPin(Pin):
     
     register_lock = threading.Lock()
     
-    def __init__(self, pin_number, bit_index, register, is_bidir):
+    def __init__(self, pin_number, bit_index, register, is_bidir) -> None:
         super().__init__(pin_number, bit_index, register, False)
         self._allow_input = True if is_bidir else False
         self._allow_output = True
@@ -57,7 +57,7 @@ class StatusPin(Pin):
     
     register_lock = threading.Lock()
     
-    def __init__(self, pin_number, bit_index, register, hw_inverted=False):
+    def __init__(self, pin_number, bit_index, register, hw_inverted=False) -> None:
         super().__init__(pin_number, bit_index, register, hw_inverted)
         self._allow_input = True
         self._allow_output = False
@@ -71,7 +71,7 @@ class ControlPin(Pin):
         
     register_lock = threading.Lock()
         
-    def __init__(self, pin_number, bit_index, register, hw_inverted=False):
+    def __init__(self, pin_number, bit_index, register, hw_inverted=False) -> None:
         super().__init__(pin_number, bit_index, register, hw_inverted)
         self._allow_input = True
         self._allow_output = True
@@ -97,7 +97,7 @@ class Pins:
     STROBE, AUTO_LINEFEED, INITIALIZE, SELECT_PRINTER
     '''
     
-    def __init__(self, data_address: int, is_bidir: bool):
+    def __init__(self, data_address: int, is_bidir: bool) -> None:
         self.STROBE = ControlPin(1, 0, data_address+2, True)
         self.AUTO_LINEFEED = ControlPin(14, 1, data_address+2, True)
         self.INITIALIZE = ControlPin(16, 2, data_address+2)

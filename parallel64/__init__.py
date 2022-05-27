@@ -26,7 +26,7 @@ class StandardPort:
     :type reset_control: bool, optional
     '''
     
-    def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, reset_control: bool = True):
+    def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, reset_control: bool = True) -> None:
         self._spp_data_address = spp_base_address
         self._status_address = spp_base_address + 1
         self._control_address = spp_base_address + 2
@@ -80,12 +80,12 @@ class StandardPort:
         new_control_byte = (direction.value << 5) | control_byte
         self.write_control_register(new_control_byte)
         
-    def set_reverse(self):
+    def set_reverse(self) -> None:
         '''Sets the port to reverse (input)
         '''
         self.direction = Direction.REVERSE
         
-    def set_forward(self):
+    def set_forward(self) -> None:
         '''Sets the port to forward (output)
         '''
         self.direction = Direction.FORWARD
@@ -110,7 +110,7 @@ class StandardPort:
        '''
         return self._is_bidir
         
-    def write_data_register(self, data_byte: int):
+    def write_data_register(self, data_byte: int) -> None:
         '''Writes to the Data register
 
         :param data_byte: A byte of data
@@ -131,7 +131,7 @@ class StandardPort:
         else:
             raise Exception("This port was detected not to be bidirectional, data cannot be read using the data register/pins")
 
-    def write_control_register(self, control_byte: int):
+    def write_control_register(self, control_byte: int) -> None:
         '''Writes to the Control register
 
         :param control_byte: A byte of data
@@ -155,7 +155,7 @@ class StandardPort:
         '''
         return self._parallel_port.DlPortReadPortUchar(self._status_address)
         
-    def write_spp_data(self, data: int, hold_while_busy: bool = True):
+    def write_spp_data(self, data: int, hold_while_busy: bool = True) -> None:
         '''Writes data via SPP
         
         :param data: The data to be transmitted
@@ -193,7 +193,7 @@ class StandardPort:
         else:
             raise OSError("This port was detected not to be bidirectional, data cannot be read using the data register/pins")
         
-    def spp_handshake_control_reset(self):
+    def spp_handshake_control_reset(self) -> None:
         '''Resets the Control register for the SPP handshake
         '''
 
@@ -214,7 +214,7 @@ class ExtendedPort:
     :type windll_location: str, optional
     '''
             
-    def __init__(self, ecp_base_address: int, windll_location: Optional[str] = None):
+    def __init__(self, ecp_base_address: int, windll_location: Optional[str] = None) -> None:
         self._ecr_address = ecp_base_address + 2
         if windll_location == None:
             parent_folder = os.path.join(__file__, "..")
@@ -248,7 +248,7 @@ class ExtendedPort:
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
-    def set_comm_mode(self, mode: CommMode):
+    def set_comm_mode(self, mode: CommMode) -> None:
         '''Set the communication mode in the ECR
 
         :param mode: The mode to set in the ECR
@@ -258,7 +258,7 @@ class ExtendedPort:
         
         return self._parallel_port.DlPortReadPortUchar(self._epp_address_address)
         
-    def write_ecr_register(self, data: int):
+    def write_ecr_register(self, data: int) -> None:
         '''Write data to the Extended Capabilities Register (ECR)
         
         :param data: The data to write to the register
@@ -285,12 +285,12 @@ class EnhancedPort(StandardPort):
     :type windll_location: str, optional
     '''
             
-    def __init__(self, spp_base_address: int, windll_location: Optional[str] = None):
+    def __init__(self, spp_base_address: int, windll_location: Optional[str] = None) -> None:
         super().__init__(spp_base_address, windll_location)
         self._epp_address_address = spp_base_address + 3
         self._epp_data_address = spp_base_address + 4
         
-    def write_epp_address(self, address: int):
+    def write_epp_address(self, address: int) -> None:
         '''Write data to the EPP Address register (Address Write Cycle)
         
         :param address: The information to write
@@ -312,7 +312,7 @@ class EnhancedPort(StandardPort):
         self.set_reverse()
         return self._parallel_port.DlPortReadPortUchar(self._epp_address_address)
         
-    def write_epp_data(self, data: int):
+    def write_epp_data(self, data: int) -> None:
         '''Write data to the EPP Data register (Data Write Cycle)
         
         :param data: The information to write
@@ -350,7 +350,7 @@ class GPIOPort(StandardPort):
     default is not to reset the register (False). Note this takes place BEFORE clearing the pins via the `clear_gpio` argument.
     '''
                 
-    def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False):
+    def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False) -> None:
         super().__init__(spp_base_address, windll_location, reset_control)
         self.pins = Pins(self._spp_data_address, self.is_bidirectional)
         if clear_gpio:
@@ -374,7 +374,7 @@ class GPIOPort(StandardPort):
         else:
             raise Exception("Input not allowed on pin " + str(pin.pin_number))
             
-    def write_pin(self, pin: Pin, value: bool):
+    def write_pin(self, pin: Pin, value: bool) -> None:
         '''Set the state of the given pin
 
         :param pin: The pin to set
@@ -394,12 +394,12 @@ class GPIOPort(StandardPort):
         else:
             raise Exception("Output not allowed on pin " + str(pin.pin_number))
             
-    def reset_data_pins(self):
+    def reset_data_pins(self) -> None:
         '''Reset the data pins (to low)
         '''
         self.write_spp_data(0)
         
-    def reset_control_pins(self):
+    def reset_control_pins(self) -> None:
         '''Reset the control pins (to low)
         '''
 
@@ -434,7 +434,7 @@ class ParallelPort:
     :type port_modes: list(str), optional
     '''
     
-    def __init__(self, spp_base_address: Optional[int] = None, ecp_base_address: Optional[int] = None, windll_location: Optional[str] = None, port_modes: List[str] = []):
+    def __init__(self, spp_base_address: Optional[int] = None, ecp_base_address: Optional[int] = None, windll_location: Optional[str] = None, port_modes: List[str] = []) -> None:
         self.spp = None
         self.epp = None
         self.ecp = None
