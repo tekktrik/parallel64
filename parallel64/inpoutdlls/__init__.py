@@ -2,4 +2,13 @@
 #
 # SPDX-License-Identifier: MIT
 
-pass
+"""
+`parallel64.inpoutdlls`
+======================
+
+Container for DLLs required for port functionality
+
+
+* Author(s): Alec Delaney
+
+"""
