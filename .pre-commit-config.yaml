@@ -26,7 +26,7 @@ repos:
         args:
             - "parallel64/"
             - --disable=duplicate-code
-            - --ignore=conf.py
+            - --ignore=conf.py,setup.py
     -   id: pylint
         name: pylint (test code)
         description: Run pylint rules on "tests/*.py" files
