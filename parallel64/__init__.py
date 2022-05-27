@@ -24,7 +24,7 @@ from .constants import Direction, CommMode
 
 if not TYPE_CHECKING:
     if sys.platform != "win32":
-        raise Exception("parallel64 is meant for Windows systems only")
+        raise OSError("parallel64 is meant for Windows systems only")
 
 # pylint: disable=too-few-public-methods
 class _BasePort:
