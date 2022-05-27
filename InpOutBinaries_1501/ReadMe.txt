@@ -12,13 +12,12 @@ Based on the original written by Logix4U (www.logix4u.net).
 
 Notes:
 
-	The InpOut32 device driver supports writing to "old fashioned" hardware port addresses. 
+	The InpOut32 device driver supports writing to "old fashioned" hardware port addresses.
 	It does NOT support USB devices such as USB Parallel ports or even PCI parallel ports (as I am lead to believe).
 
 
 	The device driver is installed at runtime. To do this however needs administrator privileges.
-	On Vista & later, using UAC, you can run the InstallDriver.exe in the \Win32 folder to install the driver 
-	appropriate for your OS. Doing so will request elevation and ask for your permission (or for the administrator 
-	password). Once the driver is installed for the first time, it can then be used by any user *without* 
+	On Vista & later, using UAC, you can run the InstallDriver.exe in the \Win32 folder to install the driver
+	appropriate for your OS. Doing so will request elevation and ask for your permission (or for the administrator
+	password). Once the driver is installed for the first time, it can then be used by any user *without*
 	administrator privileges
-
