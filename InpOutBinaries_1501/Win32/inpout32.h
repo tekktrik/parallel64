@@ -25,8 +25,3 @@ PBYTE	_stdcall MapPhysToLin(PBYTE pbPhysAddr, DWORD dwPhysSize, HANDLE *pPhysica
 BOOL	_stdcall UnmapPhysicalMemory(HANDLE PhysicalMemoryHandle, PBYTE pbLinAddr);
 BOOL	_stdcall GetPhysLong(PBYTE pbPhysAddr, PDWORD pdwPhysVal);
 BOOL	_stdcall SetPhysLong(PBYTE pbPhysAddr, DWORD dwPhysVal);
-
-
-
-
-
