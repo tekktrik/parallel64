@@ -23,7 +23,7 @@ from .pins import Pins, Pin
 from .constants import Direction, CommMode
 
 if not TYPE_CHECKING:
-    if sys.platform != "win32" and False:
+    if sys.platform != "win32":
         raise OSError("parallel64 is meant for Windows systems only")
 
 # pylint: disable=too-few-public-methods
