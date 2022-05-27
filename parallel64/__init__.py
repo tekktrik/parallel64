@@ -103,12 +103,11 @@ class StandardPort:
         self.direction = curr_dir
         return isBidir
         
+    @property
     def is_bidirectional(self) -> bool:
-        '''Returns whether the port is bidirectional, based on the test performed during __init__
-
-        :return: Whether the port was confirmed to be bidirectional
-        :rtype: bool
-        '''
+        '''Returns whether the port is bidirectional, based on the test performed
+        during ``__init__()``
+       '''
         return self._is_bidir
         
     def write_data_register(self, data_byte: int):
@@ -167,7 +166,7 @@ class StandardPort:
         '''
 
         self.spp_handshake_control_reset()
-        if self.is_bidirectional():
+        if self.is_bidirectional:
             self.set_forward()
         self.write_data_register(data)
         if not bool((self.read_status_register() & (1 << 7)) >> 7):
@@ -187,7 +186,7 @@ class StandardPort:
         :rtype: int
         '''
 
-        if self.is_bidirectional():
+        if self.is_bidirectional:
             self.spp_handshake_control_reset()
             self.set_reverse()
             return self.read_data_register()
@@ -353,7 +352,7 @@ class GPIOPort(StandardPort):
                 
     def __init__(self, spp_base_address: int, windll_location: Optional[str] = None, clear_gpio: bool = True, reset_control: bool = False):
         super().__init__(spp_base_address, windll_location, reset_control)
-        self.pins = Pins(self._spp_data_address, self.is_bidirectional())
+        self.pins = Pins(self._spp_data_address, self.is_bidirectional)
         if clear_gpio:
             self.write_data_register(0)
             self.reset_control_pins()
