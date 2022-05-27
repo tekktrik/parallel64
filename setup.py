@@ -1,22 +1,51 @@
+# SPDX-FileCopyrightText: 2022 Alec Delaney
+#
+# SPDX-License-Identifier: MIT
+
+"""A setuptools based setup module.
+
+See:
+https://packaging.python.org/en/latest/distributing.html
+https://github.com/pypa/sampleproject
+"""
+
 from setuptools import setup, find_packages
 
-# read the contents of your README file
-from pathlib import Path
-this_directory = Path(__file__).parent
-long_description = (this_directory / "README.md").read_text()
+# To use a consistent encoding
+from codecs import open
+from os import path
+
+here = path.abspath(path.dirname(__file__))
+
+# Get the long description from the README file
+with open(path.join(here, "README.rst"), encoding="utf-8") as f:
+    long_description = f.read()
 
 setup(
-    name = 'parallel64',
-    packages = ['parallel64', 'parallel64.inpoutdlls'],
-    version = 'v0.6.1',  # Ideally should be same as your GitHub release tag varsion
-    description = 'Python package for working with parallel ports in a 64-bit Windows environment',
-    long_description = long_description,
-    author = 'Alec Delaney',
-    author_email = 'tekktrik@gmail.com',
-    url = 'https://github.com/tekktrik/parallel64',
-    download_url = 'https://github.com/tekktrik/parallel64/archive/refs/tags/v0.6.00.tar.gz',
-    include_package_data = True,
-    package_data = {"bitbang_pwm": ['parallel64.bitbang.bitbang_pwm.pyd']},
-    keywords = ['parallel', 'port', 'spp', 'epp', 'ecp', 'gpio'],
-    classifiers = [],
+    name="parallel64",
+    use_scm_version=True,
+    setup_requires=["setuptools_scm"],
+    description="Base Library for the Portal-style libraries.",
+    long_description=long_description,
+    long_description_content_type="text/x-rst",
+    # Author details
+    author="Alec Delaney",
+    author_email="tekktrik@gmail.com",
+    # The project's main homepage.
+    url="https://github.com/tekktrik/parallel64",
+    # Choose your license
+    license="MIT",
+    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "Topic :: System :: Hardware",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+    ],
+    # What does your project relate to?
+    keywords=["parallel", "port", "spp", "epp", "ecp", "gpio"],
+    # You can just specify the packages manually here if your project is
+    # simple. Or you can use find_packages().
+    packages=["parallel64"],
 )
