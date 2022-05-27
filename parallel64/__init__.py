@@ -23,7 +23,7 @@ from .pins import Pins, Pin
 from .constants import Direction, CommMode
 
 if not TYPE_CHECKING:
-    if sys.platform != "win32":
+    if sys.platform != "win32" and False:
         raise OSError("parallel64 is meant for Windows systems only")
 
 # pylint: disable=too-few-public-methods
@@ -42,6 +42,7 @@ class _BasePort:
             for folder in os.listdir(parent_folder):
                 if folder == "inpoutdlls":
                     inpout_folder = os.path.abspath(os.path.join(parent_folder, folder))
+                    break
             if inpout_folder is None:
                 raise OSError("Could not find the default DLL folder path")
             if sys.maxsize > 2**32:
