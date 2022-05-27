@@ -1,5 +1,5 @@
 import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional, Sequence
 
 if not TYPE_CHECKING:
     if sys.platform != 'win32':
@@ -9,7 +9,6 @@ import os
 import ctypes
 import time
 import json
-from typing import Optional, List
 from .pins import Pins, Pin
 from .constants import Direction, CommMode
 
@@ -438,7 +437,7 @@ class ParallelPort:
     :type port_modes: list(str), optional
     '''
     
-    def __init__(self, spp_base_address: Optional[int] = None, ecp_base_address: Optional[int] = None, windll_location: Optional[str] = None, port_modes: List[str] = []) -> None:
+    def __init__(self, spp_base_address: Optional[int] = None, ecp_base_address: Optional[int] = None, windll_location: Optional[str] = None, port_modes: Sequence[str] = ("spp")) -> None:
         self.spp = None
         self.epp = None
         self.ecp = None
