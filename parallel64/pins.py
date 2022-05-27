@@ -13,11 +13,9 @@ class Pin:
         self._allow_input = None
         self._allow_output = None
         
-    def is_hw_inverted(self) -> bool:
-        '''Returns whether a pin is hardware inverted
-        
-        :rtype: bool
-        '''
+    @property
+    def hw_inverted(self) -> bool:
+        '''Returns whether a pin is hardware inverted'''
         return self._hw_inverted
         
     @property

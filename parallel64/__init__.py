@@ -370,7 +370,7 @@ class GPIOPort(StandardPort):
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
             bit_mask = 1 << pin.bit_index
             bit_result = bool((bit_mask & register_byte) >> pin.bit_index)
-            return (not bit_result) if pin.is_hw_inverted() else bit_result
+            return (not bit_result) if pin.hw_inverted else bit_result
         else:
             raise Exception("Input not allowed on pin " + str(pin.pin_number))
             
@@ -386,7 +386,7 @@ class GPIOPort(StandardPort):
         if pin.output_allowed:
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
             current_bit = ((1 << pin.bit_index) & register_byte) >> pin.bit_index
-            current_value = (not current_bit) if pin.is_hw_inverted() else current_bit
+            current_value = (not current_bit) if pin.hw_inverted else current_bit
             if bool(current_value) != value:
                 bit_mask = 1 << pin.bit_index
                 byte_result = (bit_mask ^ register_byte)
