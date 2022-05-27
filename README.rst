@@ -5,16 +5,4 @@ parallel64 is a python package for working with parallel ports in a 64-bit Windo
 
 Documentation available at https://parallel64.alecdelaney.info
 
-Installation
-============
-
-Downloading parallel64
-----------------------
-
-
-Setting up the DLL
-------------------
-
-
-Determining the port address
-----------------------------
+.. include:: docs/install.rst
