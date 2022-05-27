@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import sys
-from typing import TYPE_CHECKING, Optional, Sequence
+from typing import TYPE_CHECKING, Optional, Sequence, Literal
 
 if not TYPE_CHECKING:
     if sys.platform != "win32":
@@ -20,13 +20,12 @@ from .constants import Direction, CommMode
 class StandardPort:
     """The class for representing the SPP port
 
-    :param spp_base_address: The base address for the port, representing the SPP port data register
-    :type spp_base_address: int
-    :param windll_location: The location of the DLL required to use the parallel port, default is to use the one \
-    included in this package
-    :type windll_location: str, optional
-    :param reset_control: Whether the control register should be reset upon initialization, default is to reset it (True)
-    :type reset_control: bool, optional
+    :param int spp_base_address: The base address for the port, representing the
+        SPP port data register
+    :param str|None windll_location: (optional) The location of the DLL required
+        to use the parallel port, default is to use the one included in this package
+    :param bool reset_control: (optional) Whether the control register should be
+        reset upon initialization, default is to reset it (True)
     """
 
     def __init__(
@@ -57,10 +56,10 @@ class StandardPort:
 
     @classmethod
     def from_json(cls, json_filepath: str) -> "StandardPort":
-        """Factory method for creating and instance of StandardPort from a JSON file containing the necessary information
+        """Factory method for creating and instance of StandardPort from a JSON
+        file containing the necessary information
 
-        :param json_filepath: Filepath to the JSON
-        :type json_filepath: str
+        :param str json_filepath: Filepath to the JSON
         :return: An instance of StandardPort
         :rtype: StandardPort
         """
@@ -137,7 +136,8 @@ class StandardPort:
 
         :return: The information in the Data register
         :rtype: int
-        :raises Exception: if the port is unable to read due to lack of bidirectionality support
+        :raises Exception: if the port is unable to read due to lack of
+            bidirectionality support
         """
 
         if self._is_bidir:
@@ -175,11 +175,10 @@ class StandardPort:
     def write_spp_data(self, data: int, hold_while_busy: bool = True) -> None:
         """Writes data via SPP
 
-        :param data: The data to be transmitted
-        :type data: int
-        :param hold_while_busy: Whether code should be blocked until the Busy line communicates the device is done receiving the data, \
-        default behavior is blocking (True)
-        :type hold_while_busy: bool
+        :param int data: The data to be transmitted
+        :param bool hold_while_busy: Whether code should be blocked until the Busy
+            line communicates the device is done receiving the data, default
+            behavior is blocking (True)
         """
 
         self.spp_handshake_control_reset()
@@ -197,7 +196,8 @@ class StandardPort:
                 pass
 
     def read_spp_data(self) -> int:
-        """Reads data on the SPP data register, while managing the SPP handshake resources similar to a write operation
+        """Reads data on the SPP data register, while managing the SPP handshake
+        resources similar to a write operation
 
         :return: The data on the Data pins
         :rtype: int
@@ -209,7 +209,8 @@ class StandardPort:
             return self.read_data_register()
         else:
             raise OSError(
-                "This port was detected not to be bidirectional, data cannot be read using the data register/pins"
+                "This port was detected not to be bidirectional, data cannot be "
+                "read using the data register/pins"
             )
 
     def spp_handshake_control_reset(self) -> None:
@@ -223,13 +224,14 @@ class StandardPort:
 
 
 class ExtendedPort:
-    """The class for representing the ECP port.  Currently, this class only works with the Extended Capabilities Register as opposed to the ECP port.
+    """The class for representing the ECP port.  Currently, this class only works
+    with the Extended Capabilities Register as opposed to the ECP port.
 
-    :param ecp_base_address: The base address for the port, representing the ECP port data register
-    :type ecp_base_address: int
-    :param windll_location: The location of the DLL required to use the parallel port, default is to use the one \
-    included in this package
-    :type windll_location: str, optional
+    :param int ecp_base_address: The base address for the port, representing the
+        ECP port data register
+    :param str|None windll_location: (optional) The location of the DLL required
+        to use the parallel port, default is to use the one included in this
+        package
     """
 
     def __init__(
@@ -253,10 +255,10 @@ class ExtendedPort:
 
     @classmethod
     def from_json(cls, json_filepath: str) -> "ExtendedPort":
-        """Factory method for creating and instance of ExtendedPort from a JSON file containing the necessary information
+        """Factory method for creating and instance of ExtendedPort from a JSON
+        file containing the necessary information
 
-        :param json_filepath: Filepath to the JSON
-        :type json_filepath: str
+        :param str json_filepath: Filepath to the JSON
         :return: An instance of ExtendedPort
         :rtype: ExtendedPort
         """
@@ -308,13 +310,14 @@ class ExtendedPort:
 
 
 class EnhancedPort(StandardPort):
-    """The class for representing the EPP port.  It is an extension of the StandardPort (SPP), so it's methods can be used as well
+    """The class for representing the EPP port.  It is an extension of the
+    StandardPort (SPP), so it's methods can be used as well
 
-    :param spp_base_address: The base address for the port, representing the SPP port data register
-    :type spp_base_address: int
-    :param windll_location: The location of the DLL required to use the parallel port, default is to use the one \
-    included in this package
-    :type windll_location: str, optional
+    :param int spp_base_address: The base address for the port, representing
+        the SPP port data register
+    :param str|None windll_location: (optional) The location of the DLL
+        required to use the parallel port, default is to use the one
+        included in this package
     """
 
     def __init__(
@@ -369,19 +372,22 @@ class EnhancedPort(StandardPort):
 
 
 class GPIOPort(StandardPort):
-    """The class for representing GPIO-like functionality of the port, useful for interacting with connected devices in ways
-    outside of established parallel port communication protocols.  It inherits from the StandardPort class, however, so those
-    methods are available as well.
+    """The class for representing GPIO-like functionality of the port, useful for
+    interacting with connected devices in ways outside of established parallel port
+    communication protocols.  It inherits from the StandardPort class, however, so
+    those methods are available as well.
 
-    :param spp_base_address: The base address for the port, representing the SPP port data register
-    :type spp_base_address: int
-    :param windll_location: The location of the DLL required to use the parallel port, default is to use the one \
-    included in this package
-    :type windll_location: str, optional
-    :param clear_gpio: Whether to clear pins and reset to low upon initialization, default is to reset pins(True)
-    :type clear_gpio: bool, optional
-    :param reset_control: Whether to reset the control register (according to SPP handshake protocol) upon initialization, \
-    default is not to reset the register (False). Note this takes place BEFORE clearing the pins via the `clear_gpio` argument.
+    :param int spp_base_address: The base address for the port, representing the
+        SPP port data register
+    :param str|None windll_location: (optional) The location of the DLL required
+        to use the parallel port, default is to use the one included in this
+        package
+    :param bool clear_gpio: (optional) Whether to clear pins and reset to low
+        upon initialization, default is to reset pins (True)
+    :param bool reset_control: (optional) Whether to reset the control register
+        (according to SPP handshake protocol) upon initialization, default is
+        not to reset the register (False). Note this takes place BEFORE clearing
+        the pins via the ``clear_gpio`` argument.
     """
 
     def __init__(
@@ -417,10 +423,8 @@ class GPIOPort(StandardPort):
     def write_pin(self, pin: Pin, value: bool) -> None:
         """Set the state of the given pin
 
-        :param pin: The pin to set
-        :type pin: Pin
-        :param value: The state to set the pin
-        :type value: bool
+        :param Pin pin: The pin to set
+        :param bool value: The state to set the pin
         """
 
         if pin.output_allowed:
@@ -449,9 +453,10 @@ class GPIOPort(StandardPort):
 
 
 class ParallelPort:
-    """The class represent multifunction ports.  If a port has multiple functionalities (or use desire such functionality, such as
-    a port the can perform EPP protocol as well as GPIO-like pin manipulation), this class is essential a wrapper class for holding
-    all such ports:
+    """The class represent multifunction ports.  If a port has multiple
+    functionalities (or use desire such functionality, such as a port
+    the can perform EPP protocol as well as GPIO-like pin manipulation),
+    this class is essential a wrapper class for holding all such ports:
 
     .. code-block::
 
@@ -461,15 +466,16 @@ class ParallelPort:
         port.spp.write_data_register(0x1A)
         port.gpio.write_pin(strobe_pin, True)
 
-    :param spp_base_address: The SPP base address, only needed for ports that require it
-    :type spp_base_address: int, optional
-    :param ecp_base_address: The ECP base address, only needed for ports that require it
-    :type ecp_base_address: int, optional
-    :param windll_location: The location of the DLL required to use the parallel port, default is to use the one \
-    included in this package
-    :type windll_location: str, optional
-    :param port_modes: The modes to be stored in the ParallelPort object
-    :type port_modes: list(str), optional
+    :param int spp_base_address: (optional) The SPP base address, only
+        needed for ports that require it
+    :param int ecp_base_address: (optional) The ECP base address, only
+        needed for ports that require it
+    :param str|None windll_location: (optional) The location of the DLL
+        required to use the parallel port, default is to use the one
+        included in this package
+    :param list|tuple port_modes: The modes to be stored in the ParallelPort
+        object as a list or tuple of strings; valid options are "spp", "epp",
+        "ecp", and "gpio"
     """
 
     def __init__(
@@ -477,7 +483,7 @@ class ParallelPort:
         spp_base_address: Optional[int] = None,
         ecp_base_address: Optional[int] = None,
         windll_location: Optional[str] = None,
-        port_modes: Sequence[str] = ("spp"),
+        port_modes: Sequence[Literal["spp", "epp", "ecp", "gpio"]] = ("spp"),
     ) -> None:
         self.spp = None
         self.epp = None
@@ -496,10 +502,10 @@ class ParallelPort:
 
     @classmethod
     def from_json(cls, json_filepath: str) -> "ParallelPort":
-        """Factory method for creating and instance of ParallelPort from a JSON file containing the necessary information
+        """Factory method for creating and instance of ParallelPort from a
+        JSON file containing the necessary information
 
-        :param json_filepath: Filepath to the JSON
-        :type json_filepath: str
+        :param str json_filepath: Filepath to the JSON
         :return: An instance of ParallelPort
         :rtype: ParallelPort
         """
