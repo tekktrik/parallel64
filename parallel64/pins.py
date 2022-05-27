@@ -114,33 +114,15 @@ class Pins:
         self.D6 = DataPin(8, 6, data_address, is_bidir)
         self.D7 = DataPin(9, 7, data_address, is_bidir)
     
-    def get_named_pin_list(self) -> List[Tuple[str, Pin]]:
-        '''Returns a list of pins and their names
-        
-        :rtype: list((str, Pin))
-        '''
-        #return list(self.__dict__.items())
+    @property
+    def pin_list(self) -> List[Tuple[str, Pin]]:
+        '''Returns a list of pins and their names'''
         return [(pin_name, pin) for pin_name, pin in self.__dict__.items() if isinstance(pin, Pin)]
-        #return [pin_name for pin_name in pin_dict if pin_name != "_parallel_port"]
-        
-    def get_pin_list(self) -> List[Pin]:
-        '''Returns a list of pins
 
-        :rtype: list(Pin)
-        '''
-        return [pin[1] for pin in self.get_named_pin_list()]
-        
-    def get_pin_name_list(self) -> List[str]:
-        '''Return a list of pin names
-        
-        :rtype: list(str)
-        '''
-        return [pin[0] for pin in self.get_named_pin_list()]
-
-    def get_pin_by_number(self, pin_number: int) -> Pin:
+    def get_pin_number(self, pin_number: int) -> Pin:
         '''Returns a pin based off of the pin number
         
         :rtype: Pin
         '''
-        pin_list = self.get_pin_list()
-        return [pin for pin in pin_list if pin.pin_number == pin_number][0]
+        # TODO: Add ValueError if out of bounds
+        return (pin for _, pin in self.pin_list if pin.pin_number == pin_number)[0]
