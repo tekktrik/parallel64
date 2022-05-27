@@ -163,14 +163,6 @@ class StandardPort(_BasePort):
         new_control_byte = (direction.value << 5) | control_byte
         self.write_control_register(new_control_byte)
 
-    def set_reverse(self) -> None:
-        """Sets the port to reverse (input)"""
-        self.direction = parallel64.constants.Direction.REVERSE
-
-    def set_forward(self) -> None:
-        """Sets the port to forward (output)"""
-        self.direction = parallel64.constants.Direction.FORWARD
-
     def _test_bidirectional(self) -> bool:
         """Tests whether the port has bidirectional support
 
@@ -179,7 +171,7 @@ class StandardPort(_BasePort):
         """
 
         curr_dir = self.direction
-        self.set_reverse()
+        self.direction = parallel64.constants.Direction.REVERSE
         is_bidir = not bool(self.direction.value)
         self.direction = curr_dir
         return is_bidir
@@ -251,7 +243,7 @@ class StandardPort(_BasePort):
 
         self.spp_handshake_control_reset()
         if self.is_bidirectional:
-            self.set_forward()
+            self.direction = parallel64.constants.Direction.FORWARD
         self.write_data_register(data)
         if not bool((self.read_status_register() & (1 << 7)) >> 7):
             raise OSError("Port is busy")
@@ -273,7 +265,7 @@ class StandardPort(_BasePort):
 
         if self.is_bidirectional:
             self.spp_handshake_control_reset()
-            self.set_reverse()
+            self.direction = parallel64.constants.Direction.REVERSE
             return self.read_data_register()
 
         raise OSError(
@@ -377,7 +369,7 @@ class EnhancedPort(StandardPort):
         """
 
         self.spp_handshake_control_reset()
-        self.set_forward()
+        self.direction = parallel64.constants.Direction.FORWARD
         self._port.DlPortWritePortUchar(self._epp_address_address, address)
 
     def read_epp_address(self) -> int:
@@ -399,7 +391,7 @@ class EnhancedPort(StandardPort):
         """
 
         self.spp_handshake_control_reset()
-        self.set_forward()
+        self.direction = parallel64.constants.Direction.FORWARD
         self._port.DlPortWritePortUchar(self._epp_data_address, data)
 
     def read_epp_data(self) -> int:
@@ -409,7 +401,7 @@ class EnhancedPort(StandardPort):
         :rtype: int
         """
         self.spp_handshake_control_reset()
-        self.set_reverse()
+        self.direction = parallel64.constants.Direction.REVERSE
         return self._port.DlPortReadPortUchar(self._epp_data_address)
 
 
