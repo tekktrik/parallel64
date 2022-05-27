@@ -7,10 +7,10 @@ Welcome to parallel64's documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Contents:
 
-   api
+   autoapi/index
 
 
 Indices and tables
