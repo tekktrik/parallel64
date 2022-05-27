@@ -10,8 +10,7 @@ Welcome to parallel64's documentation!
    :maxdepth: 3
    :caption: Contents:
 
-   installation
-   parallel64
+   api
 
 
 Indices and tables
