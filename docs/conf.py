@@ -40,7 +40,7 @@ extensions = [
 ]
 autoapi_dirs = ["../parallel64"]
 autoapi_add_toctree_entry = True
-autoapi_options = ['members', 'show-module-summary']
+autoapi_options = ["members", "show-module-summary"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
