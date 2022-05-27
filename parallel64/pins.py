@@ -37,7 +37,7 @@ class DataPin(Pin):
     
     register_lock = threading.Lock()
     
-    def __init__(self, pin_number, bit_index, register, is_bidir) -> None:
+    def __init__(self, pin_number: int, bit_index: int, register: int, is_bidir: bool) -> None:
         super().__init__(pin_number, bit_index, register, False)
         self._allow_input = True if is_bidir else False
         self._allow_output = True
@@ -51,7 +51,7 @@ class StatusPin(Pin):
     
     register_lock = threading.Lock()
     
-    def __init__(self, pin_number, bit_index, register, hw_inverted=False) -> None:
+    def __init__(self, pin_number: int, bit_index: int, register: int, hw_inverted: bool = False) -> None:
         super().__init__(pin_number, bit_index, register, hw_inverted)
         self._allow_input = True
         self._allow_output = False
@@ -65,7 +65,7 @@ class ControlPin(Pin):
         
     register_lock = threading.Lock()
         
-    def __init__(self, pin_number, bit_index, register, hw_inverted=False) -> None:
+    def __init__(self, pin_number: int, bit_index: int, register: int, hw_inverted: bool = False) -> None:
         super().__init__(pin_number, bit_index, register, hw_inverted)
         self._allow_input = True
         self._allow_output = True
