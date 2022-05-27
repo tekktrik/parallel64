@@ -28,7 +28,8 @@ if not TYPE_CHECKING:
 
 # pylint: disable=too-few-public-methods
 class _BasePort:
-    """Base class for all ports
+    """
+    Base class for all ports
 
     :param str|None windll_location: (optional) The location of the DLL required
         to use the parallel port, default is to use the one included in this package
@@ -108,7 +109,8 @@ class _BasePort:
 
 
 class StandardPort(_BasePort):
-    """The class for representing the SPP port
+    """
+    The class for representing the SPP port
 
     :param int spp_base_address: The base address for the port, representing the
         SPP port data register
@@ -290,7 +292,8 @@ class StandardPort(_BasePort):
 
 
 class ExtendedPort(_BasePort):
-    """The class for representing the ECP port.  Currently, this class only works
+    """
+    The class for representing the ECP port.  Currently, this class only works
     with the Extended Capabilities Register as opposed to the ECP port.
 
     :param int ecp_base_address: The base address for the port, representing the
@@ -348,7 +351,8 @@ class ExtendedPort(_BasePort):
 
 
 class EnhancedPort(StandardPort):
-    """The class for representing the EPP port.  It is an extension of the
+    """
+    The class for representing the EPP port.  It is an extension of the
     StandardPort (SPP), so it's methods can be used as well
 
     :param int spp_base_address: The base address for the port, representing
@@ -410,7 +414,8 @@ class EnhancedPort(StandardPort):
 
 
 class GPIOPort(StandardPort):
-    """The class for representing GPIO-like functionality of the port, useful for
+    """
+    The class for representing GPIO-like functionality of the port, useful for
     interacting with connected devices in ways outside of established parallel port
     communication protocols.  It inherits from the StandardPort class, however, so
     those methods are available as well.
