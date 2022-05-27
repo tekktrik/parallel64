@@ -65,23 +65,16 @@ class StandardPort:
         except KeyError as err:
             raise KeyError("Unable to find " + str(err) + " parameter in the JSON file, see reference documentation")
         
-    def get_direction(self) -> Direction:
-        '''Get the current direction of the port
-
-        :return: Direction of the port
-        :rtype: Direction
-        '''
+    @property
+    def direction(self) -> Direction:
+        '''Get the current direction of the port'''
 
         control_byte = self.read_control_register()
         direction_byte = (1 << 5) & control_byte
         return Direction(direction_byte >> 5)
     
-    def set_direction(self, direction: Direction):
-        '''Sets the direction of the port
-
-        :param direction: The direction to set the port
-        :type direction: Direction
-        '''
+    @direction.setter
+    def direction(self, direction: Direction) -> None:
 
         control_byte = self.read_control_register()
         new_control_byte = (direction.value << 5) | control_byte
@@ -90,12 +83,12 @@ class StandardPort:
     def set_reverse(self):
         '''Sets the port to reverse (input)
         '''
-        self.set_direction(Direction.REVERSE)
+        self.direction = Direction.REVERSE
         
     def set_forward(self):
         '''Sets the port to forward (output)
         '''
-        self.set_direction(Direction.FORWARD)
+        self.direction = Direction.FORWARD
         
     def _test_bidirectional(self) -> bool:
         '''Tests whether the port has bidirectional support
@@ -104,10 +97,10 @@ class StandardPort:
         :rtype: bool
         '''
 
-        curr_dir = self.get_direction()
+        curr_dir = self.direction
         self.set_reverse()
-        isBidir = not bool(self.get_direction().value)
-        self.set_direction(curr_dir)
+        isBidir = not bool(self.direction.value)
+        self.direction = curr_dir
         return isBidir
         
     def is_bidirectional(self) -> bool:
