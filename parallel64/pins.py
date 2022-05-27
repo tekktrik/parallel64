@@ -36,9 +36,11 @@ class Pin:
 
 
 class DataPin(Pin):
-    """Class representing an individual data pin, including a class-wide threading.Lock for I/O operations
+    """Class representing an individual data pin, including a
+    class-wide threading.Lock for I/O operations
 
-    :ivar register_lock: A class-wide thread lock useful for making I/O safe code
+    :ivar register_lock: A class-wide thread lock useful for
+        making I/O safe code
     :vartype register_lock: threading.Lock
     """
 
@@ -53,9 +55,11 @@ class DataPin(Pin):
 
 
 class StatusPin(Pin):
-    """Class representing an individual status pin, including a class-wide threading.Lock for I/O operations
+    """Class representing an individual status pin, including a
+    class-wide threading.Lock for I/O operations
 
-    :ivar register_lock: A class-wide thread lock useful for making I/O safe code
+    :ivar register_lock: A class-wide thread lock useful for
+        making I/O safe code
     :vartype register_lock: threading.Lock
     """
 
@@ -70,9 +74,11 @@ class StatusPin(Pin):
 
 
 class ControlPin(Pin):
-    """Class representing an individual control pin, including a class-wide threading.Lock for I/O operations
+    """Class representing an individual control pin, including a
+    class-wide threading.Lock for I/O operations
 
-    :ivar register_lock: A class-wide thread lock useful for making I/O safe code
+    :ivar register_lock: A class-wide thread lock useful for
+        making I/O safe code
     :vartype register_lock: threading.Lock
     """
 
@@ -87,8 +93,9 @@ class ControlPin(Pin):
 
 
 class Pins:
-    """Class representing all the pins for a given port (connected to registers).  Interaction with this class typically
-    takes place by manipulating the 'pins' attribute of an instance of 'GPIOPort':
+    """Class representing all the pins for a given port (connected to
+    registers).  Interaction with this class typically takes place by
+    manipulating the 'pins' attribute of an instance of 'GPIOPort':
 
     .. code-block::
 
