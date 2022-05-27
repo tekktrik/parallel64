@@ -9,8 +9,7 @@ import os
 import ctypes
 import time
 import json
-from enum import Enum
-from typing import Optional, List, Tuple
+from typing import Optional, List
 from .pins import Pins, Pin
 from .constants import Direction, CommMode
 
