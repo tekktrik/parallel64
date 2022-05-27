@@ -44,6 +44,7 @@ class _BasePort:
             else:
                 windll_location = os.path.join(inpout_folder, "inpout32.dll")
         self._windll_location = windll_location
+        self._port = ctypes.WinDLL(windll_location)
 
     @staticmethod
     def _parse_from_json(
@@ -127,7 +128,6 @@ class StandardPort(_BasePort):
         self._spp_data_address = spp_base_address
         self._status_address = spp_base_address + 1
         self._control_address = spp_base_address + 2
-        self._parallel_port = ctypes.WinDLL(windll_location)
         self._is_bidir = self._test_bidirectional()
         if reset_control:
             self.spp_handshake_control_reset()
@@ -305,7 +305,6 @@ class ExtendedPort(_BasePort):
     ) -> None:
         super().__init__(windll_location)
         self._ecr_address = ecp_base_address + 2
-        self._parallel_port = ctypes.WinDLL(windll_location)
 
     @classmethod
     def from_json(cls, json_filepath: str) -> "ExtendedPort":
