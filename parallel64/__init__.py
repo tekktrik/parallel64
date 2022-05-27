@@ -19,8 +19,8 @@ import os
 import ctypes
 import time
 import json
-import parallel64.pins
-import parallel64.constants
+from parallel64.pins import Pins, Pin
+from parallel64.constants import Direction, CommMode
 
 if not TYPE_CHECKING:
     if sys.platform != "win32":
@@ -149,19 +149,20 @@ class StandardPort(_BasePort):
         return cls._create_from_json(json_filepath, port_params)
 
     @property
-    def direction(self) -> parallel64.constants.Direction:
+    def direction(self) -> Direction:
         """Get the current direction of the port"""
 
         control_byte = self.read_control_register()
         direction_byte = (1 << 5) & control_byte
-        return parallel64.constants.Direction(direction_byte >> 5)
+        return Direction(direction_byte >> 5)
 
     @direction.setter
-    def direction(self, direction: parallel64.constants.Direction) -> None:
+    def direction(self, direction: Direction) -> None:
 
         control_byte = self.read_control_register()
         new_control_byte = (direction.value << 5) | control_byte
         self.write_control_register(new_control_byte)
+
 
     def _test_bidirectional(self) -> bool:
         """Tests whether the port has bidirectional support
@@ -171,7 +172,7 @@ class StandardPort(_BasePort):
         """
 
         curr_dir = self.direction
-        self.direction = parallel64.constants.Direction.REVERSE
+        self.direction = Direction.REVERSE
         is_bidir = not bool(self.direction.value)
         self.direction = curr_dir
         return is_bidir
@@ -243,7 +244,7 @@ class StandardPort(_BasePort):
 
         self.spp_handshake_control_reset()
         if self.is_bidirectional:
-            self.direction = parallel64.constants.Direction.FORWARD
+            self.direction = Direction.FORWARD
         self.write_data_register(data)
         if not bool((self.read_status_register() & (1 << 7)) >> 7):
             raise OSError("Port is busy")
@@ -265,7 +266,7 @@ class StandardPort(_BasePort):
 
         if self.is_bidirectional:
             self.spp_handshake_control_reset()
-            self.direction = parallel64.constants.Direction.REVERSE
+            self.direction = Direction.REVERSE
             return self.read_data_register()
 
         raise OSError(
@@ -316,13 +317,13 @@ class ExtendedPort(_BasePort):
         return cls._create_from_json(json_filepath, port_params)
 
     @property
-    def comm_mode(self) -> parallel64.constants.CommMode:
+    def comm_mode(self) -> CommMode:
         """The communication mode in the ECR"""
         mode = self.read_ecr_register()
-        return parallel64.constants.CommMode(mode >> 5)
+        return CommMode(mode >> 5)
 
     @comm_mode.setter
-    def comm_mode(self, mode: parallel64.constants.CommMode) -> None:
+    def comm_mode(self, mode: CommMode) -> None:
         self.write_ecr_register(mode.value << 5)
 
     def write_ecr_register(self, data: int) -> None:
@@ -369,7 +370,7 @@ class EnhancedPort(StandardPort):
         """
 
         self.spp_handshake_control_reset()
-        self.direction = parallel64.constants.Direction.FORWARD
+        self.direction = Direction.FORWARD
         self._port.DlPortWritePortUchar(self._epp_address_address, address)
 
     def read_epp_address(self) -> int:
@@ -391,7 +392,7 @@ class EnhancedPort(StandardPort):
         """
 
         self.spp_handshake_control_reset()
-        self.direction = parallel64.constants.Direction.FORWARD
+        self.direction = Direction.FORWARD
         self._port.DlPortWritePortUchar(self._epp_data_address, data)
 
     def read_epp_data(self) -> int:
@@ -401,7 +402,7 @@ class EnhancedPort(StandardPort):
         :rtype: int
         """
         self.spp_handshake_control_reset()
-        self.direction = parallel64.constants.Direction.REVERSE
+        self.direction = Direction.REVERSE
         return self._port.DlPortReadPortUchar(self._epp_data_address)
 
 
@@ -433,12 +434,12 @@ class GPIOPort(StandardPort):
         reset_control: bool = False,
     ) -> None:
         super().__init__(spp_base_address, windll_location, reset_control)
-        self.pins = parallel64.pins.Pins(self._spp_data_address, self.is_bidirectional)
+        self.pins = Pins(self._spp_data_address, self.is_bidirectional)
         if clear_gpio:
             self.write_data_register(0)
             self.reset_control_pins()
 
-    def read_pin(self, pin: parallel64.pins.Pin) -> bool:
+    def read_pin(self, pin: Pin) -> bool:
         """Read the state of the given pin
 
         :param pin: The pin to read
@@ -454,7 +455,7 @@ class GPIOPort(StandardPort):
             return (not bit_result) if pin.hw_inverted else bit_result
         raise OSError("Input not allowed on pin " + str(pin.pin_number))
 
-    def write_pin(self, pin: parallel64.pins.Pin, value: bool) -> None:
+    def write_pin(self, pin: Pin, value: bool) -> None:
         """Set the state of the given pin
 
         :param Pin pin: The pin to set
