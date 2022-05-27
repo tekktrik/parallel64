@@ -30,7 +30,7 @@ jobs:
         pip install --force-reinstall pre-commit
     - name: Pip install documentation requirements
       run: |
-        pip install --force-reinstall requirements-doc.txt
+        pip install --force-reinstall -r requirements-doc.txt
     - name: Library version
       run: git describe --dirty --always --tags
     - name: Pre-commit hooks
