@@ -4,4 +4,4 @@
 
 sphinx
 sphinx-rtd-theme
-#sphinx-autoapi
+sphinx-autoapi
