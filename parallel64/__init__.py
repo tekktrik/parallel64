@@ -1,7 +1,9 @@
 import sys
+from typing import TYPE_CHECKING
 
-if sys.platform != 'win32':
-    raise Exception("parallel64 is meant for Windows systems only")
+if not TYPE_CHECKING:
+    if sys.platform != 'win32':
+        raise Exception("parallel64 is meant for Windows systems only")
 
 import os
 import ctypes
