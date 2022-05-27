@@ -2,6 +2,18 @@
 #
 # SPDX-License-Identifier: MIT
 
+"""
+`parallel64.constants`
+======================
+
+Constants as enums used for during typical operation of a
+parrallel port
+
+
+* Author(s): Alec Delaney
+
+"""
+
 from enum import Enum
 
 
@@ -16,8 +28,9 @@ class Direction(Enum):
 
 
 class CommMode(Enum):
-    """Enum class representing the various protocols the ECR might be configureable for (port-dependent).
-    Note that more available modes may be added as this project progresses.
+    """Enum class representing the various protocols the ECR might
+    be configureable for (port-dependent).  Note that more available
+    modes may be added as this project progresses.
 
     Used with :class:`parallel64.ExtendedPort`
     """
