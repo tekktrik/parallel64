@@ -366,7 +366,7 @@ class GPIOPort(StandardPort):
         :rtype: bool
         '''
 
-        if pin.is_input_allowed():
+        if pin.input_allowed:
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
             bit_mask = 1 << pin.bit_index
             bit_result = bool((bit_mask & register_byte) >> pin.bit_index)
@@ -383,7 +383,7 @@ class GPIOPort(StandardPort):
         :type value: bool
         '''
 
-        if pin.is_output_allowed():
+        if pin.output_allowed:
             register_byte =  self._parallel_port.DlPortReadPortUchar(pin.register)
             current_bit = ((1 << pin.bit_index) & register_byte) >> pin.bit_index
             current_value = (not current_bit) if pin.is_hw_inverted() else current_bit

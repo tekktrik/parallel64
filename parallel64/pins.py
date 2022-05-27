@@ -20,18 +20,14 @@ class Pin:
         '''
         return self._hw_inverted
         
-    def is_output_allowed(self) -> bool:
-        '''Returns whether a pin allows output
-        
-        :rtype: bool
-        '''
+    @property
+    def output_allowed(self) -> bool:
+        '''Returns whether a pin allows output'''
         return self._allow_output
         
-    def is_input_allowed(self) -> bool:
-        '''Returns whether a pin allows input
-        
-        :rtype: bool
-        '''
+    @property
+    def input_allowed(self) -> bool:
+        '''Returns whether a pin allows input'''
         return self._allow_input
 
 class DataPin(Pin):
