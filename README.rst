@@ -5,7 +5,7 @@
 .. image:: https://github.com/tekktrik/parallel64/workflows/Build%20CI/badge.svg
     :target: https://github.com/tekktrik/parallel64/actions/
     :alt: Build Status
-    
+
 parallel64
 ==========
 
