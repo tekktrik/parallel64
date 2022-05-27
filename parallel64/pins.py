@@ -119,7 +119,8 @@ class Pins:
         
         :rtype: list((str, Pin))
         '''
-        return list(self.__dict__.items())
+        #return list(self.__dict__.items())
+        return [(pin_name, pin) for pin_name, pin in self.__dict__.items() if isinstance(pin, Pin)]
         #return [pin_name for pin_name in pin_dict if pin_name != "_parallel_port"]
         
     def get_pin_list(self) -> List[Pin]:
