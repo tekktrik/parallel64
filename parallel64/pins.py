@@ -2,6 +2,18 @@
 #
 # SPDX-License-Identifier: MIT
 
+"""
+`parallel64.pins`
+======================
+
+Individual pin and pin collection functionalities used as part
+of a GPIO port
+
+
+* Author(s): Alec Delaney
+
+"""
+
 import threading
 from typing import List, Tuple
 
@@ -50,7 +62,7 @@ class DataPin(Pin):
         self, pin_number: int, bit_index: int, register: int, is_bidir: bool
     ) -> None:
         super().__init__(pin_number, bit_index, register, False)
-        self._allow_input = True if is_bidir else False
+        self._allow_input = is_bidir
         self._allow_output = True
 
 
@@ -92,6 +104,7 @@ class ControlPin(Pin):
         self._allow_output = True
 
 
+# pylint: disable=invalid-name,too-many-instance-attributes
 class Pins:
     """Class representing all the pins for a given port (connected to
     registers).  Interaction with this class typically takes place by
@@ -149,5 +162,6 @@ class Pins:
 
         :rtype: Pin
         """
-        # TODO: Add ValueError if out of bounds
+        if not 1 <= pin_number <= 17:
+            raise ValueError("Only pins 1-17 are accessible")
         return (pin for _, pin in self.pin_list if pin.pin_number == pin_number)[0]
