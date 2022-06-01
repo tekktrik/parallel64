@@ -50,6 +50,9 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# Specify language for documentation
+language = "en"
+
 
 # -- Options for HTML output -------------------------------------------------
 
