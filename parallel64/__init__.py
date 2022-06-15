@@ -51,7 +51,8 @@ class _BasePort:
     def _parse_from_json(
         json_filepath: str, port_params: List[str]
     ) -> Dict[str, Union[int, str]]:
-        """Parses a JSON file for the given parameters
+        """
+        Parses a JSON file for the given parameters
 
         :param str json_filepath: The path to the JSON file
         :param list port_params: A list of the parameters to get from
