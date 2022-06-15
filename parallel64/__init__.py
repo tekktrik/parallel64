@@ -60,6 +60,10 @@ class _BasePort:
         :return: A dictionary containing the contents of the JSON file
             that can be used to instance a _BasePort object
         :rtype: dict
+        :raises KeyError: If an expected key is missing in the JSON
+            file
+        :raises TypeError: If the ports are not written as hex
+            strings
         """
 
         with open(json_filepath, mode="r", encoding="utf-8") as json_file:
@@ -197,8 +201,7 @@ class StandardPort(_BasePort):
 
         :return: The information in the Data register
         :rtype: int
-        :raises Exception: if the port is unable to read due to lack of
-            bidirectionality support
+        :raises OSError: If the port is not bidirectional
         """
 
         if self._is_bidir:
@@ -240,6 +243,7 @@ class StandardPort(_BasePort):
         :param bool hold_while_busy: Whether code should be blocked until the Busy
             line communicates the device is done receiving the data, default
             behavior is blocking (True)
+        :raises OSError: If the port is busy
         """
 
         self.spp_handshake_control_reset()
@@ -262,6 +266,7 @@ class StandardPort(_BasePort):
 
         :return: The data on the Data pins
         :rtype: int
+        :raises OSError: If the port is not bidirectional
         """
 
         if self.is_bidirectional:
@@ -446,6 +451,7 @@ class GPIOPort(StandardPort):
         :type pin: Pin
         :return: The state of the pin
         :rtype: bool
+        :raises OSError: If the pin is output-only
         """
 
         if pin.input_allowed:
@@ -460,6 +466,7 @@ class GPIOPort(StandardPort):
 
         :param Pin pin: The pin to set
         :param bool value: The state to set the pin
+        :raises OSError: If the pin is input-only
         """
 
         if pin.output_allowed:
@@ -471,7 +478,7 @@ class GPIOPort(StandardPort):
                 byte_result = bit_mask ^ register_byte
                 self._port.DlPortWritePortUchar(pin.register, byte_result)
         else:
-            raise Exception("Output not allowed on pin " + str(pin.pin_number))
+            raise OSError("Output not allowed on pin " + str(pin.pin_number))
 
     def reset_data_pins(self) -> None:
         """Reset the data pins (to low)"""
