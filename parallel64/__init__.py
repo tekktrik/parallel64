@@ -51,7 +51,8 @@ class _BasePort:
     def _parse_from_json(
         json_filepath: str, port_params: List[str]
     ) -> Dict[str, Union[int, str]]:
-        """Parses a JSON file for the given parameters
+        """
+        Parses a JSON file for the given parameters
 
         :param str json_filepath: The path to the JSON file
         :param list port_params: A list of the parameters to get from
@@ -345,7 +346,7 @@ class ExtendedPort(_BasePort):
 class EnhancedPort(StandardPort):
     """
     The class for representing the EPP port.  It is an extension of the
-    StandardPort (SPP), so it's methods can be used as well
+    StandardPort (SPP), so its methods can be used as well.
 
     :param int spp_base_address: The base address for the port, representing
         the SPP port data register
