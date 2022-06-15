@@ -346,7 +346,7 @@ class ExtendedPort(_BasePort):
 class EnhancedPort(StandardPort):
     """
     The class for representing the EPP port.  It is an extension of the
-    StandardPort (SPP), so it's methods can be used as well
+    StandardPort (SPP), so its methods can be used as well.
 
     :param int spp_base_address: The base address for the port, representing
         the SPP port data register
