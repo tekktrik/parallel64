@@ -44,7 +44,7 @@ autoapi_options = [
     "members",
     "show-module-summary",
     "private_members",
-    "show-inheritance"
+    "show-inheritance",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
