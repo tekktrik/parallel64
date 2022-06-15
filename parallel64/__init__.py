@@ -471,7 +471,7 @@ class GPIOPort(StandardPort):
                 byte_result = bit_mask ^ register_byte
                 self._port.DlPortWritePortUchar(pin.register, byte_result)
         else:
-            raise Exception("Output not allowed on pin " + str(pin.pin_number))
+            raise OSError("Output not allowed on pin " + str(pin.pin_number))
 
     def reset_data_pins(self) -> None:
         """Reset the data pins (to low)"""
