@@ -22,8 +22,8 @@ class Direction(Enum):
     Used with :class:`parallel64.StandardPort`
     """
 
-    REVERSE = 0
-    FORWARD = 1
+    REVERSE = 1
+    FORWARD = 0
 
 
 class CommMode(Enum):
