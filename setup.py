@@ -47,5 +47,7 @@ setup(
     keywords=["parallel", "port", "spp", "epp", "ecp", "gpio"],
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=["parallel64"],
+    packages=["parallel64", "parallel64.inpoutdlls"],
+    package_data={"inpoutdlls": ["*.dll", "*.license"]},
+    include_package_data=True,
 )
