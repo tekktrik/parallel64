@@ -4,11 +4,12 @@
 
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
-
 #if defined(_WIN32)
-#include <dos.h>
-#define writeport(PORT, VALUE) outp(PORT, VALUE)
-#define readport(PORT) inp(PORT)
+#include <windows.h>
+typedef void (__stdcall *wport)(short, short);
+typedef unsigned char (__stdcall *rport)(short);
+wport writeport;
+rport readport;
 #elif defined(__linux__) || defined(BSD)
 #include <sys/io.h>
 #define writeport(PORT, VALUE) outb(VALUE, PORT)
@@ -20,21 +21,31 @@ static PyObject* _parallel64_init_ports(PyObject *self, PyObject *args, PyObject
     const unsigned long port_address;
     const unsigned long num_ports;
 
-    static const char *keywords[] = {"address", "num", NULL};
+    static char *keywords[] = {"address", "num", NULL};
 
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "kk", keywords, &port_address, &num_ports)) {
         return NULL;
     }
 
-    #if defined(__linux__) || defined(BSD)
-    int res = ioperm(port_address, num_ports, 1);
-    #else
     int res = 0;
+    #if defined(__linux__) || defined(BSD)
+    res = ioperm(port_address, num_ports, 1);
+    #else
+    HINSTANCE dll = LoadLibrary("inpoutx64.dll");
+    if (dll == NULL) {
+        PyErr_SetString(
+            PyExc_OSError,
+            "Unable to load DLL"
+        );
+        return NULL;
+    }
+    writeport = (wport)GetProcAddress(dll, "DlPortWritePortUchar");
+    readport = (rport)GetProcAddress(dll, "DlPortReadPortUchar");
     #endif
     if (res != 0) {
         PyErr_SetString(
             PyExc_OSError,
-            "Insufficient permissions to operate port - please run as administrator."
+            "Insufficient permissions to operate port - please run as administrator"
         );
         return NULL;
     }
@@ -47,7 +58,7 @@ static PyObject* _parallel64_write(PyObject *self, PyObject *args, PyObject *kwa
     const unsigned long port_address;
     const unsigned char value;
 
-    static const char *keywords[] = {"address", "value", NULL};
+    static char *keywords[] = {"address", "value", NULL};
 
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "kb", keywords, &port_address, &value)) {
         return NULL;
@@ -63,7 +74,7 @@ static PyObject* _parallel64_read(PyObject *self, PyObject *args, PyObject *kwar
 
     const unsigned long port_address;
 
-    static const char *keywords[] = {"address", NULL};
+    static char *keywords[] = {"address", NULL};
 
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "k", keywords, &port_address)) {
         return NULL;
