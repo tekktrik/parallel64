@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2020 Diego Elio Pettenò
+//
+// SPDX-License-Identifier: Unlicense
+
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 

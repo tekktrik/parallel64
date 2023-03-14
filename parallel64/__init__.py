@@ -49,8 +49,6 @@ class StandardPort(_BasePort):
         if reset_control:
             self.spp_handshake_control_reset()
 
-    @classmethod
-
     @property
     def direction(self) -> Direction:
         """Get the current direction of the port"""
@@ -61,7 +59,6 @@ class StandardPort(_BasePort):
 
     @direction.setter
     def direction(self, direction: Direction) -> None:
-
         control_byte = self.read_control_register()
         new_control_byte = (direction.value << 5) | control_byte
         self.write_control_register(new_control_byte)
@@ -92,7 +89,7 @@ class StandardPort(_BasePort):
         :param data_byte: A byte of data
         :type data_byte: int
         """
-        import os
+
         _parallel64.write(self._spp_data_address, data_byte)
 
     def read_data_register(self) -> int:
