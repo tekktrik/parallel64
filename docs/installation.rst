@@ -1,14 +1,16 @@
 Installation Instructions
 =========================
 
-Due to having to run the contained DLL (explained later), this package
-is no longer available on PyPI.  You must instead download the source
-code to install this library.
-
 Downloading parallel64
 ----------------------
 
-You can install ``parallel64`` using either ``git`` or by downloading the source
+You can install ``parallel4`` from PyPI using ``pip``:
+
+.. code-block:: shell
+
+    pip install parallel64
+
+You can also install ``parallel64`` using either ``git`` or by downloading the source
 code from `Github <https://github.com/tekktrik/parallel64>`_.
 
 Using ``git``:
@@ -23,28 +25,12 @@ Using Github:
     - In the "HTTPS" option, select ``Download ZIP``
     - Extract the contents of the ZIP file
 
-Installing parallel64
----------------------
-
-You can use ``pip`` to install the package!  Make sure you are in the folder
-containing the source code (either the git repository or the extracted folder),
-and install the package:
+Then make sure you are in the folder containing the source code
+(either the git repository or the extracted folder), and install the package:
 
 .. code-block:: shell
 
     pip install .
-
-Setting up the DLL
-------------------
-
-On most modern versions of Windows, the DLL must be used once with Adminstrator
-priveleges in order to function properly.  You can do so by running
-``InpOutBinaries_1501/Win32/InstallDriver.exe`` in the source code folder.  This
-will prompt you to use administrator priveleges.
-
-.. note::
-
-    You only need to do this step once!  After that, you're good to go!
 
 Determining the port address
 ----------------------------
