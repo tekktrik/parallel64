@@ -9,7 +9,7 @@ https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
 
-from setuptools import setup, find_packages
+from setuptools import setup, Extension
 
 # To use a consistent encoding
 from codecs import open
@@ -20,6 +20,11 @@ here = path.abspath(path.dirname(__file__))
 # Get the long description from the README file
 with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
+
+module = Extension(
+    "_parallel64",
+    ["extension/_parallel64.c"],
+)
 
 setup(
     name="parallel64",
@@ -48,4 +53,5 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=["parallel64"],
+    ext_modules=[module],
 )
