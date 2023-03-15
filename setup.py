@@ -22,8 +22,12 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
 module = Extension(
-    "_parallel64",
-    ["extension/_parallel64.c"],
+    "parallel64",
+    [
+        "parallel64/__init__.c",
+        "parallel64/portio.c",
+        "parallel64/_BasePort.c",
+    ],
 )
 
 setup(
@@ -52,6 +56,6 @@ setup(
     keywords=["parallel", "port", "spp", "epp", "ecp", "gpio"],
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=["parallel64"],
+    #packages=["_parallel64"],
     ext_modules=[module],
 )

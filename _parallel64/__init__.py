@@ -15,8 +15,8 @@ Functionality fo interfacing with a parallel port
 
 import time
 import _parallel64
-from parallel64.pins import Pins, Pin
-from parallel64.constants import Direction, CommMode
+from _parallel64.pins import Pins, Pin
+from _parallel64.constants import Direction, CommMode
 
 
 # pylint: disable=too-few-public-methods

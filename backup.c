@@ -1,6 +1,6 @@
-// SPDX-FileCopyrightText: 2020 Diego Elio Pettenò
+// SPDX-FileCopyrightText: 2023 Alec Delaney
 //
-// SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: MIT
 
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
@@ -95,7 +95,7 @@ static PyMethodDef _Parallel64Methods[] = {
 
 static struct PyModuleDef _parallel64module = {
     PyModuleDef_HEAD_INIT,
-    "_parallel64",
+    "parallel64",
     "Behind the scenes extension for operating the parallel port",
     -1,
     _Parallel64Methods
