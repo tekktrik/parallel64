@@ -4,6 +4,6 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-extern PyType_Spec _BasePort_Spec;
+extern PyTypeObject _BasePortType;
 
 #endif /* _BASEPORT_H */
