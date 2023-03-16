@@ -79,4 +79,5 @@ PyTypeObject StandardPortType = {
     .tp_new = (newfunc)StandardPort_new,
     .tp_init = (initproc)StandardPort_init,
     .tp_getset = StandardPort_getsetters,
+    .tp_free = PyObject_GC_Del,
 };
