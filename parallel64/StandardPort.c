@@ -53,15 +53,35 @@ static inline PyObject* StandardPort_write_spp_data(PyObject *self, PyObject *ar
     parallel64_parse_write(SPPDATA(((StandardPortObject *)self)->spp_address), args);
 }
 
+static inline PyObject* StandardPort_write_spp_control(PyObject *self, PyObject *args) {
+    parallel64_parse_write(SPPCONTROL(((StandardPortObject *)self)->spp_address), args);
+}
+
+static inline PyObject* StandardPort_read_spp_data(PyObject *self, PyObject *args) {
+    return parallel64_parse_read(SPPDATA(((StandardPortObject *)self)->spp_address));
+}
+
+static inline PyObject* StandardPort_read_spp_status(PyObject *self, PyObject *args) {
+    return parallel64_parse_read(SPPSTATUS(((StandardPortObject *)self)->spp_address));
+}
+
+static inline PyObject* StandardPort_read_spp_control(PyObject *self, PyObject *args) {
+    return parallel64_parse_read(SPPCONTROL(((StandardPortObject *)self)->spp_address));
+}
+
 
 static PyObject* StandardPort_get_port_address(PyObject *self, void *closure) {
     uint16_t address = ((StandardPortObject *)self)->spp_address + (uint16_t)closure;
-    return (PyObject *)PyLong_FromLong(address);
+    return PyLong_FromLong(address);
 }
 
 
 static PyMethodDef StandardPort_methods[] = {
-    {"write_spp_data", (PyCFunction)StandardPort_write_spp_data, METH_VARARGS, "Get the data from the SPP data register"},
+    {"write_data_register", (PyCFunction)StandardPort_write_spp_data, METH_VARARGS, "Write data to the SPP data register"},
+    {"write_control_register", (PyCFunction)StandardPort_write_spp_control, METH_VARARGS, "Write data to the SPP control register"},
+    {"read_data_register", (PyCFunction)StandardPort_read_spp_data, METH_NOARGS, "Read data from the SPP data register"},
+    {"read_status_register", (PyCFunction)StandardPort_read_spp_status, METH_NOARGS, "Read data from the SPP status register"},
+    {"read_control_register", (PyCFunction)StandardPort_read_spp_control, METH_NOARGS, "Read data from the SPP control register"},
     {NULL}
 };
 

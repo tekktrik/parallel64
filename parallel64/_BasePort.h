@@ -29,4 +29,8 @@ static inline PyObject* parallel64_parse_write(uint16_t address, PyObject *args)
     Py_RETURN_NONE;
 }
 
+static inline PyObject* parallel64_parse_read(uint16_t address) {
+    return PyLong_FromLong(readport(address));
+}
+
 #endif /* _BASEPORT_H */
