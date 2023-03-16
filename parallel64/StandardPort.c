@@ -13,9 +13,7 @@
 
 
 static PyObject* StandardPort_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
-    StandardPortObject *self = PyObject_GC_NewVar(StandardPortObject, type, 0);
-    self->spp_address = 0;
-    return (PyObject *)self;
+    return (PyObject *)PyObject_GC_NewVar(StandardPortObject, type, 0);
 }
 
 
@@ -45,12 +43,7 @@ static int StandardPort_init(StandardPortObject *self, PyObject *args, PyObject 
 
 
 static void StandardPort_dealloc(StandardPortObject *self) {
-    printf("AAAA\n");
-    //PyObject_GC_UnTrack(self);
-    printf("BBB\n");
-    //PyObject_GC_Del(self);
     Py_TYPE(self)->tp_free((PyObject *)self);
-    printf("CCC\n");
 }
 
 
