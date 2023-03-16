@@ -7,13 +7,13 @@
 #include "_BasePort.h"
 #include "StandardPort.h"
 
-#define ADDNEWTYPE(NEW_TYPE) do \
+#define ADDNEWTYPE(NEW_TYPE, MODULE_OBJ) do \
 { \
     if (PyType_Ready(&##NEW_TYPE##Type) < 0) { \
         return NULL; \
     } \
     Py_INCREF(&##NEW_TYPE##Type); \
-    PyModule_AddObject(module, #NEW_TYPE, (PyObject *)&##NEW_TYPE##Type); \
+    PyModule_AddObject(MODULE_OBJ, #NEW_TYPE, (PyObject *)&##NEW_TYPE##Type); \
 } while (0);\
 
 
@@ -31,8 +31,8 @@ PyMODINIT_FUNC PyInit_parallel64(void) {
         return NULL;
     }
 
-    ADDNEWTYPE(_BasePort)
-    ADDNEWTYPE(StandardPort)
+    ADDNEWTYPE(_BasePort, module)
+    ADDNEWTYPE(StandardPort, module)
 
     return module;
 

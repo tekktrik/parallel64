@@ -25,7 +25,7 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
 extra_args = {}
 if sys.platform == "win32":
     extra_args = {
-        "include_pacakge_data": True,
+        "include_package_data": True,
         "package_data": {
             "parallel64": ["inpoutx64_dll/*.dlls"]
         },

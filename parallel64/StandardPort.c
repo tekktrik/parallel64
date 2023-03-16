@@ -7,8 +7,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "portio.h"
+#include "_BasePort.h"
 #include "StandardPort.h"
 
+// TODO: Remove this later
 #include <stdio.h>
 
 
@@ -28,7 +30,7 @@ static int StandardPort_init(StandardPortObject *self, PyObject *args, PyObject 
         return -1;
     }
 
-    if (_parallel64_init_ports(spp_address, 3) != INIT_SUCCESS) {
+    if (parallel64_init_ports(spp_address, 3) != INIT_SUCCESS) {
         // TODO: Set more specific error
         return -1;
     }
@@ -47,10 +49,21 @@ static void StandardPort_dealloc(StandardPortObject *self) {
 }
 
 
+static inline PyObject* StandardPort_write_spp_data(PyObject *self, PyObject *args) {
+    parallel64_parse_write(SPPDATA(((StandardPortObject *)self)->spp_address), args);
+}
+
+
 static PyObject* StandardPort_get_port_address(PyObject *self, void *closure) {
     uint16_t address = ((StandardPortObject *)self)->spp_address + (uint16_t)closure;
     return (PyObject *)PyLong_FromLong(address);
 }
+
+
+static PyMethodDef StandardPort_methods[] = {
+    {"write_spp_data", (PyCFunction)StandardPort_write_spp_data, METH_VARARGS, "Get the data from the SPP data register"},
+    {NULL}
+};
 
 
 static PyGetSetDef StandardPort_getsetters[] = {
@@ -74,4 +87,5 @@ PyTypeObject StandardPortType = {
     .tp_getset = StandardPort_getsetters,
     .tp_free = PyObject_Del,
     .tp_base = &_BasePortType,
+    .tp_methods = &StandardPort_methods,
 };

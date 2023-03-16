@@ -2,10 +2,15 @@
 //
 // SPDX-License-Identifier: MIT
 
+#ifndef PORTIO_H
+#define PORTIO_H
+
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+
 #include <stdbool.h>
 #include <stdint.h>
+
 #if defined(_WIN32)
 #include <windows.h>
 typedef void (__stdcall *wport)(short, short);
@@ -26,7 +31,7 @@ typedef enum {
 } init_result_t;
 
 
-static inline init_result_t _parallel64_init_ports(uint16_t address, uint16_t num_ports) {
+static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num_ports) {
 
     int res = 0;
     #if defined(__linux__) || defined(BSD)
@@ -53,3 +58,5 @@ static inline void _parallel64_write(uint16_t address, uint16_t value) {
 static inline u_char _parallel64_read(uint16_t address) {
     return readport(address);
 }
+
+#endif /* PORTIO_H */
