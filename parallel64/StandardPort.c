@@ -13,7 +13,7 @@
 
 
 static PyObject* StandardPort_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
-    return (PyObject *)PyObject_GC_NewVar(StandardPortObject, type, 0);
+    return (PyObject *)PyObject_NewVar(StandardPortObject, type, 0);
 }
 
 
@@ -65,13 +65,13 @@ PyTypeObject StandardPortType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "parallel64.StandardPort",
     .tp_basicsize = sizeof(StandardPortObject),
-    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_HAVE_GC,
+    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
     .tp_doc = "Class for representing an SPP port",
     .tp_alloc = PyType_GenericAlloc,
     .tp_dealloc = (destructor)StandardPort_dealloc,
     .tp_new = (newfunc)StandardPort_new,
     .tp_init = (initproc)StandardPort_init,
     .tp_getset = StandardPort_getsetters,
-    .tp_free = PyObject_GC_Del,
+    .tp_free = PyObject_Del,
     .tp_base = &_BasePortType,
 };
