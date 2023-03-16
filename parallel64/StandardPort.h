@@ -3,13 +3,14 @@
 
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+#include "_BasePort.h"
 
 #define SPPDATA(ADDRESS) ADDRESS
 #define SPPSTATUS(ADDRESS) ADDRESS+1
 #define SPPCONTROL(ADDRESS) ADDRESS+2
 
 typedef struct {
-    PyObject_HEAD
+    _BasePortObject super;
     uint16_t spp_address;
 } StandardPortObject;
 
