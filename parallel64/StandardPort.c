@@ -48,8 +48,8 @@ static void StandardPort_dealloc(StandardPortObject *self) {
     printf("AAAA\n");
     //PyObject_GC_UnTrack(self);
     printf("BBB\n");
-    PyObject_GC_Del(self);
-    //Py_TYPE(self)->tp_free((PyObject *)self);
+    //PyObject_GC_Del(self);
+    Py_TYPE(self)->tp_free((PyObject *)self);
     printf("CCC\n");
 }
 
