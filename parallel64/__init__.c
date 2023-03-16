@@ -5,6 +5,16 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include "_BasePort.h"
+#include "StandardPort.h"
+
+#define ADDNEWTYPE(NEW_TYPE) do \
+{ \
+    if (PyType_Ready(&##NEW_TYPE##Type) < 0) { \
+        return NULL; \
+    } \
+    Py_INCREF(&##NEW_TYPE##Type); \
+    PyModule_AddObject(module, #NEW_TYPE, (PyObject *)&##NEW_TYPE##Type); \
+} while (0);\
 
 
 static struct PyModuleDef parallel64module = {
@@ -21,11 +31,8 @@ PyMODINIT_FUNC PyInit_parallel64(void) {
         return NULL;
     }
 
-    if (PyType_Ready(&_BasePortType) < 0) {
-        return NULL;
-    }
-    Py_INCREF(&_BasePortType);
-    PyModule_AddObject(module, "_BasePort", (PyObject *)&_BasePortType);
+    ADDNEWTYPE(_BasePort)
+    ADDNEWTYPE(StandardPort)
 
     return module;
 

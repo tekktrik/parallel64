@@ -14,6 +14,7 @@ from setuptools import setup, Extension
 # To use a consistent encoding
 from codecs import open
 from os import path
+import sys
 
 here = path.abspath(path.dirname(__file__))
 
@@ -21,12 +22,21 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
+extra_args = {}
+if sys.platform == "win32":
+    extra_args = {
+        "include_pacakge_data": True,
+        "package_data": {
+            "parallel64": ["inpoutx64_dll/*.dlls"]
+        },
+    }
+
 module = Extension(
     "parallel64",
     [
         "parallel64/__init__.c",
-        "parallel64/portio.c",
         "parallel64/_BasePort.c",
+        "parallel64/StandardPort.c",
     ],
 )
 
@@ -58,4 +68,5 @@ setup(
     # simple. Or you can use find_packages().
     #packages=["_parallel64"],
     ext_modules=[module],
+    **extra_args,
 )
