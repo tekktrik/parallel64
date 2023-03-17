@@ -35,9 +35,9 @@ jobs:
         echo "--------------------------------"
         which sudo python
         echo "--------------------------------"
-        which python
+        which ${{ steps.install-lib.outputs.pyexec }}
         echo "--------------------------------"
-        sudo python --version
+        sudo ${{ steps.install-lib.outputs.pyexec }} --version
         if [ ${{ matrix.os }} == ubuntu-latest ]; then
           echo ${{ matrix.os }}
           sudo ${{ steps.install-lib.outputs.pyexec }} tests/StandardPort.py
