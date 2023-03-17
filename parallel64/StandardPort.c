@@ -31,7 +31,7 @@ static int StandardPort_init(StandardPortObject *self, PyObject *args, PyObject 
     }
 
     init_result_t init_result = parallel64_init_ports(spp_address, 3);
-    switch (init_result != INIT_SUCCESS) {
+    switch (init_result) {
     case INIT_DLLLOAD_ERROR:
         PyErr_SetString(
             PyExc_OSError,
