@@ -33,4 +33,4 @@ jobs:
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install .
     - name: Run test script
       run: |
-        ${{ steps.find-pyexec.outputs.pyexec }} tests/StandardPort.py -RunAsAdmin
+        Start-Process wpr -verb runAs -Args "${{ steps.find-pyexec.outputs.pyexec }} tests/StandardPort.py"
