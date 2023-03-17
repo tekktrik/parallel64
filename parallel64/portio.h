@@ -34,7 +34,7 @@ typedef enum {
 static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num_ports) {
 
     int res = 0;
-    #if defined(__linux__) || defined(BSD)
+    #if !defined(_WIN32)
     res = ioperm(address, num_ports, 1);
     if (res != 0) {
         return INIT_PERMISSION_ERROR;
