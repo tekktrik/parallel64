@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 Alec Delaney
+//
+// SPDX-License-Identifier: MIT
+
 #ifndef STANDARDPORT_H
 #define STANDARDPORT_H
 

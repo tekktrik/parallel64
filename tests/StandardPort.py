@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Alec Delaney
+#
+# SPDX-License-Identifier: MIT
+
 import parallel64
 
 thing = parallel64.StandardPort(100)
