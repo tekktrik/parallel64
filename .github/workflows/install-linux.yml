@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-name: Install Test CI
+name: Linux Install Test CI
 
 on: [pull_request, push]
 
