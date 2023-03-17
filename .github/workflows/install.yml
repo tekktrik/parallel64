@@ -30,8 +30,11 @@ jobs:
     - name: Run test script for Linux
       if: ${{ matrix.os }} == ubuntu-latest
       run: |
+        echo ${{ matrix.os }}
+        pip freeze
         sudo python tests/StandardPort.py
     - name: Run test script for Windows
       if: ${{ matrix.os }} == windows-latest
       run: |
+        pip freeze
         python -RunAsAdmin
