@@ -30,10 +30,20 @@ static int StandardPort_init(StandardPortObject *self, PyObject *args, PyObject 
         return -1;
     }
 
-    if (parallel64_init_ports(spp_address, 3) != INIT_SUCCESS) {
-        // TODO: Set more specific error
+    init_result_t init_result = parallel64_init_ports(spp_address, 3);
+    switch (init_result != INIT_SUCCESS) {
+    case INIT_DLLLOAD_ERROR:
+        PyErr_SetString(
+            PyExc_OSError,
+            "Unable to load the DLL"
+        );
         return -1;
-    }
+    case INIT_PERMISSION_ERROR:
+        PyErr_SetString(
+            PyExc_OSError,
+            "Unable gain permission for the port"
+        );
+        return -1;
 
     // TODO: Reset port if needed
 
