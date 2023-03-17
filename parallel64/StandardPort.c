@@ -44,6 +44,7 @@ static int StandardPort_init(StandardPortObject *self, PyObject *args, PyObject 
             "Unable gain permission for the port"
         );
         return -1;
+    }
 
     // TODO: Reset port if needed
 
