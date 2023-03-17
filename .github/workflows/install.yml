@@ -29,7 +29,6 @@ jobs:
         pip install --upgrade .
         echo pyexec=$(sudo which python) >> $GITHUB_OUTPUT
     - name: Run test script
-      if: ${{ matrix.os }} == ubuntu-latest
       run: |
         echo "--------------------------------"
         sudo which python
