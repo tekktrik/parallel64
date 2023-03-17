@@ -17,16 +17,16 @@
 } while (0);\
 
 
-static struct PyModuleDef parallel64module = {
+static struct PyModuleDef parallel64ports_module = {
     PyModuleDef_HEAD_INIT,
-    .m_name = "parallel64",
+    .m_name = "ports",
     .m_doc = "Behind the scenes extension for operating the parallel port",
     .m_size = -1,
 };
 
-PyMODINIT_FUNC PyInit_parallel64(void) {
+PyMODINIT_FUNC PyInit_ports(void) {
 
-    PyObject *module = PyModule_Create(&parallel64module);
+    PyObject *module = PyModule_Create(&parallel64ports_module);
     if (!module) {
         return NULL;
     }

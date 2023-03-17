@@ -14,7 +14,7 @@ static void _BasePort_dealloc(_BasePortObject *self) {
 
 PyTypeObject _BasePortType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name = "parallel64._BasePort",
+    .tp_name = "parallel64.ports._BasePort",
     .tp_basicsize = sizeof(_BasePortObject),
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_HAVE_GC,
     .tp_doc = "Base class for all ports",

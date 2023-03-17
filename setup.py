@@ -9,7 +9,7 @@ https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
 
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 
 # To use a consistent encoding
 from codecs import open
@@ -22,19 +22,19 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
-extra_args = {}
-if sys.platform == "win32":
-    extra_args = {
-        "include_package_data": True,
-        "package_data": {"parallel64": ["inpoutx64_dll/*.dlls"]},
-    }
+#extra_args = {}
+#if sys.platform == "win32":
+#    extra_args = {
+#        "include_package_data": True,
+#        "package_data": {"parallel64": ["*.dll"]},
+#    }
 
 module = Extension(
-    "parallel64",
+    "parallel64.ports",
     [
-        "parallel64/__init__.c",
-        "parallel64/_BasePort.c",
-        "parallel64/StandardPort.c",
+        "src/parallel64/moduleports.c",
+        "src/parallel64/_BasePort.c",
+        "src/parallel64/StandardPort.c",
     ],
 )
 
@@ -66,5 +66,8 @@ setup(
     # simple. Or you can use find_packages().
     # packages=["_parallel64"],
     ext_modules=[module],
-    **extra_args,
+    packages=["parallel64"],
+    package_dir={"": "src"},
+    package_data={"parallel64": ["*.dll"]},
+    #**extra_args,
 )
