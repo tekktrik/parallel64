@@ -27,14 +27,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install --upgrade .
-    - name: Run test script for Linux
+    - name: Run test script
       if: ${{ matrix.os }} == ubuntu-latest
       run: |
-        echo ${{ matrix.os }}
-        pip freeze
-        sudo python tests/StandardPort.py
-    - name: Run test script for Windows
-      if: ${{ matrix.os }} == windows-latest
-      run: |
-        pip freeze
-        python -RunAsAdmin
+        sudo python -m pip freeze
+        if [ ${{ matrix.os }} == ubuntu-latest ]; then
+          echo ${{ matrix.os }}
+          sudo python tests/StandardPort.py
+        fi
+        if [ ${{ matrix.os }} == windows-latest ]; then
+          pip freeze
+          python -RunAsAdmin
+        fi
