@@ -25,7 +25,8 @@ jobs:
     - name: Find Python executable
       id: find-pyexec
       run: |
-        "pyexec=(where python)" >> $env:GITHUB_OUTPUT
+        $pyexecloc = (where python)
+        "pyexec=$pyexecloc" >> $env:GITHUB_OUTPUT
     - name: Install the library
       run: |
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install --upgrade pip
