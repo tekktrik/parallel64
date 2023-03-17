@@ -25,7 +25,7 @@ jobs:
         submodules: true
     - name: Install Library
       run: |
-        pip install .
+        pip install --upgrade .
     - name: Run test script for Linux
       if: ${{ matrix.os }} == ubuntu-latest
       run: |
