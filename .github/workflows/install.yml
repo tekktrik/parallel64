@@ -26,7 +26,11 @@ jobs:
     - name: Find Python executable
       id: find-pyexec
       run: |
-        echo pyexec=$(which python) >> $GITHUB_OUTPUT
+        if [ ${{ steps.find-pyexec.outputs.pyexec }} == ubuntu-latest ]; then
+          echo pyexec=$(which python) >> $GITHUB_OUTPUT
+        elif [ ${{ steps.find-pyexec.outputs.pyexec }} == windows-latest ]; then
+          echo pyexec=$(where python) >> $GITHUB_OUTPUT
+        fi
     - name: Install the library
       run: |
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install --upgrade pip
