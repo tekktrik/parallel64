@@ -25,6 +25,7 @@ jobs:
         submodules: true
     - name: Find Python executable
       id: find-pyexec
+      shell: bash
       run: |
         if [ ${{ matrix.os }} == ubuntu-latest ]; then
           echo pyexec=$(which python) >> $GITHUB_OUTPUT
@@ -32,10 +33,12 @@ jobs:
           echo pyexec=$(where python) >> $GITHUB_OUTPUT
         fi
     - name: Install the library
+      shell: bash
       run: |
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install --upgrade pip
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install .
     - name: Run test script
+      shell: bash
       run: |
         echo "--------------------------------"
         sudo which python
