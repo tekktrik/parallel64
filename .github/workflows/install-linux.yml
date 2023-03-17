@@ -26,6 +26,7 @@ jobs:
       id: find-pyexec
       run: |
         echo pyexec=$(which python) >> $GITHUB_OUTPUT
+        echo $(where python)
     - name: Install the library
       run: |
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install --upgrade pip
