@@ -11,9 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
         pyver: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
     - name: Set up Python ${{ matrix.pyver }}
       uses: actions/setup-python@v4
@@ -25,20 +24,13 @@ jobs:
         submodules: true
     - name: Find Python executable
       id: find-pyexec
-      shell: bash
       run: |
-        if [ ${{ matrix.os }} == ubuntu-latest ]; then
-          echo pyexec=$(which python) >> $GITHUB_OUTPUT
-        elif [ ${{ matrix.os }} == windows-latest ]; then
-          echo pyexec=$(where python) >> $GITHUB_OUTPUT
-        fi
+        echo pyexec=$(which python) >> $GITHUB_OUTPUT
     - name: Install the library
-      shell: bash
       run: |
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install --upgrade pip
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install .
     - name: Run test script
-      shell: bash
       run: |
         echo "--------------------------------"
         sudo which python
@@ -48,11 +40,4 @@ jobs:
         which ${{ steps.find-pyexec.outputs.pyexec }}
         echo "--------------------------------"
         sudo ${{ steps.find-pyexec.outputs.pyexec }} --version
-        if [ ${{ matrix.os }} == ubuntu-latest ]; then
-          echo ${{ matrix.os }}
-          sudo ${{ steps.find-pyexec.outputs.pyexec }} tests/StandardPort.py
-        fi
-        if [ ${{ matrix.os }} == windows-latest ]; then
-          pip freeze
-          python -RunAsAdmin
-        fi
+        sudo ${{ steps.find-pyexec.outputs.pyexec }} tests/StandardPort.py

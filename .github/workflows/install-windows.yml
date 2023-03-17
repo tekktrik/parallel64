@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2023 Alec Delaney
+#
+# SPDX-License-Identifier: MIT
+
+name: Install Test CI
+
+on: [pull_request, push]
+
+jobs:
+  test-install:
+    strategy:
+      fail-fast: false
+      matrix:
+        pyver: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+    runs-on: windows-latest
+    steps:
+    - name: Set up Python ${{ matrix.pyver }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.pyver }}
+    - name: Checkout Current Repo
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: Find Python executable
+      id: find-pyexec
+      run: |
+        echo pyexec=$(where python) >> $GITHUB_OUTPUT
+    - name: Install the library
+      run: |
+        ${{ steps.find-pyexec.outputs.pyexec }} -m pip install --upgrade pip
+        ${{ steps.find-pyexec.outputs.pyexec }} -m pip install .
+    - name: Run test script
+      run: |
+        ${{ steps.find-pyexec.outputs.pyexec }} tests/StandardPort.py -RunAsAdmin
