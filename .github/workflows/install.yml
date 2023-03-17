@@ -25,8 +25,8 @@ jobs:
         submodules: true
     - name: Install Library
       run: |
-        python -m pip install --upgrade pip
         pip install --upgrade .
+        pyexec=$(sudo which python)
     - name: Run test script
       if: ${{ matrix.os }} == ubuntu-latest
       run: |
@@ -40,7 +40,7 @@ jobs:
         sudo python --version
         if [ ${{ matrix.os }} == ubuntu-latest ]; then
           echo ${{ matrix.os }}
-          sudo python tests/StandardPort.py
+          sudo $pyexec tests/StandardPort.py
         fi
         if [ ${{ matrix.os }} == windows-latest ]; then
           pip freeze
