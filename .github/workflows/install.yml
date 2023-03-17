@@ -23,11 +23,14 @@ jobs:
       uses: actions/checkout@v3
       with:
         submodules: true
-    - name: Install Library
-      id: install-lib
+    - name: Find Python executable
+      id: find-pyexec
       run: |
-        pip install --upgrade .
-        echo pyexec=$(sudo which python) >> $GITHUB_OUTPUT
+        echo pyexec=$(which python) >> $GITHUB_OUTPUT
+    - name: Install the library
+      run: |
+        ${{ steps.find-pyexec.outputs.pyexec }} -m pip install --upgrade pip
+        ${{ steps.find-pyexec.outputs.pyexec }} -m pip install .
     - name: Run test script
       run: |
         echo "--------------------------------"
@@ -35,12 +38,12 @@ jobs:
         echo "--------------------------------"
         which sudo python
         echo "--------------------------------"
-        which ${{ steps.install-lib.outputs.pyexec }}
+        which ${{ steps.find-pyexec.outputs.pyexec }}
         echo "--------------------------------"
-        sudo ${{ steps.install-lib.outputs.pyexec }} --version
+        sudo ${{ steps.find-pyexec.outputs.pyexec }} --version
         if [ ${{ matrix.os }} == ubuntu-latest ]; then
           echo ${{ matrix.os }}
-          sudo ${{ steps.install-lib.outputs.pyexec }} tests/StandardPort.py
+          sudo ${{ steps.find-pyexec.outputs.pyexec }} tests/StandardPort.py
         fi
         if [ ${{ matrix.os }} == windows-latest ]; then
           pip freeze
