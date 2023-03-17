@@ -26,9 +26,7 @@ extra_args = {}
 if sys.platform == "win32":
     extra_args = {
         "include_package_data": True,
-        "package_data": {
-            "parallel64": ["inpoutx64_dll/*.dlls"]
-        },
+        "package_data": {"parallel64": ["inpoutx64_dll/*.dlls"]},
     }
 
 module = Extension(
@@ -66,7 +64,7 @@ setup(
     keywords=["parallel", "port", "spp", "epp", "ecp", "gpio"],
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    #packages=["_parallel64"],
+    # packages=["_parallel64"],
     ext_modules=[module],
     **extra_args,
 )

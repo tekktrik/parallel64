@@ -20,7 +20,7 @@ static PyObject* StandardPort_new(PyTypeObject *type, PyObject *args, PyObject *
 
 
 static int StandardPort_init(StandardPortObject *self, PyObject *args, PyObject *kwds) {
-    
+
     const uint16_t spp_address;
     bool reset_control = true;
 
