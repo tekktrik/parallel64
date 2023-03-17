@@ -26,9 +26,9 @@ jobs:
     - name: Find Python executable
       id: find-pyexec
       run: |
-        if [ ${{ steps.find-pyexec.outputs.pyexec }} == ubuntu-latest ]; then
+        if [ ${{ matrix.os }} == ubuntu-latest ]; then
           echo pyexec=$(which python) >> $GITHUB_OUTPUT
-        elif [ ${{ steps.find-pyexec.outputs.pyexec }} == windows-latest ]; then
+        elif [ ${{ matrix.os }} == windows-latest ]; then
           echo pyexec=$(where python) >> $GITHUB_OUTPUT
         fi
     - name: Install the library
