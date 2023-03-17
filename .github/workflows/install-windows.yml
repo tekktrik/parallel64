@@ -25,7 +25,7 @@ jobs:
     - name: Find Python executable
       id: find-pyexec
       run: |
-        $pyexecloc = (get-command python)where python.Path
+        $pyexecloc = (get-command python).Path
         "pyexec=$pyexecloc" >> $env:GITHUB_OUTPUT
     - name: Install the library
       run: |
