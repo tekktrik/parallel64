@@ -30,7 +30,13 @@ jobs:
     - name: Run test script
       if: ${{ matrix.os }} == ubuntu-latest
       run: |
-        sudo python -m pip freeze
+        echo "--------------------------------"
+        sudo which python
+        echo "--------------------------------"
+        which sudo python
+        echo "--------------------------------"
+        which python
+        echo "--------------------------------"
         sudo python --version
         if [ ${{ matrix.os }} == ubuntu-latest ]; then
           echo ${{ matrix.os }}
