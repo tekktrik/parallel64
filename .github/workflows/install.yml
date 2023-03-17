@@ -27,6 +27,7 @@ jobs:
       run: |
         pip install --upgrade .
         pyexec=$(sudo which python)
+        export pyexec
     - name: Run test script
       if: ${{ matrix.os }} == ubuntu-latest
       run: |
