@@ -44,9 +44,9 @@ packages = [
 ]
 
 [tool.setuptools.package-dir]
-"parallel64" = "src"
-"parallel64.ports" = "src"
-"parallel64.ports.inpoutx64" = "src"
+"parallel64" = "src/parallel64"
+"ports" = "src/parallel64/ports"
+"inpoutx64" = "src/parallel64/ports/inpoutx64"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}

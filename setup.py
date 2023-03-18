@@ -19,5 +19,4 @@ module = Extension(
 
 setup(
     ext_modules=[module],
-    package_dir={"": "src"},
 )
