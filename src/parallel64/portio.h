@@ -11,6 +11,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "moduleports.h"
+
 #if defined(_WIN32)
 #include <windows.h>
 typedef void (__stdcall *wport)(short, short);
@@ -40,7 +42,15 @@ static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num
         return INIT_PERMISSION_ERROR;
     }
     #else
-    HINSTANCE dll = LoadLibrary("inpoutx64_dll/inpoutx64.dll");
+
+    PyObject *mod = PyImport_ImportModule("parallel64");
+    PyObject *filestring = PyObject_GetAttrString(mod, "__file__");
+    char *filechars = PyUnicode_AsUTF8(filestring);
+    filechars[strlen(filechars) - 11] = '\0';
+    char *dllpath = strcat(filechars, "inpoutx64");
+    Py_DECREF(mod);
+
+    HINSTANCE dll = LoadLibrary(dllpath);
     if (dll == NULL) {
         return INIT_DLLLOAD_ERROR;
     }

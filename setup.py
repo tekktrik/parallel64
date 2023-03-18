@@ -69,7 +69,7 @@ setup(
     packages=["parallel64"],
     package_dir={"": "src"},
     package_data={"parallel64": [
-        "inpoutx64/*.dll",
+        "*.dll",
         #"inpoutx64"
         ]
     },
