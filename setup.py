@@ -25,7 +25,11 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
 extra_args = {}
 if sys.platform == "win32":
     extra_args = {
-        "package_data": {"parallel64": ["ports/inpoutx64/*.dll",]},
+        "package_data": {
+            "parallel64": [
+                "ports/inpoutx64/*.dll",
+            ]
+        },
     }
 
 module = Extension(
