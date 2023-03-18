@@ -41,6 +41,7 @@ static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num
     }
     #else
 
+    // TODO: Maybe use PyImport_AddModule
     PyObject *mod = PyImport_ImportModule("parallel64");
     PyObject *filestring = PyObject_GetAttrString(mod, "__file__");
     char *filechars = PyUnicode_AsUTF8(filestring);
