@@ -84,7 +84,7 @@ static inline PyObject* StandardPort_read_spp_control(PyObject *self, PyObject *
 
 
 static PyObject* StandardPort_get_port_address(PyObject *self, void *closure) {
-    uint16_t address = ((StandardPortObject *)self)->spp_address + (uint16_t)closure;
+    uint16_t address = ((StandardPortObject *)self)->spp_address + *(uint16_t *)closure;
     return PyLong_FromLong(address);
 }
 
@@ -100,9 +100,9 @@ static PyMethodDef StandardPort_methods[] = {
 
 
 static PyGetSetDef StandardPort_getsetters[] = {
-    {"spp_data_address", (getter)StandardPort_get_port_address, NULL, "SPP data address", (void *)0},
-    {"spp_status_address", (getter)StandardPort_get_port_address, NULL, "SPP status address", (void *)1},
-    {"spp_control_address", (getter)StandardPort_get_port_address, NULL, "SPP control address", (void *)2},
+    {"spp_data_address", (getter)StandardPort_get_port_address, NULL, "SPP data address", &(uint16_t){0}},
+    {"spp_status_address", (getter)StandardPort_get_port_address, NULL, "SPP status address", &(uint16_t){1}},
+    {"spp_control_address", (getter)StandardPort_get_port_address, NULL, "SPP control address", &(uint16_t){2}},
     {NULL}
 };
 
