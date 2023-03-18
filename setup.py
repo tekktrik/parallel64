@@ -32,9 +32,9 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
 module = Extension(
     "parallel64.ports",
     [
-        "src/parallel64/moduleports.c",
-        "src/parallel64/_BasePort.c",
-        "src/parallel64/StandardPort.c",
+        "src/parallel64/ports/moduleports.c",
+        "src/parallel64/ports/_BasePort.c",
+        "src/parallel64/ports/StandardPort.c",
     ],
 )
 
@@ -70,7 +70,7 @@ setup(
     package_dir={"": "src"},
     package_data={
         "parallel64": [
-            "*.dll",
+            "ports/inpoutx64/*.dll",
             # "inpoutx64"
         ]
     },

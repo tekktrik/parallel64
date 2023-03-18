@@ -45,7 +45,9 @@ static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num
     PyObject *filestring = PyObject_GetAttrString(mod, "__file__");
     char *filechars = PyUnicode_AsUTF8(filestring);
     filechars[strlen(filechars) - 11] = '\0';
-    char *dllpath = strcat(filechars, "inpoutx64");
+    char *dllpath = strcat(filechars, "\\ports");
+    dllpath = strcat(dllpath, "\\inpoutx64");
+    dllpath = strcat(dllpath, "\\inpoutx64");
     Py_DECREF(mod);
 
     HINSTANCE dll = LoadLibrary(dllpath);
