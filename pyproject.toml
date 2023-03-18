@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2023 Alec Delaney
+#
+# SPDX-License-Identifier: MIT
+
+[build-system]
+requires = [
+    "setuptools",
+    "wheel",
+    "setuptools-scm",
+]
+
+[project]
+name = "parallel64"
+description = "Library for working with parallel ports on a 64-bit system."
+version = "0.0.0+auto.0"
+readme = "README.rst"
+authors = [
+    {name = "Alec Delaney", email = "tekktrik@gmail.com"}
+]
+urls = {Homepage = "https://github.com/tekktrik/parallel64"}
+keywords = [
+    "parallel",
+    "port",
+    "spp",
+    "epp",
+    "ecp",
+    "gpio",
+]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: System :: Hardware",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dynamic = ["dependencies", "optional-dependencies"]
+
+[tool.setuptools]
+packages = ["parallel64"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+optional-dependencies = {optional = {file = ["optional_requirements.txt"]}}
