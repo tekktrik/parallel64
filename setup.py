@@ -22,12 +22,11 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
-# extra_args = {}
-# if sys.platform == "win32":
-#    extra_args = {
-#        "include_package_data": True,
-#        "package_data": {"parallel64": ["*.dll"]},
-#    }
+extra_args = {}
+if sys.platform == "win32":
+    extra_args = {
+        "package_data": {"parallel64": ["ports/inpoutx64/*.dll",]},
+    }
 
 module = Extension(
     "parallel64.ports",
@@ -68,11 +67,5 @@ setup(
     ext_modules=[module],
     packages=["parallel64"],
     package_dir={"": "src"},
-    package_data={
-        "parallel64": [
-            "ports/inpoutx64/*.dll",
-            # "inpoutx64"
-        ]
-    },
-    # **extra_args,
+    **extra_args,
 )
