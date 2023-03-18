@@ -40,7 +40,7 @@ static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num
         return INIT_PERMISSION_ERROR;
     }
     #else
-    HINSTANCE dll = LoadLibrary("../inpoutx64_dll/inpoutx64.dll");
+    HINSTANCE dll = LoadLibrary("inpoutx64_dll/inpoutx64.dll");
     if (dll == NULL) {
         return INIT_DLLLOAD_ERROR;
     }

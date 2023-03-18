@@ -1,1 +1,1 @@
-recursive-include parallel64 *.dll
+recursive-include src *.dll *.dll.license
