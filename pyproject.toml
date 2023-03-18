@@ -37,7 +37,16 @@ classifiers = [
 dynamic = ["dependencies", "optional-dependencies"]
 
 [tool.setuptools]
-packages = ["parallel64"]
+packages = [
+    "parallel64",
+    "parallel64.ports",
+    "parallel64.ports.inpoutx64",
+]
+
+[tool.setuptools.package-dir]
+"parallel64" = "src"
+"parallel64.ports" = "src"
+"parallel64.ports.inpoutx64" = "src"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
