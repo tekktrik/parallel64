@@ -32,6 +32,8 @@ static int StandardPort_init(StandardPortObject *self, PyObject *args, PyObject 
 
     init_result_t init_result = parallel64_init_ports(spp_address, 3);
     switch (init_result) {
+    case INIT_SUCCESS:
+        break;
     case INIT_DLLLOAD_ERROR:
         PyErr_SetString(
             PyExc_OSError,
@@ -61,11 +63,11 @@ static void StandardPort_dealloc(StandardPortObject *self) {
 
 
 static inline PyObject* StandardPort_write_spp_data(PyObject *self, PyObject *args) {
-    parallel64_parse_write(SPPDATA(((StandardPortObject *)self)->spp_address), args);
+    return parallel64_parse_write(SPPDATA(((StandardPortObject *)self)->spp_address), args);
 }
 
 static inline PyObject* StandardPort_write_spp_control(PyObject *self, PyObject *args) {
-    parallel64_parse_write(SPPCONTROL(((StandardPortObject *)self)->spp_address), args);
+    return parallel64_parse_write(SPPCONTROL(((StandardPortObject *)self)->spp_address), args);
 }
 
 static inline PyObject* StandardPort_read_spp_data(PyObject *self, PyObject *args) {
@@ -118,5 +120,5 @@ PyTypeObject StandardPortType = {
     .tp_getset = StandardPort_getsetters,
     .tp_free = PyObject_GC_Del,
     .tp_base = &_BasePortType,
-    .tp_methods = &StandardPort_methods,
+    .tp_methods = StandardPort_methods,
 };
