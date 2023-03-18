@@ -11,8 +11,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "moduleports.h"
-
 #if defined(_WIN32)
 #include <windows.h>
 typedef void (__stdcall *wport)(short, short);
