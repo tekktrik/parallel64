@@ -68,6 +68,10 @@ setup(
     ext_modules=[module],
     packages=["parallel64"],
     package_dir={"": "src"},
-    package_data={"parallel64": ["*.dll"]},
+    package_data={"parallel64": [
+        "inpoutx64/*.dll",
+        #"inpoutx64"
+        ]
+    },
     #**extra_args,
 )
