@@ -106,11 +106,13 @@ static inline void portio_set_port_direction(uint16_t spp_base_addr, port_dir_t 
     writeport(SPPCONTROL(spp_base_addr), new_direction_byte);
 }
 
+#define PORTIO_STORE_DIRECTION(OBJECT, TYPE, DIRECTION_VAR) *DIRECTION_VAR = portio_get_port_direction(((TYPE *)OBJECT)->spp_address)
+
 #define PORTIO_GET_DIRECTION(OBJECT, TYPE) do { \
     PyObject *constmod = PyImport_AddModule("parallel64.constants"); \
     PyObject *direnum = PyObject_GetAttrString(constmod, "Direction"); \
-    const uint16_t spp_base_addr = ((TYPE *)OBJECT)->spp_address; \
-    const uint8_t direction_byte = portio_get_port_direction(spp_base_addr); \
+    uint8_t direction_byte; \
+    PORTIO_STORE_DIRECTION(OBJECT, TYPE, &direction_byte); \
     PyObject *direction = PyObject_CallFunction(direnum, "(i)", direction_byte); \
     return direction; \
 } while (0)
