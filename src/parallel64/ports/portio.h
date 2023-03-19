@@ -123,10 +123,10 @@ static inline void portio_set_port_direction(uint16_t spp_base_addr, port_dir_t 
     return 0; \
 } while(0)
 
-#define PORT_PARSE_READ_DATA(SELF, TYPE) portio_parse_read(SPPDATA(((TYPE *)SELF)->spp_address))
-#define PORT_PARSE_READ_STATUS(SELF, TYPE) portio_parse_read(SPPSTATUS(((TYPE *)SELF)->spp_address))
-#define PORT_PARSE_READ_CONTROL(SELF, TYPE) portio_parse_read(SPPCONTROL(((TYPE *)SELF)->spp_address))
-#define PORT_PARSE_WRITE_DATA(SELF, ARGS, TYPE) portio_parse_write(SPPDATA(((TYPE *)SELF)->spp_address), ARGS)
-#define PORT_PARSE_WRITE_CONTROL(SELF, ARGS, TYPE) portio_parse_write(SPPCONTROL(((TYPE *)SELF)->spp_address), ARGS)
+#define PORT_PARSE_READ_DATA(OBJECT, TYPE) portio_parse_read(SPPDATA(((TYPE *)OBJECT)->spp_address))
+#define PORT_PARSE_READ_STATUS(OBJECT, TYPE) portio_parse_read(SPPSTATUS(((TYPE *)OBJECT)->spp_address))
+#define PORT_PARSE_READ_CONTROL(OBJECT, TYPE) portio_parse_read(SPPCONTROL(((TYPE *)OBJECT)->spp_address))
+#define PORT_PARSE_WRITE_DATA(OBJECT, ARGS, TYPE) portio_parse_write(SPPDATA(((TYPE *)OBJECT)->spp_address), ARGS)
+#define PORT_PARSE_WRITE_CONTROL(OBJECT, ARGS, TYPE) portio_parse_write(SPPCONTROL(((TYPE *)OBJECT)->spp_address), ARGS)
 
 #endif /* PORTIO_H */
