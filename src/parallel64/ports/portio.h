@@ -44,9 +44,12 @@ static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num
     // TODO: Maybe use PyImport_AddModule
     PyObject *mod = PyImport_AddModule("parallel64");
     PyObject *filestring = PyObject_GetAttrString(mod, "__file__");
-    char *filechars = PyUnicode_AsUTF8(filestring);
-    filechars[strlen(filechars) - 11] = '\0';
+    const char *constfilechars = PyUnicode_AsUTF8(filestring);
+    char *filechars = malloc(strlen(constfilechars));
+    strncpy(filechars, constfilechars, strlen(constfilechars) + 1);
+    filechars[strlen(constfilechars) - 11] = '\0';
     char *dllpath = strcat(filechars, "\\ports");
+    free(filechars);
     dllpath = strcat(dllpath, "\\inpoutx64");
     dllpath = strcat(dllpath, "\\inpoutx64");
     Py_DECREF(mod);
