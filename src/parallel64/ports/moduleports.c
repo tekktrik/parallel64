@@ -36,11 +36,6 @@ PyMODINIT_FUNC PyInit_ports(void) {
         return NULL;
     }
 
-    //PyObject *constmod = PyImport_ImportModule("parallel64.constants");
-    //if (constmod == NULL) {
-    //    return NULL;
-    //}
-
     ADDNEWTYPE(_BasePort, module)
     ADDNEWTYPE(StandardPort, module)
 
