@@ -95,7 +95,9 @@ static PyObject* StandardPort_get_direction(PyObject *self, void *closure) {
     const uint16_t spp_base_addr = ((StandardPortObject *)self)->spp_address;
     int8_t control_byte = readport(SPPCONTROL(spp_base_addr));
     uint8_t direction_byte = ((1 << 5) & control_byte) >> 5;
-    return PyObject_CallFunction(direnum, "(i)", direction_byte);
+    PyObject *direction = PyObject_CallFunction(direnum, "(i)", direction_byte);
+    Py_INCREF(direction);
+    return direction;
 }
 
 // TODO: Reuse part of code a bit masking helper
