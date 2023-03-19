@@ -23,6 +23,13 @@ rport readport;
 #define readport(PORT) inb(PORT)
 #endif
 
+#define P64_CHECKBIT_UINT8(VALUE, BITINDEX) ((1 << BITINDEX) & VALUE)
+#define P64_CHECKBIT_BOOL(VALUE, BITINDEX) P64_CHECKBIT_UINT8(VALUE, BITINDEX) >> BITINDEX
+#define P64_SETBIT_OFF(VALUE, BITINDEX) ~(1 << BITINDEX) & VALUE
+#define P64_SETBIT_ON(VALUE, BITINDEX) (1 << BITINDEX) | VALUE
+#define P64_SETBIT(VALUE, BITINDEX, SETTING) SETTING ? P64_SETBIT_ON(VALUE, BITINDEX) : P64_SETBIT_OFF(VALUE, BITINDEX)
+
+#define DIRECTION_BITINDEX 5
 
 typedef enum {
     INIT_SUCCESS,
@@ -95,5 +102,23 @@ static inline void portio_set_port_direction(uint16_t spp_base_addr, port_dir_t 
     uint8_t new_direction_byte = P64_SETBIT(direction, DIRECTION_BITINDEX, direction);
     writeport(SPPCONTROL(spp_base_addr), new_direction_byte);
 }
+
+#define PORTIO_GET_DIRECTION(OBJECT, TYPE) do { \
+    PyObject *constmod = PyImport_AddModule("parallel64.constants"); \
+    PyObject *direnum = PyObject_GetAttrString(constmod, "Direction"); \
+    const uint16_t spp_base_addr = ((TYPE *)OBJECT)->spp_address; \
+    const uint8_t direction_byte = portio_get_port_direction(spp_base_addr); \
+    PyObject *direction = PyObject_CallFunction(direnum, "(i)", direction_byte); \
+    Py_INCREF(direction); \
+    return direction; \
+} while (0);
+
+#define PORTIO_SET_DIRECTION(OBJECT, VALUE, TYPE) do { \
+    const uint16_t spp_base_addr = ((TYPE *)OBJECT)->spp_address; \
+    PyObject *dirobjvalue = PyObject_GetAttrString(VALUE, "value"); \
+    port_dir_t dirvalue = (port_dir_t)PyLong_AsLong(dirobjvalue); \
+    portio_set_port_direction(spp_base_addr, dirvalue); \
+    return 0; \
+} while(0);
 
 #endif /* PORTIO_H */

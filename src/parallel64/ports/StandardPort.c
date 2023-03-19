@@ -88,31 +88,12 @@ static PyObject* StandardPort_get_port_address(PyObject *self, void *closure) {
     return PyLong_FromLong(address);
 }
 
-// TODO: Reuse part of code a bit masking helper
 static PyObject* StandardPort_get_direction(PyObject *self, void *closure) {
-    PyObject *constmod = PyImport_AddModule("parallel64.constants");
-    PyObject *direnum = PyObject_GetAttrString(constmod, "Direction");
-    const uint16_t spp_base_addr = ((StandardPortObject *)self)->spp_address;
-    int8_t control_byte = readport(SPPCONTROL(spp_base_addr));
-    uint8_t direction_byte = ((1 << 5) & control_byte) >> 5;
-    PyObject *direction = PyObject_CallFunction(direnum, "(i)", direction_byte);
-    Py_INCREF(direction);
-    return direction;
+    PORTIO_GET_DIRECTION(self, StandardPortObject);
 }
 
-// TODO: Reuse part of code a bit masking helper
 static int StandardPort_set_direction(PyObject *self, PyObject *value, void *closure) {
-    const uint16_t spp_base_addr = ((StandardPortObject *)self)->spp_address;
-    PyObject *dirobjvalue = PyObject_GetAttrString(value, "value");
-    uint8_t dirvalue = (uint8_t)PyLong_AsLong(dirobjvalue);
-    if (dirvalue == 0) {
-        dirvalue = ~(1 << 5) & dirvalue;
-    }
-    else {
-        dirvalue = (1 << 5) | dirvalue;
-    }
-    writeport(SPPCONTROL(spp_base_addr), dirvalue);
-    return 0;
+    PORTIO_SET_DIRECTION(self, value, StandardPortObject);
 }
 
 
