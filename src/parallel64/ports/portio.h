@@ -87,7 +87,6 @@ static inline PyObject* portio_parse_write(uint16_t address, PyObject *args) {
         return NULL;
     }
 
-    //parallel64_write(ADDRESS, value);
     writeport(address, value);
     Py_RETURN_NONE;
 }
