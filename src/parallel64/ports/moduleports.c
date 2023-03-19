@@ -14,7 +14,7 @@
     } \
     Py_INCREF(&NEW_TYPE##Type); \
     PyModule_AddObject(MODULE_OBJ, #NEW_TYPE, (PyObject *)&NEW_TYPE##Type); \
-} while (0);\
+} while (0)
 
 
 static struct PyModuleDef parallel64ports_module = {
@@ -36,8 +36,8 @@ PyMODINIT_FUNC PyInit_ports(void) {
         return NULL;
     }
 
-    ADDNEWTYPE(_BasePort, module)
-    ADDNEWTYPE(StandardPort, module)
+    ADDNEWTYPE(_BasePort, module);
+    ADDNEWTYPE(StandardPort, module);
 
     return module;
 
