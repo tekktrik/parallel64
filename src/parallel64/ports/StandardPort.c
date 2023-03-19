@@ -62,23 +62,23 @@ static void StandardPort_dealloc(StandardPortObject *self) {
 }
 
 
-static inline PyObject* StandardPort_write_spp_data(PyObject *self, PyObject *args) {
+static inline PyObject* StandardPort_write_data_register(PyObject *self, PyObject *args) {
     return parallel64_parse_write(SPPDATA(((StandardPortObject *)self)->spp_address), args);
 }
 
-static inline PyObject* StandardPort_write_spp_control(PyObject *self, PyObject *args) {
+static inline PyObject* StandardPort_write_control_register(PyObject *self, PyObject *args) {
     return parallel64_parse_write(SPPCONTROL(((StandardPortObject *)self)->spp_address), args);
 }
 
-static inline PyObject* StandardPort_read_spp_data(PyObject *self, PyObject *args) {
+static inline PyObject* StandardPort_read_data_register(PyObject *self, PyObject *args) {
     return parallel64_parse_read(SPPDATA(((StandardPortObject *)self)->spp_address));
 }
 
-static inline PyObject* StandardPort_read_spp_status(PyObject *self, PyObject *args) {
+static inline PyObject* StandardPort_read_status_register(PyObject *self, PyObject *args) {
     return parallel64_parse_read(SPPSTATUS(((StandardPortObject *)self)->spp_address));
 }
 
-static inline PyObject* StandardPort_read_spp_control(PyObject *self, PyObject *args) {
+static inline PyObject* StandardPort_read_control_register(PyObject *self, PyObject *args) {
     return parallel64_parse_read(SPPCONTROL(((StandardPortObject *)self)->spp_address));
 }
 
@@ -117,11 +117,11 @@ static int StandardPort_set_direction(PyObject *self, PyObject *value, void *clo
 
 
 static PyMethodDef StandardPort_methods[] = {
-    {"write_data_register", (PyCFunction)StandardPort_write_spp_data, METH_VARARGS, "Write data to the SPP data register"},
-    {"write_control_register", (PyCFunction)StandardPort_write_spp_control, METH_VARARGS, "Write data to the SPP control register"},
-    {"read_data_register", (PyCFunction)StandardPort_read_spp_data, METH_NOARGS, "Read data from the SPP data register"},
-    {"read_status_register", (PyCFunction)StandardPort_read_spp_status, METH_NOARGS, "Read data from the SPP status register"},
-    {"read_control_register", (PyCFunction)StandardPort_read_spp_control, METH_NOARGS, "Read data from the SPP control register"},
+    {"write_data_register", (PyCFunction)StandardPort_write_data_register, METH_VARARGS, "Write data to the SPP data register"},
+    {"write_control_register", (PyCFunction)StandardPort_write_control_register, METH_VARARGS, "Write data to the SPP control register"},
+    {"read_data_register", (PyCFunction)StandardPort_read_data_register, METH_NOARGS, "Read data from the SPP data register"},
+    {"read_status_register", (PyCFunction)StandardPort_read_status_register, METH_NOARGS, "Read data from the SPP status register"},
+    {"read_control_register", (PyCFunction)StandardPort_read_control_register, METH_NOARGS, "Read data from the SPP control register"},
     {NULL}
 };
 
