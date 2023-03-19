@@ -30,6 +30,11 @@ typedef enum {
     INIT_DLLLOAD_ERROR
 } init_result_t;
 
+typedef enum {
+    PORT_DIR_FORWARD = 0,
+    PORT_DIR_REVERSE = 1
+} port_dir_t;
+
 
 static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num_ports) {
 
@@ -41,7 +46,6 @@ static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num
     }
     #else
 
-    // TODO: Maybe use PyImport_AddModule
     PyObject *mod = PyImport_AddModule("parallel64");
     PyObject *filestring = PyObject_GetAttrString(mod, "__file__");
     const char *constfilechars = PyUnicode_AsUTF8(filestring);
