@@ -63,23 +63,23 @@ static void StandardPort_dealloc(StandardPortObject *self) {
 
 
 static inline PyObject* StandardPort_write_data_register(PyObject *self, PyObject *args) {
-    return portio_parse_write(SPPDATA(((StandardPortObject *)self)->spp_address), args);
+    return PORT_PARSE_WRITE_DATA(self, args, StandardPortObject);
 }
 
 static inline PyObject* StandardPort_write_control_register(PyObject *self, PyObject *args) {
-    return portio_parse_write(SPPCONTROL(((StandardPortObject *)self)->spp_address), args);
+    return PORT_PARSE_WRITE_CONTROL(self, args, StandardPortObject);
 }
 
 static inline PyObject* StandardPort_read_data_register(PyObject *self, PyObject *args) {
-    return portio_parse_read(SPPDATA(((StandardPortObject *)self)->spp_address));
+    return PORT_PARSE_READ_DATA(self, StandardPortObject);
 }
 
 static inline PyObject* StandardPort_read_status_register(PyObject *self, PyObject *args) {
-    return portio_parse_read(SPPSTATUS(((StandardPortObject *)self)->spp_address));
+    return PORT_PARSE_READ_STATUS(self, StandardPortObject);
 }
 
 static inline PyObject* StandardPort_read_control_register(PyObject *self, PyObject *args) {
-    return portio_parse_read(SPPCONTROL(((StandardPortObject *)self)->spp_address));
+    return PORT_PARSE_READ_CONTROL(self, StandardPortObject);
 }
 
 
