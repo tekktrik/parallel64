@@ -69,12 +69,31 @@ static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num
 
 }
 
-static inline void _parallel64_write(uint16_t address, uint16_t value) {
+static inline PyObject* portio_parse_write(uint16_t address, PyObject *args) {
+    const uint8_t value;
+
+    if (!PyArg_ParseTuple(args, "b", &value)) {
+        return NULL;
+    }
+
+    //parallel64_write(ADDRESS, value);
     writeport(address, value);
+    Py_RETURN_NONE;
 }
 
-static inline u_char _parallel64_read(uint16_t address) {
-    return readport(address);
+static inline PyObject* portio_parse_read(uint16_t address) {
+    return PyLong_FromLong(readport(address));
+}
+
+static inline const port_dir_t portio_get_port_direction(uint16_t spp_base_addr) {
+    const int8_t control_byte = readport(SPPCONTROL(spp_base_addr));
+    const uint8_t direction_byte = P64_CHECKBIT_BOOL(control_byte, DIRECTION_BITINDEX);
+    return (port_dir_t)direction_byte;
+}
+
+static inline void portio_set_port_direction(uint16_t spp_base_addr, port_dir_t direction) {
+    uint8_t new_direction_byte = P64_SETBIT(direction, DIRECTION_BITINDEX, direction);
+    writeport(SPPCONTROL(spp_base_addr), new_direction_byte);
 }
 
 #endif /* PORTIO_H */
