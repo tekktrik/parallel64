@@ -112,7 +112,6 @@ static inline void portio_set_port_direction(uint16_t spp_base_addr, port_dir_t 
     const uint16_t spp_base_addr = ((TYPE *)OBJECT)->spp_address; \
     const uint8_t direction_byte = portio_get_port_direction(spp_base_addr); \
     PyObject *direction = PyObject_CallFunction(direnum, "(i)", direction_byte); \
-    /*Py_INCREF(direction);*/ \
     return direction; \
 } while (0);
 
