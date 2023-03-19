@@ -7,13 +7,18 @@ repos:
     rev: 23.1.0
     hooks:
     - id: black
+      name: Format via black
 -   repo: https://github.com/fsfe/reuse-tool
     rev: v1.1.2
     hooks:
     - id: reuse
+      name: Check REUSE compliance
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
     -   id: check-yaml
+        name: Check YAML formatting
     -   id: end-of-file-fixer
+        name: Fix end of files (no newlines)
     -   id: trailing-whitespace
+        name: Trim trailing whitespace
