@@ -88,6 +88,31 @@ static PyObject* StandardPort_get_port_address(PyObject *self, void *closure) {
     return PyLong_FromLong(address);
 }
 
+// TODO: Reuse part of code a bit masking helper
+static PyObject* StandardPort_get_direction(PyObject *self, void *closure) {
+    PyObject *constmod = PyImport_AddModule("parallel64.constants");
+    PyObject *direnum = PyObject_GetAttrString(constmod, "Direction");
+    const uint16_t spp_base_addr = ((StandardPortObject *)self)->spp_address;
+    int8_t control_byte = readport(SPPCONTROL(spp_base_addr));
+    uint8_t direction_byte = ((1 << 5) & control_byte) >> 5;
+    return PyObject_CallFunction(direnum, "(i)", direction_byte);
+}
+
+// TODO: Reuse part of code a bit masking helper
+static int StandardPort_set_direction(PyObject *self, PyObject *value, void *closure) {
+    const uint16_t spp_base_addr = ((StandardPortObject *)self)->spp_address;
+    PyObject *dirobjvalue = PyObject_GetAttrString(value, "value");
+    uint8_t dirvalue = (uint8_t)PyLong_AsLong(dirobjvalue);
+    if (dirvalue == 0) {
+        dirvalue = ~(1 << 5) & dirvalue;
+    }
+    else {
+        dirvalue = (1 << 5) | dirvalue;
+    }
+    writeport(SPPCONTROL(spp_base_addr), dirvalue);
+    return 0;
+}
+
 
 static PyMethodDef StandardPort_methods[] = {
     {"write_data_register", (PyCFunction)StandardPort_write_spp_data, METH_VARARGS, "Write data to the SPP data register"},
@@ -103,6 +128,7 @@ static PyGetSetDef StandardPort_getsetters[] = {
     {"spp_data_address", (getter)StandardPort_get_port_address, NULL, "SPP data address", &(uint16_t){0}},
     {"spp_status_address", (getter)StandardPort_get_port_address, NULL, "SPP status address", &(uint16_t){1}},
     {"spp_control_address", (getter)StandardPort_get_port_address, NULL, "SPP control address", &(uint16_t){2}},
+    {"direction", (getter)StandardPort_get_direction, (setter)StandardPort_set_direction, "Direction of the port", NULL},
     {NULL}
 };
 
