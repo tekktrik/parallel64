@@ -20,100 +20,16 @@ static PyObject* StandardPort_new(PyTypeObject *type, PyObject *args, PyObject *
 
 
 static int StandardPort_init(StandardPortObject *self, PyObject *args, PyObject *kwds) {
-
-    const uint16_t spp_address;
-    bool reset_control = true;
-
-    static char *keywords[] = {"spp_base_address", "reset_control", NULL};
-
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "H|p", keywords, &spp_address, &reset_control)) {
+    if (_BasePortType.tp_init((PyObject *)self, args, kwds) < 0) {
         return -1;
     }
-
-    init_result_t init_result = parallel64_init_ports(spp_address, 3);
-    switch (init_result) {
-    case INIT_SUCCESS:
-        break;
-    case INIT_DLLLOAD_ERROR:
-        PyErr_SetString(
-            PyExc_OSError,
-            "Unable to load the DLL"
-        );
-        return -1;
-    case INIT_PERMISSION_ERROR:
-        PyErr_SetString(
-            PyExc_OSError,
-            "Unable gain permission for the port"
-        );
-        return -1;
-    }
-
-    // TODO: Reset port if needed
-
-    self->spp_address = spp_address;
-
     return 0;
-
 }
 
 
 static void StandardPort_dealloc(StandardPortObject *self) {
     Py_TYPE(self)->tp_free((PyObject *)self);
 }
-
-
-static PyObject* StandardPort_write_data_register(PyObject *self, PyObject *args) {
-    return PORT_PARSE_WRITE_DATA(self, args, StandardPortObject);
-}
-
-static PyObject* StandardPort_write_control_register(PyObject *self, PyObject *args) {
-    return PORT_PARSE_WRITE_CONTROL(self, args, StandardPortObject);
-}
-
-static PyObject* StandardPort_read_data_register(PyObject *self, PyObject *args) {
-    return PORT_PARSE_READ_DATA(self, StandardPortObject);
-}
-
-static PyObject* StandardPort_read_status_register(PyObject *self, PyObject *args) {
-    return PORT_PARSE_READ_STATUS(self, StandardPortObject);
-}
-
-static PyObject* StandardPort_read_control_register(PyObject *self, PyObject *args) {
-    return PORT_PARSE_READ_CONTROL(self, StandardPortObject);
-}
-
-
-static PyObject* StandardPort_get_port_address(PyObject *self, void *closure) {
-    uint16_t address = ((StandardPortObject *)self)->spp_address + *(uint16_t *)closure;
-    return PyLong_FromLong(address);
-}
-
-static PyObject* StandardPort_get_direction(PyObject *self, void *closure) {
-    PORTIO_GET_DIRECTION(self, StandardPortObject);
-}
-
-static int StandardPort_set_direction(PyObject *self, PyObject *value, void *closure) {
-    PORTIO_SET_DIRECTION(self, value, StandardPortObject);
-}
-
-
-static PyMethodDef StandardPort_methods[] = {
-    {"write_data_register", (PyCFunction)StandardPort_write_data_register, METH_VARARGS, "Write data to the SPP data register"},
-    {"write_control_register", (PyCFunction)StandardPort_write_control_register, METH_VARARGS, "Write data to the SPP control register"},
-    {"read_data_register", (PyCFunction)StandardPort_read_data_register, METH_NOARGS, "Read data from the SPP data register"},
-    {"read_status_register", (PyCFunction)StandardPort_read_status_register, METH_NOARGS, "Read data from the SPP status register"},
-    {"read_control_register", (PyCFunction)StandardPort_read_control_register, METH_NOARGS, "Read data from the SPP control register"},
-    {NULL}
-};
-
-
-static PyGetSetDef StandardPort_getsetters[] = {
-    {"spp_data_address", (getter)StandardPort_get_port_address, NULL, "SPP data address", &(uint16_t){0}},
-    {"spp_status_address", (getter)StandardPort_get_port_address, NULL, "SPP status address", &(uint16_t){1}},
-    {"spp_control_address", (getter)StandardPort_get_port_address, NULL, "SPP control address", &(uint16_t){2}},
-    {"direction", (getter)StandardPort_get_direction, (setter)StandardPort_set_direction, "Direction of the port", NULL},
-    {NULL}
-};
 
 
 PyTypeObject StandardPortType = {
@@ -126,8 +42,6 @@ PyTypeObject StandardPortType = {
     .tp_dealloc = (destructor)StandardPort_dealloc,
     .tp_new = (newfunc)StandardPort_new,
     .tp_init = (initproc)StandardPort_init,
-    .tp_getset = StandardPort_getsetters,
     .tp_free = PyObject_GC_Del,
     .tp_base = &_BasePortType,
-    .tp_methods = StandardPort_methods,
 };

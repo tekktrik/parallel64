@@ -106,29 +106,4 @@ static inline void portio_set_port_direction(uint16_t spp_base_addr, port_dir_t 
     writeport(SPPCONTROL(spp_base_addr), new_direction_byte);
 }
 
-#define PORTIO_STORE_DIRECTION(OBJECT, TYPE, DIRECTION_VAR) *DIRECTION_VAR = portio_get_port_direction(((TYPE *)OBJECT)->spp_address)
-
-#define PORTIO_GET_DIRECTION(OBJECT, TYPE) do { \
-    PyObject *constmod = PyImport_AddModule("parallel64.constants"); \
-    PyObject *direnum = PyObject_GetAttrString(constmod, "Direction"); \
-    uint8_t direction_byte; \
-    PORTIO_STORE_DIRECTION(OBJECT, TYPE, &direction_byte); \
-    PyObject *direction = PyObject_CallFunction(direnum, "(i)", direction_byte); \
-    return direction; \
-} while (0)
-
-#define PORTIO_SET_DIRECTION(OBJECT, VALUE, TYPE) do { \
-    const uint16_t spp_base_addr = ((TYPE *)OBJECT)->spp_address; \
-    PyObject *dirobjvalue = PyObject_GetAttrString(VALUE, "value"); \
-    port_dir_t dirvalue = (port_dir_t)PyLong_AsLong(dirobjvalue); \
-    portio_set_port_direction(spp_base_addr, dirvalue); \
-    return 0; \
-} while(0)
-
-#define PORT_PARSE_READ_DATA(OBJECT, TYPE) portio_parse_read(SPPDATA(((TYPE *)OBJECT)->spp_address))
-#define PORT_PARSE_READ_STATUS(OBJECT, TYPE) portio_parse_read(SPPSTATUS(((TYPE *)OBJECT)->spp_address))
-#define PORT_PARSE_READ_CONTROL(OBJECT, TYPE) portio_parse_read(SPPCONTROL(((TYPE *)OBJECT)->spp_address))
-#define PORT_PARSE_WRITE_DATA(OBJECT, ARGS, TYPE) portio_parse_write(SPPDATA(((TYPE *)OBJECT)->spp_address), ARGS)
-#define PORT_PARSE_WRITE_CONTROL(OBJECT, ARGS, TYPE) portio_parse_write(SPPCONTROL(((TYPE *)OBJECT)->spp_address), ARGS)
-
 #endif /* PORTIO_H */

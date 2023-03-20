@@ -16,6 +16,8 @@
     PyModule_AddObject(MODULE_OBJ, #NEW_TYPE, (PyObject *)&NEW_TYPE##Type); \
 } while (0)
 
+#define IMPORTMOD(NAME) if (PyImport_ImportModule(NAME) == NULL) return NULL
+
 
 static struct PyModuleDef parallel64ports_module = {
     PyModuleDef_HEAD_INIT,
@@ -31,10 +33,8 @@ PyMODINIT_FUNC PyInit_ports(void) {
         return NULL;
     }
 
-    PyObject *enummod = PyImport_ImportModule("enum");
-    if (enummod == NULL) {
-        return NULL;
-    }
+    IMPORTMOD("enum");
+    IMPORTMOD("parallel64.constants");
 
     ADDNEWTYPE(_BasePort, module);
     ADDNEWTYPE(StandardPort, module);

@@ -12,9 +12,9 @@
 
 #include "portio.h"
 
-
 typedef struct {
     PyObject_HEAD
+    uint16_t spp_address;
 } _BasePortObject;
 
 

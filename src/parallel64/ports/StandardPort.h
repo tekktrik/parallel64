@@ -11,7 +11,6 @@
 
 typedef struct {
     _BasePortObject super;
-    uint16_t spp_address;
 } StandardPortObject;
 
 extern PyTypeObject StandardPortType;
