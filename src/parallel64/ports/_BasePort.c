@@ -12,10 +12,6 @@
 #include "_BasePort.h"
 
 
-#define SPPADDRESS(OBJECT) (((_BasePortObject *)OBJECT)->spp_address)
-#define ISBIDIR(OBJECT) (((_BasePortObject *)OBJECT)->is_bidir)
-
-
 static int _BasePort_init(_BasePortObject *self, PyObject *args, PyObject *kwds) {
 
     const uint16_t spp_address;

@@ -12,6 +12,11 @@
 
 #include "portio.h"
 
+
+#define SPPADDRESS(OBJECT) (((_BasePortObject *)OBJECT)->spp_address)
+#define ISBIDIR(OBJECT) (((_BasePortObject *)OBJECT)->is_bidir)
+
+
 typedef struct {
     PyObject_HEAD
     uint16_t spp_address;
