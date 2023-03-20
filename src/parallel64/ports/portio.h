@@ -49,7 +49,7 @@ typedef enum {
 } port_dir_t;
 
 
-static inline init_result_t parallel64_init_ports(uint16_t address, uint16_t num_ports) {
+static inline init_result_t portio_init_ports(uint16_t address, uint16_t num_ports) {
 
     int res = 0;
     #if !defined(_WIN32)

@@ -20,7 +20,7 @@ static int _BasePort_init(_BasePortObject *self, PyObject *args, PyObject *kwds)
         return -1;
     }
 
-    init_result_t init_result = parallel64_init_ports(spp_address, 3);
+    init_result_t init_result = portio_init_ports(spp_address, 3);
     switch (init_result) {
     case INIT_SUCCESS:
         break;
