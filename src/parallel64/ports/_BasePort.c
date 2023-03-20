@@ -4,19 +4,26 @@
 
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+
+#include <stdint.h>
+#include <stdbool.h>
+
+#include "portio.h"
 #include "_BasePort.h"
 
 
+#define SPPADDRESS(OBJECT) (((_BasePortObject *)OBJECT)->spp_address)
 
 
 static int _BasePort_init(_BasePortObject *self, PyObject *args, PyObject *kwds) {
 
     const uint16_t spp_address;
     bool reset_control = true;
+    PyObject *is_bidir = Py_None;
 
-    static char *keywords[] = {"spp_base_address", "reset_control", NULL};
+    static char *keywords[] = {"spp_base_address", "reset_control", "bidirectional", NULL};
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "H|p", keywords, &spp_address, &reset_control)) {
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "H|$pO", keywords, &spp_address, &reset_control, &is_bidir)) {
         return -1;
     }
 
@@ -38,9 +45,22 @@ static int _BasePort_init(_BasePortObject *self, PyObject *args, PyObject *kwds)
         return -1;
     }
 
+    self->spp_address = spp_address;
+
     // TODO: Reset port if needed
 
-    self->spp_address = spp_address;
+    if (is_bidir == Py_True) {
+        self->is_bidir = true;
+    }
+    else if (is_bidir == Py_False) {
+        self->is_bidir = false;
+    }
+    else if (is_bidir == Py_None) {
+        self->is_bidir = portio_test_bidirectionality(spp_address);
+    }
+    else {
+        // TODO: Raise an exception
+    }
 
     return 0;
 
@@ -52,48 +72,54 @@ static void _BasePort_dealloc(_BasePortObject *self) {
 
 
 static PyObject* _BasePort_write_data_register(PyObject *self, PyObject *args) {
-    return portio_parse_write(SPPDATA(((_BasePortObject *)self)->spp_address), args);
+    return portio_parse_write(SPP_DATA_ADDR(SPPADDRESS(self)), args);
 }
 
 static PyObject* _BasePort_write_control_register(PyObject *self, PyObject *args) {
-    return portio_parse_write(SPPCONTROL(((_BasePortObject *)self)->spp_address), args);
+    return portio_parse_write(SPP_CONTROL_ADDR(SPPADDRESS(self)), args);
 }
 
 static PyObject* _BasePort_read_data_register(PyObject *self, PyObject *args) {
-    return portio_parse_read(SPPDATA(((_BasePortObject *)self)->spp_address));
+    return portio_parse_read(SPP_DATA_ADDR(SPPADDRESS(self)));
 }
 
 static PyObject* _BasePort_read_status_register(PyObject *self, PyObject *args) {
-    return portio_parse_read(SPPSTATUS(((_BasePortObject *)self)->spp_address));
+    return portio_parse_read(SPP_STATUS_ADDR(SPPADDRESS(self)));
 }
 
 static PyObject* _BasePort_read_control_register(PyObject *self, PyObject *args) {
-    return portio_parse_read(SPPCONTROL(((_BasePortObject *)self)->spp_address));
+    return portio_parse_read(SPP_CONTROL_ADDR(SPPADDRESS(self)));
 }
 
-//static PyObject* StandardPort_test_bidirectionality(PyObject *self, PyObject *args) {
-//
-//}
+static PyObject* _BasePort_test_bidirectionality(PyObject *self, PyObject *args) {
+    const uint16_t spp_base_addr = SPPADDRESS(self);
+    bool is_bidir = portio_test_bidirectionality(spp_base_addr);
+    return PyBool_FromLong(is_bidir);
+}
 
 
 static PyObject* _BasePort_get_port_address(PyObject *self, void *closure) {
     return PyLong_FromLong(((_BasePortObject *)self)->spp_address + *(uint16_t *)closure);
 }
 
-static PyObject* _BasePort_get_direction(PyObject *self, PyObject *args) {
+static PyObject* _BasePort_get_direction(PyObject *self, void *closure) {
     PyObject *constmod = PyImport_AddModule("parallel64.constants");
     PyObject *direnum = PyObject_GetAttrString(constmod, "Direction");
-    uint8_t direction_byte = portio_get_port_direction(((_BasePortObject *)self)->spp_address);
+    uint8_t direction_byte = portio_get_port_direction(SPPADDRESS(self));
     PyObject *direction = PyObject_CallFunction(direnum, "(i)", direction_byte);
     return direction;
 }
 
 static int _BasePort_set_direction(PyObject *self, PyObject *value, void *closure) {
-    const uint16_t spp_base_addr = ((_BasePortObject *)self)->spp_address;
+    const uint16_t spp_base_addr = SPPADDRESS(self);
     PyObject *dirobjvalue = PyObject_GetAttrString(value, "value");
     port_dir_t dirvalue = (port_dir_t)PyLong_AsLong(dirobjvalue);
     portio_set_port_direction(spp_base_addr, dirvalue);
     return 0;
+}
+
+static PyObject* _BasePort_get_bidirectional(PyObject *self, void *closure) {
+    return PyBool_FromLong(((_BasePortObject *)self)->is_bidir);
 }
 
 
@@ -102,6 +128,7 @@ static PyGetSetDef _BasePort_getsetters[] = {
     {"spp_status_address", (getter)_BasePort_get_port_address, NULL, "SPP status address", &(uint16_t){1}},
     {"spp_control_address", (getter)_BasePort_get_port_address, NULL, "SPP control address", &(uint16_t){2}},
     {"direction", (getter)_BasePort_get_direction, (setter)_BasePort_set_direction, "Direction of the port", NULL},
+    {"bidirectional", (getter)_BasePort_get_bidirectional, NULL, "Whether the port is bidirectional", NULL},
     {NULL}
 };
 
@@ -111,6 +138,7 @@ static PyMethodDef _BasePort_methods[] = {
     {"read_data_register", (PyCFunction)_BasePort_read_data_register, METH_NOARGS, "Read data from the SPP data register"},
     {"read_status_register", (PyCFunction)_BasePort_read_status_register, METH_NOARGS, "Read data from the SPP status register"},
     {"read_control_register", (PyCFunction)_BasePort_read_control_register, METH_NOARGS, "Read data from the SPP control register"},
+    {"test_bidirectionality", (PyCFunction)_BasePort_test_bidirectionality, METH_NOARGS, "Test the bidirectionality of the port"},
     {NULL}
 };
 

@@ -23,9 +23,10 @@ rport readport;
 #define readport(PORT) inb(PORT)
 #endif
 
-#define SPPDATA(ADDRESS) ADDRESS
-#define SPPSTATUS(ADDRESS) ADDRESS+1
-#define SPPCONTROL(ADDRESS) ADDRESS+2
+
+#define SPP_DATA_ADDR(ADDRESS) (ADDRESS)+0
+#define SPP_STATUS_ADDR(ADDRESS) (ADDRESS)+1
+#define SPP_CONTROL_ADDR(ADDRESS) (ADDRESS)+2
 
 #define P64_CHECKBITS_UINT8(VALUE, BITMASK, BITINDEX) ((BITMASK << BITINDEX) & VALUE)
 #define P64_CHECKBIT_UINT8(VALUE, BITINDEX) P64_CHECKBITS_UINT8(VALUE, 1, BITINDEX)
@@ -98,14 +99,22 @@ static inline PyObject* portio_parse_read(uint16_t address) {
 }
 
 static inline const port_dir_t portio_get_port_direction(uint16_t spp_base_addr) {
-    const int8_t control_byte = readport(SPPCONTROL(spp_base_addr));
+    const int8_t control_byte = readport(SPP_CONTROL_ADDR(spp_base_addr));
     const uint8_t direction_byte = P64_CHECKBIT_SHIFT(control_byte, DIRECTION_BITINDEX);
     return (port_dir_t)direction_byte;
 }
 
 static inline void portio_set_port_direction(uint16_t spp_base_addr, port_dir_t direction) {
     uint8_t new_direction_byte = P64_SETBIT(direction, DIRECTION_BITINDEX, direction);
-    writeport(SPPCONTROL(spp_base_addr), new_direction_byte);
+    writeport(SPP_CONTROL_ADDR(spp_base_addr), new_direction_byte);
+}
+
+static inline bool portio_test_bidirectionality(uint16_t spp_base_addr) {
+    port_dir_t direction = portio_get_port_direction(spp_base_addr);
+    portio_set_port_direction(spp_base_addr, PORT_DIR_REVERSE);
+    bool is_bidir = portio_get_port_direction(spp_base_addr) == PORT_DIR_REVERSE;
+    if (is_bidir && direction == PORT_DIR_FORWARD) portio_set_port_direction(spp_base_addr, PORT_DIR_FORWARD);
+    return is_bidir;
 }
 
 #endif /* PORTIO_H */

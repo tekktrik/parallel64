@@ -15,6 +15,7 @@
 typedef struct {
     PyObject_HEAD
     uint16_t spp_address;
+    bool is_bidir;
 } _BasePortObject;
 
 
