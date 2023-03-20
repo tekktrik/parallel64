@@ -32,6 +32,50 @@ static void StandardPort_dealloc(StandardPortObject *self) {
 }
 
 
+static PyObject* StandardPort_write_spp_data(PyObject *self, PyObject *args, PyObject *kwds) {
+
+    Py_buffer data;
+    bool hold_setting = true;
+
+    static char *keywords[] = {"", "hold_while_busy", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "y*|$p", keywords, &data, &hold_setting)) {
+        return NULL;
+    }
+
+    const uint8_t spp_base_addr = SPPADDRESS(self);
+    const bool is_bidir = ISBIDIR(self);
+
+    if (is_bidir) portio_set_port_direction(spp_base_addr, PORT_DIR_FORWARD);
+
+    for (Py_ssize_t index = 0; index < data.len; index++) {
+        portio_reset_control_pins(spp_base_addr, is_bidir);
+        writeport(SPP_DATA_ADDR(spp_base_addr), *(uint8_t *)(data.buf + index));
+        uint8_t status = readport(SPP_STATUS_ADDR(spp_base_addr));
+        if (P64_CHECKBIT_UINT8(status, BUSY_BITINDEX)) {
+            // TODO: Raise port busy OS error
+        }
+        uint8_t curr_control = readport(SPP_CONTROL_ADDR(spp_base_addr));
+        writeport(SPP_CONTROL_ADDR(spp_base_addr), P64_SETBIT_ON(curr_control, 1));
+        portio_delay_us(5);
+        writeport(SPP_CONTROL_ADDR(spp_base_addr), curr_control);
+        if (hold_setting) {
+            while (true) {
+                uint8_t current_status = readport(SPP_STATUS_ADDR(spp_base_addr));
+                if (P64_CHECKBIT_UINT8(current_status, BUSY_BITINDEX)) break;
+            }
+        }
+    }
+    Py_RETURN_NONE;
+}
+
+
+static PyMethodDef StandardPort_methods[] = {
+    {"write_spp_data", (PyCFunction)StandardPort_write_spp_data, METH_VARARGS | METH_KEYWORDS, "Write data via SPP protocol"},
+    {NULL}
+};
+
+
 PyTypeObject StandardPortType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "parallel64.ports.StandardPort",
@@ -44,4 +88,5 @@ PyTypeObject StandardPortType = {
     .tp_init = (initproc)StandardPort_init,
     .tp_free = PyObject_GC_Del,
     .tp_base = &_BasePortType,
+    .tp_methods = StandardPort_methods
 };

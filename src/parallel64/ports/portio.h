@@ -10,6 +10,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <time.h>
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -37,6 +38,8 @@ rport readport;
 #define P64_SETBIT(VALUE, BITINDEX, SETTING) SETTING ? P64_SETBIT_ON(VALUE, BITINDEX) : P64_SETBIT_OFF(VALUE, BITINDEX)
 
 #define DIRECTION_BITINDEX 5
+
+#define BUSY_BITINDEX 7
 
 typedef enum {
     INIT_SUCCESS,
@@ -123,6 +126,36 @@ static inline void portio_reset_control_pins(uint16_t spp_base_addr, bool is_bid
     uint8_t pre_control_byte = bidir_control_byte | control_byte;
     uint8_t new_control_byte = (1 << 2) | pre_control_byte;
     writeport(SPP_CONTROL_ADDR(spp_base_addr), new_control_byte);
+}
+
+static inline bool portio_delay_us(uint16_t delay_us) {
+    #if defined(_WIN32)
+    // Windows code
+    LARGE_INTEGER frequency, start_time, current_time, elapsed_time;
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&start_time);
+    // TODO: Shift math to start
+    LARGE_NUMBER ticks_needed;
+    ticks_needed.QuadPart = delay_us * frequency.QuadPart;
+    ticks_needed.QuadPart = delay_us / 1000000;
+    while (true) {
+        QueryPerformanceCounter(&end_time);
+        if (current_time.QuardPort - start_time.QuadPart >= ticks_needed) break;
+    }
+    #elif defined(__linux__) || defined(BSD)
+    // Linux
+    struct timespec delay_set = {0, delay_us * 1000};
+    struct timespec delay_remaining = {0, 0};
+    if (nanosleep(&delay_set, &delay_remaining)) {
+        return false;
+    }
+    #else
+    // Other system
+    uint16_t delay_ms = delay_us / 1000;
+    clock_t start_time = clock();
+    while (clock() < start_time + delay_ms);
+    #endif
+    return true;
 }
 
 #endif /* PORTIO_H */
