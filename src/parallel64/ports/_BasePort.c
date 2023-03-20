@@ -61,7 +61,7 @@ static int _BasePort_init(_BasePortObject *self, PyObject *args, PyObject *kwds)
         // TODO: Raise an exception
     }
 
-    if (reset_control) portio_reset_control_pins(SPP_CONTROL_ADDR(spp_address), self->is_bidir);
+    if (reset_control) portio_reset_control_pins(spp_address, self->is_bidir);
 
     return 0;
 
