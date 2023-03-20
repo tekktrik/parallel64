@@ -146,6 +146,7 @@ static PyMethodDef _BasePort_methods[] = {
     {"read_status_register", (PyCFunction)_BasePort_read_status_register, METH_NOARGS, "Read data from the SPP status register"},
     {"read_control_register", (PyCFunction)_BasePort_read_control_register, METH_NOARGS, "Read data from the SPP control register"},
     {"test_bidirectionality", (PyCFunction)_BasePort_test_bidirectionality, METH_NOARGS, "Test the bidirectionality of the port"},
+    {"reset_control_register", (PyCFunction)_BasePort_reset_control_register, METH_NOARGS, "Reset the control register's output pins"},
     {NULL}
 };
 
