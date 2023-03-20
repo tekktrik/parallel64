@@ -27,8 +27,10 @@ rport readport;
 #define SPPSTATUS(ADDRESS) ADDRESS+1
 #define SPPCONTROL(ADDRESS) ADDRESS+2
 
-#define P64_CHECKBIT_UINT8(VALUE, BITINDEX) ((1 << BITINDEX) & VALUE)
-#define P64_CHECKBIT_BOOL(VALUE, BITINDEX) P64_CHECKBIT_UINT8(VALUE, BITINDEX) >> BITINDEX
+#define P64_CHECKBITS_UINT8(VALUE, BITMASK, BITINDEX) ((BITMASK << BITINDEX) & VALUE)
+#define P64_CHECKBIT_UINT8(VALUE, BITINDEX) P64_CHECKBITS_UINT8(VALUE, 1, BITINDEX)
+#define P64_CHECKBITS_SHIFT(VALUE, BITMASK, BITINDEX) P64_CHECKBITS_UINT8(VALUE, BITMASK, BITINDEX) >> BITINDEX
+#define P64_CHECKBIT_SHIFT(VALUE, BITINDEX) P64_CHECKBITS_UINT8(VALUE, 1, BITINDEX) >> BITINDEX
 #define P64_SETBIT_OFF(VALUE, BITINDEX) ~(1 << BITINDEX) & VALUE
 #define P64_SETBIT_ON(VALUE, BITINDEX) (1 << BITINDEX) | VALUE
 #define P64_SETBIT(VALUE, BITINDEX, SETTING) SETTING ? P64_SETBIT_ON(VALUE, BITINDEX) : P64_SETBIT_OFF(VALUE, BITINDEX)
@@ -97,7 +99,7 @@ static inline PyObject* portio_parse_read(uint16_t address) {
 
 static inline const port_dir_t portio_get_port_direction(uint16_t spp_base_addr) {
     const int8_t control_byte = readport(SPPCONTROL(spp_base_addr));
-    const uint8_t direction_byte = P64_CHECKBIT_BOOL(control_byte, DIRECTION_BITINDEX);
+    const uint8_t direction_byte = P64_CHECKBIT_SHIFT(control_byte, DIRECTION_BITINDEX);
     return (port_dir_t)direction_byte;
 }
 
