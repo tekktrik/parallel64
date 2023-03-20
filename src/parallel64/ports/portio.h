@@ -131,16 +131,16 @@ static inline void portio_reset_control_pins(uint16_t spp_base_addr, bool is_bid
 static inline bool portio_delay_us(uint16_t delay_us) {
     #if defined(_WIN32)
     // Windows code
-    LARGE_INTEGER frequency, start_time, current_time, elapsed_time;
+    LARGE_INTEGER frequency, start_time, current_time;
     QueryPerformanceFrequency(&frequency);
     QueryPerformanceCounter(&start_time);
     // TODO: Shift math to start
-    LARGE_NUMBER ticks_needed;
+    LARGE_INTEGER ticks_needed;
     ticks_needed.QuadPart = delay_us * frequency.QuadPart;
     ticks_needed.QuadPart = delay_us / 1000000;
     while (true) {
-        QueryPerformanceCounter(&end_time);
-        if (current_time.QuardPort - start_time.QuadPart >= ticks_needed) break;
+        QueryPerformanceCounter(&current_time);
+        if (current_time.QuadPart - start_time.QuadPart >= ticks_needed.QuadPart) break;
     }
     #elif defined(__linux__) || defined(BSD)
     // Linux

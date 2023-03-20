@@ -43,14 +43,14 @@ static PyObject* StandardPort_write_spp_data(PyObject *self, PyObject *args, PyO
         return NULL;
     }
 
-    const uint8_t spp_base_addr = SPPADDRESS(self);
+    const uint16_t spp_base_addr = SPPADDRESS(self);
     const bool is_bidir = ISBIDIR(self);
 
     if (is_bidir) portio_set_port_direction(spp_base_addr, PORT_DIR_FORWARD);
 
     for (Py_ssize_t index = 0; index < data.len; index++) {
         portio_reset_control_pins(spp_base_addr, is_bidir);
-        writeport(SPP_DATA_ADDR(spp_base_addr), *(uint8_t *)(data.buf + index));
+        writeport(SPP_DATA_ADDR(spp_base_addr), *((uint8_t *)data.buf + index));
         uint8_t status = readport(SPP_STATUS_ADDR(spp_base_addr));
         if (P64_CHECKBIT_UINT8(status, BUSY_BITINDEX)) {
             // TODO: Raise port busy OS error
