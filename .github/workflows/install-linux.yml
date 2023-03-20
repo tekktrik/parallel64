@@ -9,7 +9,7 @@ on: [pull_request, push]
 jobs:
   test-install:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         pyver: ["3.7", "3.8", "3.9", "3.10"]
     runs-on: ubuntu-latest
