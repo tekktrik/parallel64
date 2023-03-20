@@ -13,6 +13,7 @@
 
 
 #define SPPADDRESS(OBJECT) (((_BasePortObject *)OBJECT)->spp_address)
+#define ISBIDIR(OBJECT) (((_BasePortObject *)OBJECT)->is_bidir)
 
 
 static int _BasePort_init(_BasePortObject *self, PyObject *args, PyObject *kwds) {
@@ -95,6 +96,12 @@ static PyObject* _BasePort_test_bidirectionality(PyObject *self, PyObject *args)
     const uint16_t spp_base_addr = SPPADDRESS(self);
     bool is_bidir = portio_test_bidirectionality(spp_base_addr);
     return PyBool_FromLong(is_bidir);
+}
+
+static PyObject* _BasePort_reset_control_register(PyObject *self, PyObject *args) {
+    const uint16_t spp_base_addr = SPPADDRESS(self);
+    portio_reset_control_pins(spp_base_addr, ISBIDIR(self));
+    Py_RETURN_NONE;
 }
 
 

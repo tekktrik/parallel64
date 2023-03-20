@@ -117,4 +117,11 @@ static inline bool portio_test_bidirectionality(uint16_t spp_base_addr) {
     return is_bidir;
 }
 
+static inline void portio_reset_control_pins(uint16_t spp_base_addr, bool is_bidir) {
+    uint8_t control_byte = readport(SPP_CONTROL_ADDR(spp_base_addr));
+    uint8_t pre_control_byte = P64_SETBIT(0b11111111, DIRECTION_BITINDEX, is_bidir);
+    uint8_t new_control_byte = (1 << 2) | pre_control_byte;
+    writeport(SPP_CONTROL_ADDR(spp_base_addr), new_control_byte);
+}
+
 #endif /* PORTIO_H */
