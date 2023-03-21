@@ -12,7 +12,7 @@
 
 
 static PyObject* EnhancedPort_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
-    return (PyObject *)PyObject_GC_NewVar(StandardPortObject, type, 0);
+    return (PyObject *)PyObject_GC_NewVar(EnhancedPortObject, type, 0);
 }
 
 static int EnhancedPort_init(StandardPortObject *self, PyObject *args, PyObject *kwds) {
