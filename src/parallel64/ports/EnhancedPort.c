@@ -65,6 +65,6 @@ PyTypeObject EnhancedPortType = {
     .tp_new = (newfunc)EnhancedPort_new,
     .tp_init = (initproc)EnhancedPort_init,
     .tp_free = PyObject_GC_Del,
-    .tp_base = &_BasePortType,
+    .tp_base = &StandardPortType,
     .tp_methods = EnhancedPort_methods
 };
