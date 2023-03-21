@@ -4,8 +4,10 @@
 
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+
 #include "_BasePort.h"
 #include "StandardPort.h"
+#include "EnhancedPort.h"
 
 #define ADDNEWTYPE(NEW_TYPE, MODULE_OBJ) do \
 { \
@@ -38,6 +40,7 @@ PyMODINIT_FUNC PyInit_ports(void) {
 
     ADDNEWTYPE(_BasePort, module);
     ADDNEWTYPE(StandardPort, module);
+    ADDNEWTYPE(EnhancedPort, module);
 
     return module;
 

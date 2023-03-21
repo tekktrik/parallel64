@@ -14,6 +14,7 @@ module = Extension(
         "src/parallel64/ports/moduleports.c",
         "src/parallel64/ports/_BasePort.c",
         "src/parallel64/ports/StandardPort.c",
+        "src/parallel64/ports/EnhancedPort.c",
     ],
 )
 
