@@ -4,14 +4,13 @@
 
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+
 #include <stdint.h>
 #include <stdbool.h>
+
 #include "portio.h"
 #include "_BasePort.h"
 #include "StandardPort.h"
-
-// TODO: Remove this later
-#include <stdio.h>
 
 
 static PyObject* StandardPort_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
