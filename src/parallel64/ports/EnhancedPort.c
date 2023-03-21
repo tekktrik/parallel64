@@ -15,7 +15,7 @@ static PyObject* EnhancedPort_new(PyTypeObject *type, PyObject *args, PyObject *
     return (PyObject *)PyObject_GC_NewVar(EnhancedPortObject, type, 0);
 }
 
-static int EnhancedPort_init(StandardPortObject *self, PyObject *args, PyObject *kwds) {
+static int EnhancedPort_init(EnhancedPortObject *self, PyObject *args, PyObject *kwds) {
     if (StandardPortType.tp_init((PyObject *)self, args, kwds) < 0) {
         return -1;
     }
@@ -23,7 +23,7 @@ static int EnhancedPort_init(StandardPortObject *self, PyObject *args, PyObject 
 }
 
 
-static void EnhancedPort_dealloc(StandardPortObject *self) {
+static void EnhancedPort_dealloc(EnhancedPortObject *self) {
     Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
