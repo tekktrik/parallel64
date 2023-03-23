@@ -11,8 +11,8 @@
 
 #if defined(_WIN32)
 #include <windows.h>
-typedef void (__stdcall *wport)(short, short);
-typedef unsigned char (__stdcall *rport)(short);
+typedef void (__stdcall *wport)(USHORT, UINT);
+typedef UINT (__stdcall *rport)(USHORT);
 wport writeport;
 rport readport;
 #elif defined(__linux__) || defined(BSD)
@@ -25,8 +25,8 @@ rport readport;
 #define SPP_DATA_ADDR(ADDRESS) (ADDRESS)
 #define SPP_STATUS_ADDR(ADDRESS) (ADDRESS)+1
 #define SPP_CONTROL_ADDR(ADDRESS) (ADDRESS)+2
-#define EPP_DATA_ADDR(ADDRESS) (ADDRESS)+3
-#define EPP_ADDRESS_ADDR(ADDRESS) (ADDRESS)+4
+#define EPP_ADDRESS_ADDR(ADDRESS) (ADDRESS)+3
+#define EPP_DATA_ADDR(ADDRESS) (ADDRESS)+4
 #define ECP_DATA_ADDR(ADDRESS) (ADDRESS)
 #define ECP_CONFIG_ADDR(ADDRESS) (ADDRESS)+1
 #define ECP_ECR_ADDR(ADDRESS) (ADDRESS)+2
@@ -64,9 +64,13 @@ static inline init_result_t portio_load_dll(const char *dllpath) {
     if (dll == NULL) {
         return INIT_DLLLOAD_ERROR;
     }
-    else {
-        writeport = (wport)GetProcAddress(dll, "DlPortWritePortUchar");
-        readport = (rport)GetProcAddress(dll, "DlPortReadPortUchar");
+    writeport = (wport)GetProcAddress(dll, "DlPortWritePortUchar");
+    readport = (rport)GetProcAddress(dll, "DlPortReadPortUchar");
+    if (
+        writeport == NULL ||
+        readport == NULL
+    ) {
+        return INIT_DLLLOAD_ERROR;
     }
     return INIT_SUCCESS;
 }
@@ -80,7 +84,8 @@ static inline const port_dir_t portio_get_port_direction(uint16_t spp_base_addr)
 }
 
 static inline void portio_set_port_direction(uint16_t spp_base_addr, port_dir_t direction) {
-    uint8_t new_direction_byte = P64_SETBIT(direction, DIRECTION_BITINDEX, direction);
+    uint8_t current_control = readport(SPP_CONTROL_ADDR(spp_base_addr));
+    uint8_t new_direction_byte = P64_SETBIT(current_control, DIRECTION_BITINDEX, direction);
     writeport(SPP_CONTROL_ADDR(spp_base_addr), new_direction_byte);
 }
 
@@ -94,9 +99,8 @@ static inline bool portio_test_bidirectionality(uint16_t spp_base_addr) {
 
 static inline void portio_reset_control_pins(uint16_t spp_base_addr, bool is_bidir) {
     uint8_t control_byte = readport(SPP_CONTROL_ADDR(spp_base_addr));
-    uint8_t bidir_control_byte = P64_SETBIT(0b11110000, DIRECTION_BITINDEX, is_bidir);
-    uint8_t pre_control_byte = bidir_control_byte | control_byte;
-    uint8_t new_control_byte = (1 << 2) | pre_control_byte;
+    uint8_t mask_control_byte = 0b11110000 & control_byte;
+    uint8_t new_control_byte = P64_SETBIT_ON(mask_control_byte, 2);
     writeport(SPP_CONTROL_ADDR(spp_base_addr), new_control_byte);
 }
 

@@ -12,7 +12,6 @@
 #include "pyportio.h"
 #include "StandardPort.h"
 
-
 #if defined(_WIN32)
 bool funcinit = false;
 #endif
@@ -105,7 +104,6 @@ PyObject* pyportio_parse_multiwrite(PyObject *self, PyObject *args, uint16_t bas
 
     for (Py_ssize_t index = 0; index < data.len; index++) {
         writeport(target_address, *((uint8_t *)data.buf + index));
-        portio_reset_control_pins(base_address, is_bidir);
     }
 
     Py_RETURN_NONE;
@@ -120,14 +118,14 @@ PyObject* pyportio_parse_multiread(PyObject *self, PyObject *args, uint16_t base
     }
 
     const bool is_bidir = ISBIDIR(self);
+    
     uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * length);
 
     portio_reset_control_pins(base_address, is_bidir);
     portio_set_port_direction(base_address, PORT_DIR_REVERSE);
 
     for (Py_ssize_t index = 0; index < length; index++) {
-        buffer[index] = readport(target_address);
-        portio_reset_control_pins(base_address, is_bidir);
+        buffer[index] = readport(target_address, 9);
     }
 
     PyObject *new_result = Py_BuildValue("y#", buffer, length);

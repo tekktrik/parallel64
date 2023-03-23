@@ -85,8 +85,8 @@ static PyObject* EnhancedPort_get_port_address(PyObject *self, void *closure) {
 
 
 static PyGetSetDef EnhancedPort_getsetters[] = {
-    {"spp_data_address", (getter)EnhancedPort_get_port_address, NULL, "EPP data address", &(uint16_t){3}},
-    {"spp_status_address", (getter)EnhancedPort_get_port_address, NULL, "EPP address address", &(uint16_t){4}},
+    {"epp_address_address", (getter)EnhancedPort_get_port_address, NULL, "EPP address address", &(uint16_t){3}},
+    {"epp_data_address", (getter)EnhancedPort_get_port_address, NULL, "EPP data address", &(uint16_t){4}},
     {NULL}
 };
 
