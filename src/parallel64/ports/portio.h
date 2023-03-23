@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: MIT
 
+// TODO: Move later
+
 #ifndef PORTIO_H
 #define PORTIO_H
 
@@ -55,38 +57,19 @@ typedef enum {
 } port_dir_t;
 
 
-static inline init_result_t portio_init_ports(uint16_t address, uint16_t num_ports) {
-
-    int res = 0;
-    #if !defined(_WIN32)
-    res = ioperm(address, num_ports, 1);
-    if (res != 0) {
-        return INIT_PERMISSION_ERROR;
-    }
-    #else
-
-    PyObject *mod = PyImport_AddModule("parallel64");
-    PyObject *filestring = PyObject_GetAttrString(mod, "__file__");
-    const char *constfilechars = PyUnicode_AsUTF8(filestring);
-    Py_DECREF(filestring);
-    char *filechars = malloc(strlen(constfilechars));
-    strncpy(filechars, constfilechars, strlen(constfilechars) + 1);
-    filechars[strlen(constfilechars) - 11] = '\0';
-    char *dllpath = strcat(filechars, "\\ports");
-    free(filechars);
-    dllpath = strcat(dllpath, "\\inpoutx64");
-    dllpath = strcat(dllpath, "\\inpoutx64");
-
+#if defined(_WIN32)
+static inline init_result_t portio_load_dll(const char *dllpath) {
     HINSTANCE dll = LoadLibrary(dllpath);
     if (dll == NULL) {
         return INIT_DLLLOAD_ERROR;
     }
-    writeport = (wport)GetProcAddress(dll, "DlPortWritePortUchar");
-    readport = (rport)GetProcAddress(dll, "DlPortReadPortUchar");
-    #endif
+    else {
+        writeport = (wport)GetProcAddress(dll, "DlPortWritePortUchar");
+        readport = (rport)GetProcAddress(dll, "DlPortReadPortUchar");
+    }
     return INIT_SUCCESS;
-
 }
+#endif
 
 static inline PyObject* portio_parse_write(uint16_t address, PyObject *args) {
     const uint8_t value;

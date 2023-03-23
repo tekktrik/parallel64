@@ -5,7 +5,6 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-#include "_BasePort.h"
 #include "StandardPort.h"
 #include "EnhancedPort.h"
 
@@ -38,7 +37,6 @@ PyMODINIT_FUNC PyInit_ports(void) {
     IMPORTMOD("enum");
     IMPORTMOD("parallel64.constants");
 
-    ADDNEWTYPE(_BasePort, module);
     ADDNEWTYPE(StandardPort, module);
     ADDNEWTYPE(EnhancedPort, module);
 

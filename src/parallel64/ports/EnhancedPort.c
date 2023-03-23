@@ -5,10 +5,15 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-#include "EnhancedPort.h"
+#include <stdbool.h>
+
 #include "portio.h"
-#include "_BasePort.h"
+#include "pyportio.h"
 #include "StandardPort.h"
+#include "EnhancedPort.h"
+
+// TODO: Remove later
+#include <stdio.h>
 
 
 static PyObject* EnhancedPort_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
@@ -16,10 +21,41 @@ static PyObject* EnhancedPort_new(PyTypeObject *type, PyObject *args, PyObject *
 }
 
 static int EnhancedPort_init(EnhancedPortObject *self, PyObject *args, PyObject *kwds) {
-    if (StandardPortType.tp_init((PyObject *)self, args, kwds) < 0) {
+
+    // Parse arguments (unique)
+    const uint16_t spp_address;
+    bool reset_control = true;
+    PyObject *is_bidir = Py_None;
+
+    static char *keywords[] = {"spp_base_address", "reset_control", "bidirectional", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "H|$pO", keywords, &spp_address, &reset_control, &is_bidir)) {
         return -1;
     }
+
+    // Initialize structure (should be used in subclasses)
+    if (!EnhancedPort_self_init(self, spp_address, is_bidir, reset_control)) {
+        return -1;
+    }
+
     return 0;
+
+}
+
+
+bool EnhancedPort_self_init(EnhancedPortObject *self, uint16_t spp_address, PyObject *is_bidir, bool reset_control) {
+
+    const uint16_t addresses[] = {
+        EPP_DATA_ADDR(spp_address),
+        EPP_ADDRESS_ADDR(spp_address)
+    };
+    const uint16_t num_addresses = sizeof(addresses) / sizeof(uint16_t);
+    if (pyportio_init_ports(addresses, num_addresses) < 0) {
+        return false;
+    }
+
+    return StandardPort_self_init(P64_AS_STANDARD(self), spp_address, is_bidir, reset_control);
+
 }
 
 
@@ -28,28 +64,30 @@ static void EnhancedPort_dealloc(EnhancedPortObject *self) {
 }
 
 
-static PyObject* EnhancedPort_write_epp_data(PyObject *self, PyObject *args, PyObject *kwds) {
-    return _BasePort_parse_multiwrite(self, args, kwds, SPPADDRESS(self), EPP_DATA_ADDR(SPPADDRESS(self)));
+static PyObject* EnhancedPort_write_epp_data(PyObject *self, PyObject *args) {
+    return pyportio_parse_multiwrite(self, args, SPPADDRESS(self), EPP_DATA_ADDR(SPPADDRESS(self)));
 }
 
-static PyObject* EnhancedPort_read_epp_data(PyObject *self, PyObject *args, PyObject *kwds) {
-    return _BasePort_parse_multiread(self, args, kwds, SPPADDRESS(self), EPP_DATA_ADDR(SPPADDRESS(self)));
+static PyObject* EnhancedPort_read_epp_data(PyObject *self, PyObject *args) {
+    return pyportio_parse_multiread(self, args, SPPADDRESS(self), EPP_DATA_ADDR(SPPADDRESS(self)));
 }
 
-static PyObject* EnhancedPort_write_epp_address(PyObject *self, PyObject *args, PyObject *kwds) {
-    return _BasePort_parse_multiwrite(self, args, kwds, SPPADDRESS(self), EPP_ADDRESS_ADDR(SPPADDRESS(self)));
+static PyObject* EnhancedPort_write_epp_address(PyObject *self, PyObject *args) {
+    return pyportio_parse_multiwrite(self, args, SPPADDRESS(self), EPP_ADDRESS_ADDR(SPPADDRESS(self)));
 }
 
-static PyObject* EnhancedPort_read_epp_address(PyObject *self, PyObject *args, PyObject *kwds) {
-    return _BasePort_parse_multiread(self, args, kwds, SPPADDRESS(self), EPP_ADDRESS_ADDR(SPPADDRESS(self)));
+static PyObject* EnhancedPort_read_epp_address(PyObject *self, PyObject *args) {
+    return pyportio_parse_multiread(self, args, SPPADDRESS(self), EPP_ADDRESS_ADDR(SPPADDRESS(self)));
 }
+
+// TODO: Add getters and setters for address
 
 
 static PyMethodDef EnhancedPort_methods[] = {
-    {"write_epp_data", (PyCFunction)EnhancedPort_write_epp_data, METH_VARARGS | METH_KEYWORDS, "Write data via EPP protocol"},
-    {"write_epp_address", (PyCFunction)EnhancedPort_write_epp_address, METH_VARARGS | METH_KEYWORDS, "Write address via EPP protocol"},
-    {"read_epp_data", (PyCFunction)EnhancedPort_read_epp_data, METH_VARARGS | METH_KEYWORDS, "Read data via EPP protocol"},
-    {"read_epp_address", (PyCFunction)EnhancedPort_read_epp_address, METH_VARARGS | METH_KEYWORDS, "Read address via EPP protocol"},
+    {"write_epp_data", (PyCFunction)EnhancedPort_write_epp_data, METH_VARARGS, "Write data via EPP protocol"},
+    {"write_epp_address", (PyCFunction)EnhancedPort_write_epp_address, METH_VARARGS, "Write address via EPP protocol"},
+    {"read_epp_data", (PyCFunction)EnhancedPort_read_epp_data, METH_VARARGS, "Read data via EPP protocol"},
+    {"read_epp_address", (PyCFunction)EnhancedPort_read_epp_address, METH_VARARGS, "Read address via EPP protocol"},
     {NULL}
 };
 
