@@ -1,1 +1,2 @@
 recursive-include src *.dll *.dll.license
+recursive-include include *.h
