@@ -8,10 +8,13 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #include "StandardPort.h"
 
 
-#define P64_AS_STANDARD(OBJECT) ((StandardPortObject *)OBJECT)
+#define P64_AS_ENHANCED(OBJECT) ((EnhancedPortObject *)OBJECT)
 
 
 typedef struct {

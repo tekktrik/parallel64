@@ -15,6 +15,7 @@ module = Extension(
         "src/parallel64/ports/pyportio.c",
         "src/parallel64/ports/StandardPort.c",
         "src/parallel64/ports/EnhancedPort.c",
+        "src/parallel64/ports/ExtendedPort.c",
     ],
 )
 

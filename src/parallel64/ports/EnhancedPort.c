@@ -6,14 +6,12 @@
 #include <Python.h>
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "portio.h"
 #include "pyportio.h"
 #include "StandardPort.h"
 #include "EnhancedPort.h"
-
-// TODO: Remove later
-#include <stdio.h>
 
 
 static PyObject* EnhancedPort_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
@@ -80,7 +78,17 @@ static PyObject* EnhancedPort_read_epp_address(PyObject *self, PyObject *args) {
     return pyportio_parse_multiread(self, args, SPPADDRESS(self), EPP_ADDRESS_ADDR(SPPADDRESS(self)));
 }
 
-// TODO: Add getters and setters for address
+
+static PyObject* EnhancedPort_get_port_address(PyObject *self, void *closure) {
+    return PyLong_FromLong(((StandardPortObject *)self)->spp_address + *(uint16_t *)closure);
+}
+
+
+static PyGetSetDef EnhancedPort_getsetters[] = {
+    {"spp_data_address", (getter)EnhancedPort_get_port_address, NULL, "EPP data address", &(uint16_t){3}},
+    {"spp_status_address", (getter)EnhancedPort_get_port_address, NULL, "EPP address address", &(uint16_t){4}},
+    {NULL}
+};
 
 
 static PyMethodDef EnhancedPort_methods[] = {
@@ -104,5 +112,6 @@ PyTypeObject EnhancedPortType = {
     .tp_init = (initproc)EnhancedPort_init,
     .tp_free = PyObject_GC_Del,
     .tp_base = &StandardPortType,
-    .tp_methods = EnhancedPort_methods
+    .tp_methods = EnhancedPort_methods,
+    .tp_getset = EnhancedPort_getsetters
 };

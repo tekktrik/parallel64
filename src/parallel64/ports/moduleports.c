@@ -7,6 +7,7 @@
 
 #include "StandardPort.h"
 #include "EnhancedPort.h"
+#include "ExtendedPort.h"
 
 #define ADDNEWTYPE(NEW_TYPE, MODULE_OBJ) do \
 { \
@@ -39,6 +40,7 @@ PyMODINIT_FUNC PyInit_ports(void) {
 
     ADDNEWTYPE(StandardPort, module);
     ADDNEWTYPE(EnhancedPort, module);
+    ADDNEWTYPE(ExtendedPort, module);
 
     return module;
 
