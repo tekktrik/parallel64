@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: MIT
 
-// TODO: Move later
-
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 

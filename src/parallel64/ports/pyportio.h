@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: MIT
 
-// TODO: Move later
-
 #ifndef PYPORTIO_H
 #define PYPORTIO_H
 

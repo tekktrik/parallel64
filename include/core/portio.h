@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: MIT
 
-// TODO: Move later
-
 #ifndef PORTIO_H
 #define PORTIO_H
 
@@ -108,7 +106,6 @@ static inline bool portio_delay_us(uint16_t delay_us) {
     LARGE_INTEGER frequency, start_time, current_time;
     QueryPerformanceFrequency(&frequency);
     QueryPerformanceCounter(&start_time);
-    // TODO: Shift math to start
     LARGE_INTEGER ticks_needed;
     ticks_needed.QuadPart = delay_us * frequency.QuadPart;
     ticks_needed.QuadPart = delay_us / 1000000;

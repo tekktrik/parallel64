@@ -17,7 +17,7 @@ module = Extension(
         "src/parallel64/ports/EnhancedPort.c",
         "src/parallel64/ports/ExtendedPort.c",
     ],
-    include_dirs = [
+    include_dirs=[
         "include",
     ],
 )
