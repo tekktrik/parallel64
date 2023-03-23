@@ -77,6 +77,22 @@ int pyportio_init_ports(const uint16_t *addresses, uint16_t num_ports) {
 }
 
 
+PyObject* pyportio_parse_write(uint16_t address, PyObject *args) {
+    const uint8_t value;
+
+    if (!PyArg_ParseTuple(args, "b", &value)) {
+        return NULL;
+    }
+
+    writeport(address, value);
+    Py_RETURN_NONE;
+}
+
+PyObject* pyportio_parse_read(uint16_t address) {
+    return PyLong_FromLong(readport(address));
+}
+
+
 PyObject* pyportio_parse_multiwrite(PyObject *self, PyObject *args, uint16_t base_address, uint16_t target_address) {
     Py_buffer data;
 

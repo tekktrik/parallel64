@@ -5,8 +5,6 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-#include "ExtendedPort.h"
-
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -24,7 +22,7 @@ static int ExtendedPort_init(ExtendedPortObject *self, PyObject *args, PyObject 
 
     // Parse arguments (unique)
     const uint16_t spp_address;
-    const uint8_t ecp_address;
+    const uint16_t ecp_address;
     bool reset_control = true;
     PyObject *is_bidir = Py_None;
 
@@ -47,9 +45,9 @@ static int ExtendedPort_init(ExtendedPortObject *self, PyObject *args, PyObject 
 bool ExtendedPort_self_init(ExtendedPortObject *self, uint16_t spp_address, uint16_t ecp_address, PyObject *is_bidir, bool reset_control) {
 
     const uint16_t addresses[] = {
-        ECP_DATA_ADDR(self),
-        ECP_CONFIG_ADDR(self),
-        ECP_ECR_ADDR(self)
+        ECP_DATA_ADDR(ecp_address),
+        ECP_CONFIG_ADDR(ecp_address),
+        ECP_ECR_ADDR(ecp_address)
     };
     const uint16_t num_addresses = sizeof(addresses) / sizeof(uint16_t);
     if (pyportio_init_ports(addresses, num_addresses) < 0) {
@@ -69,29 +67,29 @@ static void ExtendedPort_dealloc(ExtendedPortObject *self) {
 
 
 static PyObject* ExtendedPort_write_ecp_ecr(PyObject *self, PyObject *args) {
-    return pyportio_parse_multiwrite(self, args, SPPADDRESS(self), EPP_ADDRESS_ADDR(SPPADDRESS(self)));
+    return pyportio_parse_write(ECP_ECR_ADDR(ECP_ADDRESS(self)), args);
 }
 
 static PyObject* ExtendedPort_read_ecp_ecr(PyObject *self, PyObject *args) {
-    return pyportio_parse_multiread(self, args, SPPADDRESS(self), EPP_ADDRESS_ADDR(SPPADDRESS(self)));
+    return pyportio_parse_read(ECP_ECR_ADDR(ECP_ADDRESS(self)));
 }
 
 
 static PyObject* ExtendedPort_get_port_address(PyObject *self, void *closure) {
-    return PyLong_FromLong(ECP_DATA_ADDR(self) + *(uint16_t *)closure);
+    return PyLong_FromLong(ECP_DATA_ADDR(ECP_ADDRESS(self)) + *(uint16_t *)closure);
 }
 
 static PyObject* ExtendedPort_get_comm_mode(PyObject *self, void *closure) {
     PyObject *constmod = PyImport_AddModule("parallel64.constants");
     PyObject *commenum = PyObject_GetAttrString(constmod, "CommMode");
-    uint8_t ecr_byte = readport(ECP_ECR_ADDR(self));
+    uint8_t ecr_byte = readport(ECP_ECR_ADDR(ECP_ADDRESS(self)));
     uint8_t comm_mode = P64_CHECKBITS_SHIFT(ecr_byte, 7, ECR_COMMMODE_BITINDEX);
     PyObject *direction = PyObject_CallFunction(commenum, "(i)", comm_mode);
     return direction;
 }
 
 static int ExtendedPort_set_comm_mode(PyObject *self, PyObject *value, void *closure) {
-    const uint16_t ecr_addr = ECP_ECR_ADDR(self);
+    const uint16_t ecr_addr = ECP_ECR_ADDR(ECP_ADDRESS(self));
     PyObject *commmode_objvalue = PyObject_GetAttrString(value, "value");
     uint8_t commmode_value = (uint8_t)PyLong_AsLong(commmode_objvalue);
     uint8_t blank_ecr_byte = P64_SETBITS_OFF(readport(ecr_addr), 7, ECR_COMMMODE_BITINDEX);
@@ -112,7 +110,7 @@ static PyGetSetDef ExtendedPort_getsetters[] = {
 
 static PyMethodDef ExtendedPort_methods[] = {
     {"write_ecp_ecr", (PyCFunction)ExtendedPort_write_ecp_ecr, METH_VARARGS, "Write data to the Extended Control Register"},
-    {"read_ecp_ecr", (PyCFunction)ExtendedPort_read_ecp_ecr, METH_VARARGS, "Read data from the Extended Control Register"},
+    {"read_ecp_ecr", (PyCFunction)ExtendedPort_read_ecp_ecr, METH_NOARGS, "Read data from the Extended Control Register"},
     {NULL}
 };
 

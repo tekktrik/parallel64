@@ -120,23 +120,23 @@ static PyObject* StandardPort_write_spp_data(PyObject *self, PyObject *args, PyO
 }
 
 static PyObject* StandardPort_write_data_register(PyObject *self, PyObject *args) {
-    return portio_parse_write(SPP_DATA_ADDR(SPPADDRESS(self)), args);
+    return pyportio_parse_write(SPP_DATA_ADDR(SPPADDRESS(self)), args);
 }
 
 static PyObject* StandardPort_write_control_register(PyObject *self, PyObject *args) {
-    return portio_parse_write(SPP_CONTROL_ADDR(SPPADDRESS(self)), args);
+    return pyportio_parse_write(SPP_CONTROL_ADDR(SPPADDRESS(self)), args);
 }
 
 static PyObject* StandardPort_read_data_register(PyObject *self, PyObject *args) {
-    return portio_parse_read(SPP_DATA_ADDR(SPPADDRESS(self)));
+    return pyportio_parse_read(SPP_DATA_ADDR(SPPADDRESS(self)));
 }
 
 static PyObject* StandardPort_read_status_register(PyObject *self, PyObject *args) {
-    return portio_parse_read(SPP_STATUS_ADDR(SPPADDRESS(self)));
+    return pyportio_parse_read(SPP_STATUS_ADDR(SPPADDRESS(self)));
 }
 
 static PyObject* StandardPort_read_control_register(PyObject *self, PyObject *args) {
-    return portio_parse_read(SPP_CONTROL_ADDR(SPPADDRESS(self)));
+    return pyportio_parse_read(SPP_CONTROL_ADDR(SPPADDRESS(self)));
 }
 
 static PyObject* StandardPort_test_bidirectionality(PyObject *self, PyObject *args) {

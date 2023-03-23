@@ -32,6 +32,9 @@ rport readport;
 #define SPP_CONTROL_ADDR(ADDRESS) (ADDRESS)+2
 #define EPP_DATA_ADDR(ADDRESS) (ADDRESS)+3
 #define EPP_ADDRESS_ADDR(ADDRESS) (ADDRESS)+4
+#define ECP_DATA_ADDR(ADDRESS) (ADDRESS)
+#define ECP_CONFIG_ADDR(ADDRESS) (ADDRESS)+1
+#define ECP_ECR_ADDR(ADDRESS) (ADDRESS)+2
 
 #define P64_CHECKBITS_UINT8(VALUE, BITMASK, BITINDEX) ((BITMASK << BITINDEX) & VALUE)
 #define P64_CHECKBIT_UINT8(VALUE, BITINDEX) P64_CHECKBITS_UINT8(VALUE, 1, BITINDEX)
@@ -74,20 +77,6 @@ static inline init_result_t portio_load_dll(const char *dllpath) {
 }
 #endif
 
-static inline PyObject* portio_parse_write(uint16_t address, PyObject *args) {
-    const uint8_t value;
-
-    if (!PyArg_ParseTuple(args, "b", &value)) {
-        return NULL;
-    }
-
-    writeport(address, value);
-    Py_RETURN_NONE;
-}
-
-static inline PyObject* portio_parse_read(uint16_t address) {
-    return PyLong_FromLong(readport(address));
-}
 
 static inline const port_dir_t portio_get_port_direction(uint16_t spp_base_addr) {
     const int8_t control_byte = readport(SPP_CONTROL_ADDR(spp_base_addr));

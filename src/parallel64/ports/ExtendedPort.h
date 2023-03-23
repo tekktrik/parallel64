@@ -16,9 +16,7 @@
 
 #define P64_AS_EXTENDED(OBJECT) ((ExtendedPortObject *)OBJECT)
 
-#define ECP_DATA_ADDR(OBJECT) (((ExtendedPortObject *)OBJECT)->ecp_address)
-#define ECP_CONFIG_ADDR(OBJECT) (((ExtendedPortObject *)OBJECT)->ecp_address + 1)
-#define ECP_ECR_ADDR(OBJECT) (((ExtendedPortObject *)OBJECT)->ecp_address + 2)
+#define ECP_ADDRESS(OBJECT) (((ExtendedPortObject *)OBJECT)->ecp_address)
 
 #define ECR_COMMMODE_BITINDEX 5
 
