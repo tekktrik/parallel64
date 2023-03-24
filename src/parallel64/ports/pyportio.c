@@ -42,7 +42,7 @@ int pyportio_init_ports(const uint16_t *addresses, uint16_t num_ports) {
         char *filechars = malloc(strlen(constfilechars));
         strncpy(filechars, constfilechars, strlen(constfilechars) + 1);
         filechars[strlen(constfilechars) - 11] = '\0';
-        char *dllpath = strcat(filechars, "\\ports");
+        char *dllpath = strcat(filechars, "ports");
         free(filechars);
         dllpath = strcat(dllpath, "\\inpoutx64");
         dllpath = strcat(dllpath, "\\inpoutx64");
@@ -118,14 +118,14 @@ PyObject* pyportio_parse_multiread(PyObject *self, PyObject *args, uint16_t base
     }
 
     const bool is_bidir = ISBIDIR(self);
-    
+
     uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * length);
 
     portio_reset_control_pins(base_address, is_bidir);
     portio_set_port_direction(base_address, PORT_DIR_REVERSE);
 
     for (Py_ssize_t index = 0; index < length; index++) {
-        buffer[index] = readport(target_address, 9);
+        buffer[index] = readport(target_address);
     }
 
     PyObject *new_result = Py_BuildValue("y#", buffer, length);

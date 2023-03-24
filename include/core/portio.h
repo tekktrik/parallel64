@@ -10,7 +10,7 @@
 #include <time.h>
 
 #if defined(_WIN32)
-#include <windows.h>
+#include <Windows.h>
 typedef void (__stdcall *wport)(USHORT, UINT);
 typedef UINT (__stdcall *rport)(USHORT);
 wport writeport;
@@ -60,7 +60,7 @@ typedef enum {
 
 #if defined(_WIN32)
 static inline init_result_t portio_load_dll(const char *dllpath) {
-    HINSTANCE dll = LoadLibrary(dllpath);
+    HINSTANCE dll = LoadLibraryA(dllpath);
     if (dll == NULL) {
         return INIT_DLLLOAD_ERROR;
     }
