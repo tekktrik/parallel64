@@ -6,7 +6,7 @@
 #include <Python.h>
 
 #include "helper/modsetup.h"
-#include "GPIO_Pin.h"
+#include "GPIO.h"
 
 
 static struct PyModuleDef parallel64gpio_module = {

@@ -9,7 +9,8 @@
 #include <stdbool.h>
 
 #include "core/portio.h"
-#include "gpio_hardware/GPIO_Pin.h"
+#include "gpio/GPIO.h"
+#include "hardware/Pin.h"
 
 
 PinObject* create_Pin(

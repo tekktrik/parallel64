@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: MIT
 
-#ifndef GPIO_PIN_H
-#define GPIO_PIN_H
+#ifndef PIN_H
+#define PIN_H
 
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
@@ -12,9 +12,8 @@
 #include <stdint.h>
 
 #include "core/portio.h"
+#include "gpio/GPIO.h"
 
-
-#define GPIO_PORT(OBJECT) (((GPIOObject *)OBJECT)->port)
 
 #define PIN_REGISTER(OBJECT) (((PinObject *)OBJECT)->reg_addr)
 #define PIN_BITINDEX(OBJECT) (((PinObject *)OBJECT)->bit_index)
@@ -25,39 +24,6 @@
 #define PIN_OUTPUTALLOWED(OBJECT) (((PinObject *)OBJECT)->output_allowed)
 
 typedef struct gpioobj GPIOObject;
-typedef struct pinobj PinObject;
-
-
-typedef struct gpioobj {
-    PyObject_HEAD
-
-    PyObject *port;
-
-    PinObject *strobe;
-    PinObject *auto_linefeed;
-    PinObject *initialize;
-    PinObject *select_printer;
-
-    PinObject *ack;
-    PinObject *busy;
-    PinObject *paper_out;
-    PinObject *select_in;
-    PinObject *error;
-
-    PinObject *d0;
-    PinObject *d1;
-    PinObject *d2;
-    PinObject *d3;
-    PinObject *d4;
-    PinObject *d5;
-    PinObject *d6;
-    PinObject *d7;
-
-    PinObject **pinlist;
-} GPIOObject;
-
-
-extern PyTypeObject GPIOType;
 
 
 typedef struct pinobj {
@@ -88,4 +54,4 @@ PinObject* create_Pin(
 
 
 
-#endif /* GPIO_PIN_H */
+#endif /* PIN_H */

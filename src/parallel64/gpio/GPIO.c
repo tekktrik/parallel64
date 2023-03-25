@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 #include "core/portio.h"
-#include "gpio_hardware/GPIO_Pin.h"
+#include "gpio/GPIO.h"
 #include "ports/StandardPort.h"
 
 
