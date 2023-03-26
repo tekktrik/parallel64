@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "core/portio.h"
 #include "gpio/GPIO.h"
@@ -179,6 +180,17 @@ static PyObject* GPIO_get_pin(PyObject *self, void *closure) {
 }
 
 
+static PyObject* GPIO_blinkatize(PyObject *self, PyObject *args) {
+    PyObject *sys_mod = PyImport_ImportModule("sys");
+    PyObject *modules = PyObject_GetAttrString(sys_mod, "modules");
+
+    PyObject *hardware_mod = PyImport_ImportModule("parallel64.hardware");
+    PyDict_SetItemString(modules, "board", hardware_mod);
+
+    Py_RETURN_NONE;
+}
+
+
 static PyGetSetDef GPIO_getsetters[] = {
     {"STROBE", (getter)GPIO_get_pin, NULL, "Strobe pin", &(uint8_t){0}},
     {"D0", (getter)GPIO_get_pin, NULL, "D0 pin", &(uint8_t){1}},
@@ -201,6 +213,12 @@ static PyGetSetDef GPIO_getsetters[] = {
 };
 
 
+static PyMethodDef GPIO_methods[] = {
+    {"blinkatize", (PyCFunction)GPIO_blinkatize, METH_NOARGS, "Magically make a Blinka-like import environment"},
+    {NULL}
+};
+
+
 PyTypeObject GPIOType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "parallel64.gpio.GPIO",
@@ -214,5 +232,6 @@ PyTypeObject GPIOType = {
     .tp_new = (newfunc)GPIO_new,
     .tp_init = (initproc)GPIO_init,
     .tp_free = PyObject_GC_Del,
-    .tp_getset = GPIO_getsetters
+    .tp_getset = GPIO_getsetters,
+    .tp_methods = GPIO_methods
 };
