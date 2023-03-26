@@ -73,7 +73,7 @@ static bool GPIO_setup_pins(GPIOObject *self, StandardPortObject *port) {
 static int GPIO_init(GPIOObject *self, PyObject *args, PyObject *kwds) {
 
     // Parse arguments (unique)
-    PyObject *port = NULL;
+    PyObject *port;
 
     static char *keywords[] = {"port", NULL};
 
@@ -81,8 +81,15 @@ static int GPIO_init(GPIOObject *self, PyObject *args, PyObject *kwds) {
         return -1;
     }
 
-    if (!PyType_IsSubtype(Py_TYPE(port), &StandardPortType)) {
-        // TODO: Set specific error
+    self->pins_init = false;
+
+    PyObject *ports_mod = PyImport_AddModule("parallel64.ports");
+    PyObject *spp_port = PyObject_GetAttrString(ports_mod, "StandardPort");
+    if (!PyObject_IsInstance(port, spp_port)) {
+        PyErr_SetString(
+            PyExc_TypeError,
+            "`port` must be an instance of parallel64.ports.StandardPort"
+        );
         return -1;
     };
     PyObject *temp = self->port;
@@ -94,6 +101,7 @@ static int GPIO_init(GPIOObject *self, PyObject *args, PyObject *kwds) {
         // TODO: Set specific error
         return -1;
     }
+    self->pins_init = true;
 
     return 0;
 
@@ -129,6 +137,10 @@ static int GPIO_traverse(GPIOObject *self, visitproc visit, void *arg) {
 static int GPIO_clear(GPIOObject *self) {
     Py_CLEAR(self->port);
 
+    if (!self->pins_init) {
+        return 0;
+    }
+
     Py_CLEAR(self->strobe);
     Py_CLEAR(self->auto_linefeed);
     Py_CLEAR(self->initialize);
@@ -154,7 +166,7 @@ static int GPIO_clear(GPIOObject *self) {
 
 static void GPIO_dealloc(GPIOObject *self) {
     PyObject_GC_UnTrack(self);
-    free(self->pinlist);
+    if (self->pins_init) free(self->pinlist);
     GPIO_clear(self);
     Py_TYPE(self)->tp_free((PyObject *)self);
 }

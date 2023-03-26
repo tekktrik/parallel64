@@ -47,6 +47,7 @@ typedef struct gpioobj {
     PinObject *d7;
 
     PinObject **pinlist;
+    bool pins_init;
 } GPIOObject;
 
 

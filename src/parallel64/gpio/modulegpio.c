@@ -25,6 +25,8 @@ PyMODINIT_FUNC PyInit_gpio(void) {
 
     ADDNEWTYPE(GPIO, module);
 
+    IMPORTMOD("parallel64.ports");
+
     return module;
 
 }
