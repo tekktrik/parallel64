@@ -110,4 +110,3 @@ PyTypeObject PinType = {
     .tp_hash = (hashfunc)Pin_hash,
     .tp_getset = Pin_getsetters,
 };
-

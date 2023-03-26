@@ -54,7 +54,6 @@ hardware_module = Extension(
 )
 
 
-
 setup(
     ext_modules=[
         ports_module,
