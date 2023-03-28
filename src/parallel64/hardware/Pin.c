@@ -53,6 +53,8 @@ static int Pin_clear(PinObject *self) {
 }
 
 static void Pin_dealloc(PinObject *self) {
+    PyObject_GC_UnTrack(self);
+    Pin_clear(self);
     Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
