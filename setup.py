@@ -57,10 +57,10 @@ digitalio_module = Extension(
     "parallel64.digitalio",
     [
         "src/parallel64/digitalio/moduledigitalio.c",
-        # "src/parallel64/hardware/Pin.c",
-        # "src/parallel64/gpio/GPIO.c",
-        # "src/parallel64/ports/StandardPort.c",
-        # "src/parallel64/ports/pyportio.c",
+        "src/parallel64/digitalio/DigitalInOut.c",
+        "src/parallel64/hardware/Pin.c",
+        "src/parallel64/ports/StandardPort.c",
+        "src/parallel64/ports/pyportio.c",
     ],
     include_dirs=[
         "include",

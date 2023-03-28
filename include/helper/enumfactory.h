@@ -29,4 +29,11 @@ static inline PyObject* create_enum(char *enum_name, pyenum_t *enum_values, uint
     return PyObject_CallFunction(enum_class, "(NN)", class_name, val_dict);
 }
 
+static inline PyObject* generate_enum(const char *mod_name, const char *enum_name, int64_t enum_value) {
+    PyObject *module = PyImport_AddModule(mod_name);
+    PyObject *enum_class = PyObject_GetAttrString(module, enum_name);
+    return PyObject_CallFunction(enum_class, "(i)", enum_value);
+}
+
+
 #endif /* ENUMFACTORY_H */

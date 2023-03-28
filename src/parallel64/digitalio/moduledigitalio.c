@@ -24,7 +24,10 @@ PyMODINIT_FUNC PyInit_digitalio(void) {
         return NULL;
     }
 
+    ADDNEWTYPE(DigitalInOut, module);
+
     IMPORTMOD("enum");
+    IMPORTMOD("parallel64.hardware");
 
     pyenum_t drivemode_enum[] = {
         {"PUSH_PULL", 0},

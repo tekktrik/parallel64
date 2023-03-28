@@ -8,7 +8,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "core/portio.h"
 #include "gpio/GPIO.h"
@@ -28,25 +27,25 @@ static bool GPIO_setup_pins(GPIOObject *self, StandardPortObject *port) {
 
     bool is_bidir = port->is_bidir;
 
-    self->strobe = create_Pin(self, spp_control_address, 0, PORT_DIR_REVERSE, true, true, true);
-    self->auto_linefeed = create_Pin(self, spp_control_address, 1, PORT_DIR_REVERSE, true, true, true);
-    self->initialize = create_Pin(self, spp_control_address, 2, PORT_DIR_REVERSE, false, true, true);
-    self->select_printer = create_Pin(self, spp_control_address, 3, PORT_DIR_REVERSE, true, true, true);
+    self->strobe = create_Pin(self, spp_control_address, 0, PORT_DIR_REVERSE, true, true, true, OPEN_DRAIN, false);
+    self->auto_linefeed = create_Pin(self, spp_control_address, 1, PORT_DIR_REVERSE, true, true, true, OPEN_DRAIN, false);
+    self->initialize = create_Pin(self, spp_control_address, 2, PORT_DIR_REVERSE, false, true, true, OPEN_DRAIN, false);
+    self->select_printer = create_Pin(self, spp_control_address, 3, PORT_DIR_REVERSE, true, true, true, OPEN_DRAIN, false);
 
-    self->ack = create_Pin(self, spp_status_address, 6, PORT_DIR_REVERSE, false, true, false);
-    self->busy = create_Pin(self, spp_status_address, 7, PORT_DIR_REVERSE, true, true, false);
-    self->paper_out = create_Pin(self, spp_status_address, 5, PORT_DIR_REVERSE, false, true, false);
-    self->select_in = create_Pin(self, spp_status_address, 4, PORT_DIR_REVERSE, false, true, false);
-    self->error = create_Pin(self, spp_status_address, 3, PORT_DIR_REVERSE, false, true, false);
+    self->ack = create_Pin(self, spp_status_address, 6, PORT_DIR_REVERSE, false, true, false, PUSH_PULL, false);
+    self->busy = create_Pin(self, spp_status_address, 7, PORT_DIR_REVERSE, true, true, false, PUSH_PULL, false);
+    self->paper_out = create_Pin(self, spp_status_address, 5, PORT_DIR_REVERSE, false, true, false, PUSH_PULL, false);
+    self->select_in = create_Pin(self, spp_status_address, 4, PORT_DIR_REVERSE, false, true, false, PUSH_PULL, false);
+    self->error = create_Pin(self, spp_status_address, 3, PORT_DIR_REVERSE, false, true, false, PUSH_PULL, false);
 
-    self->d0 = create_Pin(self, spp_data_address, 0, PORT_DIR_REVERSE, false, is_bidir, false);
-    self->d1 = create_Pin(self, spp_data_address, 1, PORT_DIR_REVERSE, false, is_bidir, false);
-    self->d2 = create_Pin(self, spp_data_address, 2, PORT_DIR_REVERSE, false, is_bidir, false);
-    self->d3 = create_Pin(self, spp_data_address, 3, PORT_DIR_REVERSE, false, is_bidir, false);
-    self->d4 = create_Pin(self, spp_data_address, 4, PORT_DIR_REVERSE, false, is_bidir, false);
-    self->d5 = create_Pin(self, spp_data_address, 5, PORT_DIR_REVERSE, false, is_bidir, false);
-    self->d6 = create_Pin(self, spp_data_address, 6, PORT_DIR_REVERSE, false, is_bidir, false);
-    self->d7 = create_Pin(self, spp_data_address, 7, PORT_DIR_REVERSE, false, is_bidir, false);
+    self->d0 = create_Pin(self, spp_data_address, 0, PORT_DIR_REVERSE, false, is_bidir, false, PUSH_PULL, true);
+    self->d1 = create_Pin(self, spp_data_address, 1, PORT_DIR_REVERSE, false, is_bidir, false, PUSH_PULL, true);
+    self->d2 = create_Pin(self, spp_data_address, 2, PORT_DIR_REVERSE, false, is_bidir, false, PUSH_PULL, true);
+    self->d3 = create_Pin(self, spp_data_address, 3, PORT_DIR_REVERSE, false, is_bidir, false, PUSH_PULL, true);
+    self->d4 = create_Pin(self, spp_data_address, 4, PORT_DIR_REVERSE, false, is_bidir, false, PUSH_PULL, true);
+    self->d5 = create_Pin(self, spp_data_address, 5, PORT_DIR_REVERSE, false, is_bidir, false, PUSH_PULL, true);
+    self->d6 = create_Pin(self, spp_data_address, 6, PORT_DIR_REVERSE, false, is_bidir, false, PUSH_PULL, true);
+    self->d7 = create_Pin(self, spp_data_address, 7, PORT_DIR_REVERSE, false, is_bidir, false, PUSH_PULL, true);
 
     PinObject **pinlist = malloc(sizeof(PinObject *) * 17);
     pinlist[0] = self->strobe;

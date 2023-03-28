@@ -8,6 +8,19 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
+#include "hardware/Pin.h"
+
+
+#define DIGINOUT_PIN(OBJECT) (((DigitalInOutObject *)OBJECT)->pin)
+
+
+typedef struct dioobj {
+    PyObject_HEAD
+    PinObject *pin;
+} DigitalInOutObject;
+
+
+extern PyTypeObject DigitalInOutType;
 
 
 #endif /* DIGITIALIO_H */

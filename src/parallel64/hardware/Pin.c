@@ -20,7 +20,9 @@ PinObject* create_Pin(
     port_dir_t direction,
     bool hw_inverted,
     bool input_allowed,
-    bool output_allowed
+    bool output_allowed,
+    drive_mode_t drive_mode,
+    bool propagate_dir
 ) {
 
     PinObject *pin = PyObject_GC_NewVar(PinObject, &PinType, 0);
@@ -34,6 +36,7 @@ PinObject* create_Pin(
     pin->hw_inverted = hw_inverted;
     pin->input_allowed = input_allowed;
     pin->output_allowed = output_allowed;
+    pin->drive_mode = drive_mode;
 
     pin->in_use = false;
 

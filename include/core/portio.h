@@ -57,6 +57,11 @@ typedef enum {
     PORT_DIR_REVERSE = 1
 } port_dir_t;
 
+typedef enum {
+    PUSH_PULL = 0,
+    OPEN_DRAIN = 1
+} drive_mode_t;
+
 
 #if defined(_WIN32)
 static inline init_result_t portio_load_dll(const char *dllpath) {

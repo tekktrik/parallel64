@@ -36,6 +36,8 @@ typedef struct pinobj {
     bool hw_inverted;
     bool input_allowed;
     bool output_allowed;
+    drive_mode_t drive_mode;
+    bool propagate_dir;
 } PinObject;
 
 
@@ -49,7 +51,9 @@ PinObject* create_Pin(
     port_dir_t direction,
     bool hw_inverted,
     bool input_allowed,
-    bool output_allowed
+    bool output_allowed,
+    drive_mode_t drive_mode,
+    bool propagate_dir
 );
 
 
