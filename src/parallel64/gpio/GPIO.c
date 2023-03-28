@@ -14,8 +14,6 @@
 #include "gpio/GPIO.h"
 #include "ports/StandardPort.h"
 
-#include <stdio.h>
-
 
 static PyObject* GPIO_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
     return (PyObject *)PyObject_GC_NewVar(GPIOObject, type, 0);
