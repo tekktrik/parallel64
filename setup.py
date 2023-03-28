@@ -53,11 +53,27 @@ hardware_module = Extension(
     ],
 )
 
+digitalio_module = Extension(
+    "parallel64.digitalio",
+    [
+        "src/parallel64/digitalio/moduledigitalio.c",
+        #"src/parallel64/hardware/Pin.c",
+        #"src/parallel64/gpio/GPIO.c",
+        #"src/parallel64/ports/StandardPort.c",
+        #"src/parallel64/ports/pyportio.c",
+    ],
+    include_dirs=[
+        "include",
+        "src/parallel64",
+    ],
+)
+
 
 setup(
     ext_modules=[
         ports_module,
         gpio_module,
         hardware_module,
+        digitalio_module,
     ],
 )

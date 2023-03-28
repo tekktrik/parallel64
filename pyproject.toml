@@ -43,6 +43,7 @@ packages = [
     "parallel64.ports.inpoutx64",
     "parallel64.gpio",
     "parallel64.hardware",
+    "parallel64.digitalio",
 ]
 
 [tool.setuptools.package-dir]
@@ -51,6 +52,7 @@ packages = [
 "inpoutx64" = "src/parallel64/ports/inpoutx64"
 "gpio" = "src/parallel64/gpio"
 "hardware" = "src/parallel64/hardware"
+"digitalio" = "src/parallel64/digitalio"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
