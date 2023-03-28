@@ -89,7 +89,7 @@ static PyObject* DigitalInOut_get_drivemode(PyObject *self, void *closure) {
 
 static PyObject* DigitalInOut_get_value(PyObject *self, void *closure) {
     uint8_t reg_value = readport(DIGINOUT_PIN(self)->reg_addr);
-    bool bit_value = P64_CHECKBIT(reg_value, DIGINOUT_PIN(self)->bit_index);
+    bool bit_value = P64_CHECKBIT_UINT8(reg_value, DIGINOUT_PIN(self)->bit_index);
     return PyBool_FromLong(bit_value);
 }
 
