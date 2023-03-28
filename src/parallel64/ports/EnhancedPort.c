@@ -36,6 +36,8 @@ static int EnhancedPort_init(EnhancedPortObject *self, PyObject *args, PyObject 
         return -1;
     }
 
+    PORTTYPE(self) = "epp_port";
+
     return 0;
 
 }

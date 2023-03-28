@@ -14,6 +14,8 @@
 #include "gpio/GPIO.h"
 #include "ports/StandardPort.h"
 
+#include <stdio.h>
+
 
 static PyObject* GPIO_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
     return (PyObject *)PyObject_GC_NewVar(GPIOObject, type, 0);
@@ -179,13 +181,20 @@ static PyObject* GPIO_get_pin(PyObject *self, void *closure) {
     return (PyObject *)obj;
 }
 
+static PyObject *GPIO_get_port_id(PyObject *self, PyObject *args) {
+    return PyUnicode_FromString(PORTTYPE(GPIO_PORT(self)));
+}
+
 
 static PyObject* GPIO_blinkatize(PyObject *self, PyObject *args) {
     PyObject *sys_mod = PyImport_ImportModule("sys");
     PyObject *modules = PyObject_GetAttrString(sys_mod, "modules");
 
+    PyDict_SetItemString(modules, "board", self);
+    Py_INCREF(self);
+
     PyObject *hardware_mod = PyImport_ImportModule("parallel64.hardware");
-    PyDict_SetItemString(modules, "board", hardware_mod);
+    PyDict_SetItemString(modules, "microcontroller", hardware_mod);
 
     Py_RETURN_NONE;
 }
@@ -209,6 +218,8 @@ static PyGetSetDef GPIO_getsetters[] = {
     {"ERROR", (getter)GPIO_get_pin, NULL, "ERROR pin", &(uint8_t){14}},
     {"INITIALIZE", (getter)GPIO_get_pin, NULL, "INITIALIZE pin", &(uint8_t){15}},
     {"SELECT_PRINTER", (getter)GPIO_get_pin, NULL, "SELECT PRINTER pin", &(uint8_t){16}},
+    {"port_id", (getter)GPIO_get_port_id, NULL, "Get the port id", NULL},
+    {"board_id", (getter)GPIO_get_port_id, NULL, "Get the board (port) id", NULL},
     {NULL}
 };
 

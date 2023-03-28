@@ -15,12 +15,14 @@
 
 #define SPPADDRESS(OBJECT) (((StandardPortObject *)OBJECT)->spp_address)
 #define ISBIDIR(OBJECT) (((StandardPortObject *)OBJECT)->is_bidir)
+#define PORTTYPE(OBJECT) (((StandardPortObject *)OBJECT)->port_type)
 
 
 typedef struct {
     PyObject_HEAD
     uint16_t spp_address;
     bool is_bidir;
+    char *port_type;
 } StandardPortObject;
 
 

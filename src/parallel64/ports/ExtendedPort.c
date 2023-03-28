@@ -37,6 +37,8 @@ static int ExtendedPort_init(ExtendedPortObject *self, PyObject *args, PyObject 
         return -1;
     }
 
+    PORTTYPE(self) = "ecp_port";
+
     return 0;
 
 }

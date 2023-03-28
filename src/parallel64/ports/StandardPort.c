@@ -36,6 +36,8 @@ static int StandardPort_init(StandardPortObject *self, PyObject *args, PyObject 
         return -1;
     }
 
+    PORTTYPE(self) = "spp_port";
+
     return 0;
 
 }
