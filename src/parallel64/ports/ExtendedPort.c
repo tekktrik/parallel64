@@ -82,7 +82,7 @@ static PyObject* ExtendedPort_get_port_address(PyObject *self, void *closure) {
 }
 
 static PyObject* ExtendedPort_get_comm_mode(PyObject *self, void *closure) {
-    PyObject *constmod = PyImport_AddModule("parallel64.constants");
+    PyObject *constmod = PyImport_AddModule("parallel64.ports");
     PyObject *commenum = PyObject_GetAttrString(constmod, "CommMode");
     uint8_t ecr_byte = readport(ECP_ECR_ADDR(ECP_ADDRESS(self)));
     uint8_t comm_mode = P64_CHECKBITS_SHIFT(ecr_byte, 7, ECR_COMMMODE_BITINDEX);

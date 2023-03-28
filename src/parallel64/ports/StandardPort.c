@@ -159,7 +159,7 @@ static PyObject* StandardPort_get_port_address(PyObject *self, void *closure) {
 }
 
 static PyObject* StandardPort_get_direction(PyObject *self, void *closure) {
-    PyObject *constmod = PyImport_AddModule("parallel64.constants");
+    PyObject *constmod = PyImport_AddModule("parallel64.ports");
     PyObject *direnum = PyObject_GetAttrString(constmod, "Direction");
     uint8_t direction_byte = portio_get_port_direction(SPPADDRESS(self));
     PyObject *direction = PyObject_CallFunction(direnum, "(i)", direction_byte);
