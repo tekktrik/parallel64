@@ -33,5 +33,4 @@ jobs:
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install .
     - name: Run test script
       run: |
-        $process = Start-Process ${{ steps.find-pyexec.outputs.pyexec }} -Args ".\tests\StandardPort.py" -PassThru -Wait
-        exit $process.ExitCode
+        ${{ steps.find-pyexec.outputs.pyexec }} .\tests\StandardPort.py
