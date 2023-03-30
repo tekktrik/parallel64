@@ -13,10 +13,6 @@
 #include "hardware/Pin.h"
 
 
-PyTypeObject PinType;
-bool PIN_CREATION_LOCK = false;
-
-
 static PyObject* Pin_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
     return (PyObject *)PyObject_GC_NewVar(PinObject, type, 0);
 }
@@ -24,13 +20,6 @@ static PyObject* Pin_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
 
 static int Pin_init(PinObject *self, PyObject *args) {
 
-    if (!PIN_CREATION_LOCK) {
-        PyErr_SetString(
-            PyExc_RuntimeError,
-            "Pin instances cannot be created manually"
-        );
-        return -1;
-    }
 
     // Parse arguments (unique)
     PyObject *gpio;
@@ -87,12 +76,21 @@ PinObject* create_Pin(
     bool propagate_dir
 ) {
 
-    PIN_CREATION_LOCK = true;
-    PyObject *args = Py_BuildValue("OHBBBBBBB", (PyObject *)gpio, reg_addr, bit_index, (uint8_t)direction, (uint8_t)hw_inverted, (uint8_t)input_allowed, (uint8_t)output_allowed, (uint8_t)drive_mode, (uint8_t)propagate_dir);
-    PinObject *pin = PyObject_GC_NewVar(PinObject, &PinType, 0);
-    PinType.tp_init((PyObject *)pin, args, NULL);
-
-    PIN_CREATION_LOCK = false;
+    PyObject *args = Py_BuildValue(
+        "OHBBBBBBB",
+        (PyObject *)gpio,
+        reg_addr,
+        bit_index,
+        (uint8_t)direction,
+        (uint8_t)hw_inverted,
+        (uint8_t)input_allowed,
+        (uint8_t)output_allowed,
+        (uint8_t)drive_mode,
+        (uint8_t)propagate_dir
+    );
+    PyObject *hw_mod = PyImport_ImportModule("parallel64.hardware");
+    PyObject *pin_class = PyObject_GetAttrString(hw_mod, "Pin");
+    PyObject *pin = PyObject_CallObject(pin_class, args);
 
     return pin;
 

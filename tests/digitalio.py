@@ -20,6 +20,7 @@ print("X")
 print(board.D2.register)
 thing = board.D2
 print("Y")
+print(isinstance(board.D2, microcontroller.Pin))
 
 # Data pins
 dio_data = digitalio.DigitalInOut(board.D2)

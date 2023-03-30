@@ -12,6 +12,7 @@
 #include "core/portio.h"
 #include "gpio/GPIO.h"
 #include "ports/StandardPort.h"
+#include "hardware/Pin.h"
 
 #include <stdio.h>
 
