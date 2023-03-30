@@ -10,6 +10,26 @@ import parallel64.ports
 import parallel64.gpio
 import parallel64.hardware
 
+def test_gpio_init():
+
+    port = parallel64.ports.StandardPort(100)
+
+    try:
+        _ = parallel64.gpio.GPIO(port)
+    except:
+        assert False
+
+
+def test_gpio_init_typeerror():
+
+    try:
+        _ = parallel64.gpio.GPIO(100)
+    except TypeError:
+        assert True
+    else:
+        assert False
+
+
 def test_gpio_properties():
 
     port = parallel64.ports.StandardPort(100)
@@ -42,3 +62,4 @@ def test_gpio_pintype():
     gpio = parallel64.gpio.GPIO(port)
 
     assert isinstance(gpio.D0, parallel64.hardware.Pin)
+
