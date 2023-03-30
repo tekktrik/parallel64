@@ -14,8 +14,9 @@ gpio.blinkatize()
 import board
 import digitalio
 import microcontroller
+
 print("X")
-#print(dir(board.D2))
+# print(dir(board.D2))
 print(board.D2.register)
 thing = board.D2
 print("Y")

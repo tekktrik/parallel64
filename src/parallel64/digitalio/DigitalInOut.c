@@ -111,7 +111,7 @@ static int DigitalInOut_set_direction(PyObject *self, PyObject *value, void *clo
         portio_set_port_direction(reg_addr, dirvalue == 0);
     }
     DIGINOUT_PIN(self)->direction = dirvalue;
-    
+
     return 0;
 }
 
@@ -128,7 +128,7 @@ static PyObject* DigitalInOut_set_pull(PyObject *self, PyObject *value, void *cl
         PyErr_SetString(PyExc_TypeError, "Pin pull modes cannot be changed from their default");
         return -1;
     }
-    
+
     return 0;
 }
 
@@ -140,7 +140,7 @@ static int DigitalInOut_set_drivemode(PyObject *self, PyObject *value, void *clo
         PyErr_SetString(PyExc_TypeError, "Pin drive modes cannot be changed from their default");
         return -1;
     }
-    
+
     return 0;
 }
 
