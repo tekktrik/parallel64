@@ -8,18 +8,23 @@ Tests the blinkatize() functionality
 
 import parallel64.ports
 import parallel64.gpio
+import parallel64.hardware
 
-def test_blinkatize():
+def test_gpio_init():
 
     port = parallel64.ports.StandardPort(100)
-    gpio = parallel64.gpio.GPIO(port)
-
-    gpio.blinkatize()
 
     try:
-        import board
-        import digitalio
-        import microcontroller
-        #import busio
+        _ = parallel64.gpio.GPIO(port)
     except:
+        assert False
+
+
+def test_gpio_init_typeerror():
+
+    try:
+        _ = parallel64.gpio.GPIO(100)
+    except TypeError:
+        assert True
+    else:
         assert False
