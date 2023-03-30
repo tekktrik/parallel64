@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Tests the blinkatize() functionality
+Tests parallel64.gpio.GPIO
 """
 
 import parallel64.ports

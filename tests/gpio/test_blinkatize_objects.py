@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Tests the blinkatize() functionality
+Tests the import objects created due to blinkatize() functionality
 """
 
 import parallel64.ports

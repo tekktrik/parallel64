@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Tests the blinkatize() functionality
+Tests import of gpio submodule
 """
 
 def test_gpio_import():
