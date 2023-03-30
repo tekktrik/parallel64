@@ -5,7 +5,7 @@
 import parallel64.ports
 import parallel64.gpio
 
-port = parallel64.ports.StandardPort(100)
+port = parallel64.ports.StandardPort(100, bidirectional=True)
 gpio = parallel64.gpio.GPIO(port)
 
 pin = gpio.SELECT_IN

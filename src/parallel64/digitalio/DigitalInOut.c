@@ -12,6 +12,7 @@
 #include "core/portio.h"
 #include "helper/enumfactory.h"
 #include "DigitalInOut.h"
+#include "hardware/Pin.h"
 
 
 static PyObject* DigitalInOut_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
@@ -30,9 +31,7 @@ static int DigitalInOut_init(DigitalInOutObject *self, PyObject *args, PyObject 
         return -1;
     }
 
-    PyObject *hw_mod = PyImport_AddModule("parallel64.hardware");
-    PyObject *pin_class = PyObject_GetAttrString(hw_mod, "Pin");
-    if (!PyObject_IsInstance(pin, pin_class)) {
+    if (Py_IS_TYPE(pin, &PinType)) {
         PyErr_SetString(
             PyExc_TypeError,
             "`pin` must be an instance of parallel64.hardware.Pin"
@@ -43,6 +42,8 @@ static int DigitalInOut_init(DigitalInOutObject *self, PyObject *args, PyObject 
     Py_INCREF(pin);
     self->pin = (PinObject *)pin;
     Py_XDECREF(temp);
+
+    self->pin->in_use = true;
 
     return 0;
 

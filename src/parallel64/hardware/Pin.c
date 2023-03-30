@@ -13,6 +13,68 @@
 #include "hardware/Pin.h"
 
 
+PyTypeObject PinType;
+bool PIN_CREATION_LOCK = false;
+
+
+static PyObject* Pin_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
+    return (PyObject *)PyObject_GC_NewVar(PinObject, type, 0);
+}
+
+
+static int Pin_init(PinObject *self, PyObject *args) {
+
+    if (!PIN_CREATION_LOCK) {
+        PyErr_SetString(
+            PyExc_RuntimeError,
+            "Pin instances cannot be created manually"
+        );
+        return -1;
+    }
+
+    // Parse arguments (unique)
+    PyObject *gpio;
+    uint16_t reg_addr;
+    uint8_t bit_index;
+    port_dir_t direction;
+    bool hw_inverted, input_allowed, output_allowed, propagate_dir;
+    drive_mode_t drive_mode;
+
+    if (!PyArg_ParseTuple(
+        args,
+        "OHBBBBBBB",
+        &gpio,
+        &reg_addr,
+        &bit_index,
+        &direction,
+        &hw_inverted,
+        &input_allowed,
+        &output_allowed,
+        &drive_mode,
+        &propagate_dir)
+    ) {
+        return -1;
+    }
+
+    GPIOObject *temp = self->gpio;
+    Py_INCREF(gpio);
+    self->gpio = (GPIOObject *)gpio;
+    Py_XDECREF(temp);
+
+    self->reg_addr = reg_addr;
+    self->bit_index = bit_index;
+    self->in_use = false;
+    self->direction = direction;
+    self->hw_inverted = hw_inverted;
+    self->input_allowed = input_allowed;
+    self->output_allowed= output_allowed;
+    self->drive_mode = drive_mode;
+    self->propagate_dir = propagate_dir;
+
+    return 0;
+
+}
+
 PinObject* create_Pin(
     GPIOObject *gpio,
     uint16_t reg_addr,
@@ -25,20 +87,12 @@ PinObject* create_Pin(
     bool propagate_dir
 ) {
 
+    PIN_CREATION_LOCK = true;
+    PyObject *args = Py_BuildValue("OHBBBBBBB", (PyObject *)gpio, reg_addr, bit_index, (uint8_t)direction, (uint8_t)hw_inverted, (uint8_t)input_allowed, (uint8_t)output_allowed, (uint8_t)drive_mode, (uint8_t)propagate_dir);
     PinObject *pin = PyObject_GC_NewVar(PinObject, &PinType, 0);
+    PinType.tp_init((PyObject *)pin, args, NULL);
 
-    pin->gpio = gpio;
-    Py_INCREF(gpio);
-
-    pin->reg_addr = reg_addr;
-    pin->bit_index = bit_index;
-    pin->direction = direction;
-    pin->hw_inverted = hw_inverted;
-    pin->input_allowed = input_allowed;
-    pin->output_allowed = output_allowed;
-    pin->drive_mode = drive_mode;
-
-    pin->in_use = false;
+    PIN_CREATION_LOCK = false;
 
     return pin;
 
@@ -108,6 +162,8 @@ PyTypeObject PinType = {
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_HAVE_GC,
     .tp_doc = "Class for representing an port pins",
     .tp_alloc = PyType_GenericAlloc,
+    .tp_new = (newfunc)Pin_new,
+    .tp_init = (initproc)Pin_init,
     .tp_dealloc = (destructor)Pin_dealloc,
     .tp_traverse = (traverseproc)Pin_traverse,
     .tp_clear = (inquiry)Pin_clear,

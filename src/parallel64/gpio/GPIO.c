@@ -13,6 +13,8 @@
 #include "gpio/GPIO.h"
 #include "ports/StandardPort.h"
 
+#include <stdio.h>
+
 
 static PyObject* GPIO_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
     return (PyObject *)PyObject_GC_NewVar(GPIOObject, type, 0);
@@ -103,6 +105,8 @@ static int GPIO_init(GPIOObject *self, PyObject *args, PyObject *kwds) {
     }
     self->pins_init = true;
 
+    PyObject_Dir(self->pinlist[0]);
+
     return 0;
 
 }
@@ -192,6 +196,9 @@ static PyObject* GPIO_blinkatize(PyObject *self, PyObject *args) {
 
     PyObject *hardware_mod = PyImport_ImportModule("parallel64.hardware");
     PyDict_SetItemString(modules, "microcontroller", hardware_mod);
+
+    PyObject *digitalio_mod = PyImport_ImportModule("parallel64.digitalio");
+    PyDict_SetItemString(modules, "digitalio", digitalio_mod);
 
     Py_RETURN_NONE;
 }
