@@ -81,7 +81,7 @@ static PyObject* DigitalInOut_get_pull(PyObject *self, void *closure) {
     if (DIGINOUT_PIN(self)->pull == PULL_NONE) {
         Py_RETURN_NONE;
     }
-    return generate_enum("parallel64.digitalio", "Pull", DIGINOUT_PIN(self)->pull);
+    return generate_enum("parallel64.digitalio", "Pull", !DIGINOUT_PIN(self)->pull);
 }
 
 static PyObject* DigitalInOut_get_drivemode(PyObject *self, void *closure) {
@@ -103,11 +103,12 @@ static int DigitalInOut_set_direction(PyObject *self, PyObject *value, void *clo
     const uint16_t reg_addr = DIGINOUT_PIN(self)->reg_addr;
     PyObject *dirobjvalue = PyObject_GetAttrString(value, "value");
     port_dir_t dirvalue = (port_dir_t)PyLong_AsLong(dirobjvalue);
-    if (dirvalue == 0 && !DIGINOUT_PIN(self)->input_allowed) {
+    dirvalue = !dirvalue;
+    if (dirvalue == 0 && !DIGINOUT_PIN(self)->output_allowed) {
         PyErr_SetString(PyExc_ValueError, "The pin cannot be use as an input");
         return -1;
     }
-    else if (dirvalue == 1 && !DIGINOUT_PIN(self)->output_allowed) {
+    else if (dirvalue == 1 && !DIGINOUT_PIN(self)->input_allowed) {
         PyErr_SetString(PyExc_ValueError, "The pin cannot be use as an output");
         return -1;
     }
@@ -120,7 +121,7 @@ static int DigitalInOut_set_direction(PyObject *self, PyObject *value, void *clo
 }
 
 static PyObject* DigitalInOut_set_pull(PyObject *self, PyObject *value, void *closure) {
-    port_dir_t current_dir = !DIGINOUT_PIN(self)->direction;
+    port_dir_t current_dir = DIGINOUT_PIN(self)->direction;
     if (current_dir != PORT_DIR_REVERSE) {
         PyErr_SetString(PyExc_AttributeError, "Not an input");
         return -1;
@@ -156,13 +157,12 @@ static int DigitalInOut_set_drivemode(PyObject *self, PyObject *value, void *clo
 }
 
 static PyObject* DigitalInOut_set_value(PyObject *self, PyObject *value, void *closure) {
-    port_dir_t current_dir = !DIGINOUT_PIN(self)->direction;
+    port_dir_t current_dir = DIGINOUT_PIN(self)->direction;
     if (current_dir != PORT_DIR_FORWARD) {
         PyErr_SetString(PyExc_AttributeError, "Not an output");
         return -1;
     }
-    PyObject *pinobjvalue = PyObject_GetAttrString(value, "value");
-    bool pinvalue = (bool)PyLong_AsLong(pinobjvalue);
+    bool pinvalue = PyObject_IsTrue(value);
     uint16_t reg_addr = DIGINOUT_PIN(self)->reg_addr;
     uint8_t bit_index = DIGINOUT_PIN(self)->bit_index;
     uint8_t current_value = readport(reg_addr);

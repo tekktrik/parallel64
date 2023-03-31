@@ -41,14 +41,14 @@ static bool GPIO_setup_pins(GPIOObject *self, StandardPortObject *port) {
     self->select_in = create_Pin(self, spp_status_address, 4, PORT_DIR_REVERSE, false, true, false, PUSH_PULL, PULL_NONE, false);
     self->error = create_Pin(self, spp_status_address, 3, PORT_DIR_REVERSE, false, true, false, PUSH_PULL, PULL_NONE, false);
 
-    self->d0 = create_Pin(self, spp_data_address, 0, PORT_DIR_REVERSE, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
-    self->d1 = create_Pin(self, spp_data_address, 1, PORT_DIR_REVERSE, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
-    self->d2 = create_Pin(self, spp_data_address, 2, PORT_DIR_REVERSE, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
-    self->d3 = create_Pin(self, spp_data_address, 3, PORT_DIR_REVERSE, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
-    self->d4 = create_Pin(self, spp_data_address, 4, PORT_DIR_REVERSE, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
-    self->d5 = create_Pin(self, spp_data_address, 5, PORT_DIR_REVERSE, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
-    self->d6 = create_Pin(self, spp_data_address, 6, PORT_DIR_REVERSE, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
-    self->d7 = create_Pin(self, spp_data_address, 7, PORT_DIR_REVERSE, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
+    self->d0 = create_Pin(self, spp_data_address, 0, PORT_DIR_FORWARD, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
+    self->d1 = create_Pin(self, spp_data_address, 1, PORT_DIR_FORWARD, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
+    self->d2 = create_Pin(self, spp_data_address, 2, PORT_DIR_FORWARD, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
+    self->d3 = create_Pin(self, spp_data_address, 3, PORT_DIR_FORWARD, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
+    self->d4 = create_Pin(self, spp_data_address, 4, PORT_DIR_FORWARD, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
+    self->d5 = create_Pin(self, spp_data_address, 5, PORT_DIR_FORWARD, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
+    self->d6 = create_Pin(self, spp_data_address, 6, PORT_DIR_FORWARD, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
+    self->d7 = create_Pin(self, spp_data_address, 7, PORT_DIR_FORWARD, false, is_bidir, true, PUSH_PULL, PULL_NONE, true);
 
     PinObject **pinlist = malloc(sizeof(PinObject *) * 17);
     pinlist[0] = self->strobe;

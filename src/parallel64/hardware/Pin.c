@@ -24,11 +24,8 @@ static int Pin_init(PinObject *self, PyObject *args) {
     // Parse arguments (unique)
     PyObject *gpio;
     uint16_t reg_addr;
-    uint8_t bit_index;
-    port_dir_t direction;
+    uint8_t bit_index, drive_mode, pull, direction;
     bool hw_inverted, input_allowed, output_allowed, propagate_dir;
-    drive_mode_t drive_mode;
-    pull_mode_t pull;
 
     if (!PyArg_ParseTuple(
         args,
@@ -55,10 +52,10 @@ static int Pin_init(PinObject *self, PyObject *args) {
     self->reg_addr = reg_addr;
     self->bit_index = bit_index;
     self->in_use = false;
-    self->direction = direction;
+    self->direction = input_allowed ? PORT_DIR_REVERSE : direction;
     self->hw_inverted = hw_inverted;
     self->input_allowed = input_allowed;
-    self->output_allowed= output_allowed;
+    self->output_allowed = output_allowed;
     self->drive_mode = drive_mode;
     self->pull = pull;
     self->propagate_dir = propagate_dir;
