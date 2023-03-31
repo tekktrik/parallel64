@@ -31,7 +31,9 @@ static int DigitalInOut_init(DigitalInOutObject *self, PyObject *args, PyObject 
         return -1;
     }
 
-    if (Py_IS_TYPE(pin, &PinType)) {
+    PyObject *hw_mod = PyImport_ImportModule("parallel64.hardware");
+    PyObject *pin_class = PyObject_GetAttrString(hw_mod, "Pin");
+    if (!PyObject_IsInstance(pin, pin_class)) {
         PyErr_SetString(
             PyExc_TypeError,
             "`pin` must be an instance of parallel64.hardware.Pin"
