@@ -33,12 +33,5 @@ jobs:
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install .
     - name: Run test script
       run: |
-        echo "--------------------------------"
-        sudo which python
-        echo "--------------------------------"
-        which sudo python
-        echo "--------------------------------"
-        which ${{ steps.find-pyexec.outputs.pyexec }}
-        echo "--------------------------------"
         sudo ${{ steps.find-pyexec.outputs.pyexec }} --version
         sudo ${{ steps.find-pyexec.outputs.pyexec }} tests/StandardPort.py
