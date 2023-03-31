@@ -28,10 +28,11 @@ static int Pin_init(PinObject *self, PyObject *args) {
     port_dir_t direction;
     bool hw_inverted, input_allowed, output_allowed, propagate_dir;
     drive_mode_t drive_mode;
+    pull_mode_t pull;
 
     if (!PyArg_ParseTuple(
         args,
-        "OHBBBBBBB",
+        "OHBBBBBBBB",
         &gpio,
         &reg_addr,
         &bit_index,
@@ -40,6 +41,7 @@ static int Pin_init(PinObject *self, PyObject *args) {
         &input_allowed,
         &output_allowed,
         &drive_mode,
+        &pull,
         &propagate_dir)
     ) {
         return -1;
@@ -58,7 +60,10 @@ static int Pin_init(PinObject *self, PyObject *args) {
     self->input_allowed = input_allowed;
     self->output_allowed= output_allowed;
     self->drive_mode = drive_mode;
+    self->pull = pull;
     self->propagate_dir = propagate_dir;
+
+    // TODO: Add pull mode
 
     return 0;
 
@@ -73,11 +78,12 @@ PinObject* create_Pin(
     bool input_allowed,
     bool output_allowed,
     drive_mode_t drive_mode,
+    pull_mode_t pull,
     bool propagate_dir
 ) {
 
     PyObject *args = Py_BuildValue(
-        "OHBBBBBBB",
+        "OHBBBBBBBB",
         (PyObject *)gpio,
         reg_addr,
         bit_index,
@@ -86,6 +92,7 @@ PinObject* create_Pin(
         (uint8_t)input_allowed,
         (uint8_t)output_allowed,
         (uint8_t)drive_mode,
+        (uint8_t)pull,
         (uint8_t)propagate_dir
     );
     PyObject *hw_mod = PyImport_ImportModule("parallel64.hardware");

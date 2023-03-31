@@ -37,6 +37,7 @@ typedef struct pinobj {
     bool input_allowed;
     bool output_allowed;
     drive_mode_t drive_mode;
+    pull_mode_t pull;
     bool propagate_dir;
 } PinObject;
 
@@ -53,6 +54,7 @@ PinObject* create_Pin(
     bool input_allowed,
     bool output_allowed,
     drive_mode_t drive_mode,
+    pull_mode_t pull,
     bool propagate_dir
 );
 

@@ -78,8 +78,10 @@ static PyObject* DigitalInOut_get_pull(PyObject *self, void *closure) {
         PyErr_SetString(PyExc_AttributeError, "Not an input");
         return NULL;
     }
-    // TODO: Fix?
-    return generate_enum("parallel64.digitalio", "Pull", DIGINOUT_PIN(self)->drive_mode);
+    if (DIGINOUT_PIN(self)->pull == PULL_NONE) {
+        Py_RETURN_NONE;
+    }
+    return generate_enum("parallel64.digitalio", "Pull", DIGINOUT_PIN(self)->pull);
 }
 
 static PyObject* DigitalInOut_get_drivemode(PyObject *self, void *closure) {
@@ -124,8 +126,15 @@ static PyObject* DigitalInOut_set_pull(PyObject *self, PyObject *value, void *cl
         return -1;
     }
     drive_mode_t drive_mode = DIGINOUT_PIN(self)->drive_mode;
-    PyObject *dmobjvalue = PyObject_GetAttrString(value, "value");
-    drive_mode_t dmvalue = (drive_mode_t)PyLong_AsLong(dmobjvalue);
+    drive_mode_t dmvalue;
+    if (Py_IsNone(value)) {
+        dmvalue = PULL_NONE;
+    }
+    else {
+        drive_mode_t drive_mode = DIGINOUT_PIN(self)->drive_mode;
+        PyObject *dmobjvalue = PyObject_GetAttrString(value, "value");
+        dmvalue = (drive_mode_t)PyLong_AsLong(dmobjvalue);
+    }
     if (dmvalue != drive_mode) {
         PyErr_SetString(PyExc_ValueError, "Pin pull modes cannot be changed from their default");
         return -1;

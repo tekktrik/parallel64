@@ -62,6 +62,12 @@ typedef enum {
     OPEN_DRAIN = 1
 } drive_mode_t;
 
+typedef enum {
+    PULL_UP = 0,
+    PULL_DOWN = 1,
+    PULL_NONE = 2
+} pull_mode_t;
+
 
 #if defined(_WIN32)
 static inline init_result_t portio_load_dll(const char *dllpath) {
