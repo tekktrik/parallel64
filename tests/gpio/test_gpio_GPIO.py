@@ -55,6 +55,9 @@ def test_gpio_properties():
     assert hasattr(gpio, "INITIALIZE")
     assert hasattr(gpio, "SELECT_PRINTER")
 
+    assert(isinstance(gpio.port_id, str))
+    assert(gpio.port_id == gpio.board_id)
+
 
 def test_gpio_pintype():
 
