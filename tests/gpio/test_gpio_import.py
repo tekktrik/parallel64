@@ -6,6 +6,7 @@
 Tests import of gpio submodule
 """
 
+
 def test_gpio_import():
     try:
         import parallel64.gpio

@@ -6,6 +6,7 @@
 Tests import of hardware submodule
 """
 
+
 def test_hardware_import():
     try:
         import parallel64.hardware

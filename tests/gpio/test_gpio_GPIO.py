@@ -10,8 +10,8 @@ import parallel64.ports
 import parallel64.gpio
 import parallel64.hardware
 
-def test_gpio_init():
 
+def test_gpio_init():
     port = parallel64.ports.StandardPort(100)
 
     try:
@@ -21,7 +21,6 @@ def test_gpio_init():
 
 
 def test_gpio_init_typeerror():
-
     try:
         _ = parallel64.gpio.GPIO(100)
     except TypeError:
@@ -31,7 +30,6 @@ def test_gpio_init_typeerror():
 
 
 def test_gpio_properties():
-
     port = parallel64.ports.StandardPort(100)
     gpio = parallel64.gpio.GPIO(port)
 
@@ -55,14 +53,12 @@ def test_gpio_properties():
     assert hasattr(gpio, "INITIALIZE")
     assert hasattr(gpio, "SELECT_PRINTER")
 
-    assert(isinstance(gpio.port_id, str))
-    assert(gpio.port_id == gpio.board_id)
+    assert isinstance(gpio.port_id, str)
+    assert gpio.port_id == gpio.board_id
 
 
 def test_gpio_pintype():
-
     port = parallel64.ports.StandardPort(100)
     gpio = parallel64.gpio.GPIO(port)
 
     assert isinstance(gpio.D0, parallel64.hardware.Pin)
-

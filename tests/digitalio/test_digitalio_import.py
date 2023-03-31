@@ -6,6 +6,7 @@
 Tests import of digitalio submodule
 """
 
+
 def test_digitalio_import():
     try:
         import parallel64.digitalio

@@ -6,6 +6,7 @@
 Tests import of ports submodule
 """
 
+
 def test_ports_import():
     try:
         import parallel64.ports
