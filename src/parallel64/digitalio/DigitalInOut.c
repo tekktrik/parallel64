@@ -102,11 +102,11 @@ static int DigitalInOut_set_direction(PyObject *self, PyObject *value, void *clo
     PyObject *dirobjvalue = PyObject_GetAttrString(value, "value");
     port_dir_t dirvalue = (port_dir_t)PyLong_AsLong(dirobjvalue);
     if (dirvalue == 0 && !DIGINOUT_PIN(self)->input_allowed) {
-        PyErr_SetString(PyExc_TypeError, "The pin cannot be use as an input");
+        PyErr_SetString(PyExc_ValueError, "The pin cannot be use as an input");
         return -1;
     }
     else if (dirvalue == 1 && !DIGINOUT_PIN(self)->output_allowed) {
-        PyErr_SetString(PyExc_TypeError, "The pin cannot be use as an output");
+        PyErr_SetString(PyExc_ValueError, "The pin cannot be use as an output");
         return -1;
     }
     if (DIGINOUT_PIN(self)->propagate_dir) {
@@ -127,7 +127,7 @@ static PyObject* DigitalInOut_set_pull(PyObject *self, PyObject *value, void *cl
     PyObject *dmobjvalue = PyObject_GetAttrString(value, "value");
     drive_mode_t dmvalue = (drive_mode_t)PyLong_AsLong(dmobjvalue);
     if (dmvalue != drive_mode) {
-        PyErr_SetString(PyExc_TypeError, "Pin pull modes cannot be changed from their default");
+        PyErr_SetString(PyExc_ValueError, "Pin pull modes cannot be changed from their default");
         return -1;
     }
 
@@ -139,7 +139,7 @@ static int DigitalInOut_set_drivemode(PyObject *self, PyObject *value, void *clo
     PyObject *dmobjvalue = PyObject_GetAttrString(value, "value");
     drive_mode_t dmvalue = (drive_mode_t)PyLong_AsLong(dmobjvalue);
     if (dmvalue != drive_mode) {
-        PyErr_SetString(PyExc_TypeError, "Pin drive modes cannot be changed from their default");
+        PyErr_SetString(PyExc_ValueError, "Pin drive modes cannot be changed from their default");
         return -1;
     }
 
