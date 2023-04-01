@@ -19,7 +19,6 @@ static inline PyObject* create_enum(char *enum_name, pyenum_t *enum_values, uint
     PyObject *class_name = PyUnicode_FromString(enum_name);
     PyObject *val_dict = PyDict_New();
     for (uint64_t index = 0; index < num_values; index++) {
-        const char *name = enum_values[index].name;
         PyDict_SetItemString(
             val_dict,
             enum_values[index].name,
