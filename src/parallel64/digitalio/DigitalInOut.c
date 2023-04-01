@@ -126,17 +126,16 @@ static PyObject* DigitalInOut_set_pull(PyObject *self, PyObject *value, void *cl
         PyErr_SetString(PyExc_AttributeError, "Not an input");
         return -1;
     }
-    drive_mode_t drive_mode = DIGINOUT_PIN(self)->drive_mode;
-    drive_mode_t dmvalue;
+    pull_mode_t pull = DIGINOUT_PIN(self)->pull;
+    pull_mode_t pullvalue;
     if (Py_IsNone(value)) {
-        dmvalue = PULL_NONE;
+        pullvalue = PULL_NONE;
     }
     else {
-        drive_mode_t drive_mode = DIGINOUT_PIN(self)->drive_mode;
-        PyObject *dmobjvalue = PyObject_GetAttrString(value, "value");
-        dmvalue = (drive_mode_t)PyLong_AsLong(dmobjvalue);
+        PyObject *pullobjvalue = PyObject_GetAttrString(value, "value");
+        pullvalue = (pull_mode_t)PyLong_AsLong(pullobjvalue);
     }
-    if (dmvalue != drive_mode) {
+    if (pullvalue != pull) {
         PyErr_SetString(PyExc_ValueError, "Pin pull modes cannot be changed from their default");
         return -1;
     }
