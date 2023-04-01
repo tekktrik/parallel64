@@ -120,7 +120,7 @@ static int DigitalInOut_set_direction(PyObject *self, PyObject *value, void *clo
     return 0;
 }
 
-static PyObject* DigitalInOut_set_pull(PyObject *self, PyObject *value, void *closure) {
+static int DigitalInOut_set_pull(PyObject *self, PyObject *value, void *closure) {
     port_dir_t current_dir = DIGINOUT_PIN(self)->direction;
     if (current_dir != PORT_DIR_REVERSE) {
         PyErr_SetString(PyExc_AttributeError, "Not an input");
