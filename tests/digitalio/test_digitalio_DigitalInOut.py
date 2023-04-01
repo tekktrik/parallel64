@@ -10,8 +10,8 @@ import parallel64.ports
 import parallel64.gpio
 import parallel64.digitalio
 
-def test_DigitalInOut_init():
 
+def test_DigitalInOut_init():
     port = parallel64.ports.StandardPort(100)
     gpio = parallel64.gpio.GPIO(port)
 
@@ -22,7 +22,6 @@ def test_DigitalInOut_init():
 
 
 def test_DigitalInOut_init_typeerror():
-
     try:
         _ = parallel64.digitalio.DigitalInOut(100)
     except TypeError:

@@ -1,3 +1,11 @@
+# SPDX-FileCopyrightText: 2023 Alec Delaney
+#
+# SPDX-License-Identifier: MIT
+
+"""
+Helper functions for testing parallel64.digitalio.DigitalInOut settings
+"""
+
 from typing import TypedDict, TypeAlias, Iterable, Literal
 
 from parallel64.digitalio import DigitalInOut, Direction, Pull, DriveMode
@@ -10,6 +18,7 @@ GetSetOption: Literal["get", "set"]
 
 # SetRuleSet: TypeAlias = dict[Literal["set"], SettingRule]
 
+
 class GetSetRules(TypedDict):
     get: SettingResult
     set: Iterable[SettingRule]
@@ -20,7 +29,9 @@ class SettingRuleSet(TypedDict):
     pull: GetSetRules
     value: GetSetRules
 
+
 PossibleSettingRuleSet: TypeAlias = SettingRuleSet | BaseException
+
 
 class PinRuleSet(TypedDict):
     input: PossibleSettingRuleSet
@@ -28,10 +39,11 @@ class PinRuleSet(TypedDict):
 
 
 def dio_test_settings(dio: DigitalInOut, pin_ruleset: PinRuleSet) -> None:
-
     # Iterate through directions
     for io_direction, setting_ruleset in pin_ruleset.items():
-        direction_setting = Direction.INPUT if io_direction == "input" else Direction.OUTPUT
+        direction_setting = (
+            Direction.INPUT if io_direction == "input" else Direction.OUTPUT
+        )
 
         print("aaaaaaaaaaaaaaa", io_direction, dio.direction)
         # Test settings within this direction
@@ -49,21 +61,30 @@ def dio_test_settings(dio: DigitalInOut, pin_ruleset: PinRuleSet) -> None:
                     if setting_result is None:
                         dio_test_set_success(dio, setting_name, setting_value)
                     else:
-                        dio_test_set_failure(dio, setting_name, setting_value, setting_result)
+                        dio_test_set_failure(
+                            dio, setting_name, setting_value, setting_result
+                        )
             continue
 
         dio_test_set_failure(dio, "direction", direction_setting, setting_ruleset)
         continue
 
 
-def dio_test_set_success(dio: DigitalInOut, setting_option: SettingOption, setting: Setting):
+def dio_test_set_success(
+    dio: DigitalInOut, setting_option: SettingOption, setting: Setting
+):
     try:
         setattr(dio, setting_option, setting)
     except:
         assert False
 
-    
-def dio_test_set_failure(dio: DigitalInOut, setting_option: SettingOption, setting: Setting, setting_result: BaseException):
+
+def dio_test_set_failure(
+    dio: DigitalInOut,
+    setting_option: SettingOption,
+    setting: Setting,
+    setting_result: BaseException,
+):
     try:
         setattr(dio, setting_option, setting)
     except setting_result:
@@ -78,8 +99,10 @@ def dio_test_get_success(dio: DigitalInOut, setting_option: SettingOption):
     except:
         assert False
 
-    
-def dio_test_get_failure(dio: DigitalInOut, setting_option: SettingOption, setting_result: BaseException):
+
+def dio_test_get_failure(
+    dio: DigitalInOut, setting_option: SettingOption, setting_result: BaseException
+):
     try:
         _ = getattr(dio, setting_option)
         print(_)

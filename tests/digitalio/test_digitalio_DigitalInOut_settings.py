@@ -12,8 +12,8 @@ from parallel64.digitalio import DigitalInOut, Direction, Pull, DriveMode
 
 from digitalio_DigitalInOut_matrix import dio_test_settings
 
+
 def test_DigitalInOut_unidirectional_data_pins():
-    
     port_uni = parallel64.ports.StandardPort(100, bidirectional=False)
     gpio_uni = parallel64.gpio.GPIO(port_uni)
 
@@ -28,31 +28,24 @@ def test_DigitalInOut_unidirectional_data_pins():
                 "set": [
                     (Pull.UP, AttributeError),
                     (Pull.DOWN, AttributeError),
-                    (None, AttributeError)
-                ]
+                    (None, AttributeError),
+                ],
             },
             "drive_mode": {
                 "get": None,
                 "set": [
                     (DriveMode.PUSH_PULL, None),
-                    (DriveMode.OPEN_DRAIN, ValueError)
-                ]
+                    (DriveMode.OPEN_DRAIN, ValueError),
+                ],
             },
-            "value": {
-                "get": None,
-                "set": [
-                    (True, None),
-                    (False, None)
-                ]
-            },
-        }
+            "value": {"get": None, "set": [(True, None), (False, None)]},
+        },
     }
 
     dio_test_settings(data_dio_uni, settings)
 
 
 def test_DigitalInOut_bidirectional_data_pins():
-    
     port_bi = parallel64.ports.StandardPort(100, bidirectional=True)
     gpio_bi = parallel64.gpio.GPIO(port_bi)
 
@@ -63,25 +56,18 @@ def test_DigitalInOut_bidirectional_data_pins():
         "input": {
             "pull": {
                 "get": None,
-                "set": [
-                    (Pull.UP, ValueError),
-                    (Pull.DOWN, ValueError),
-                    (None, None)
-                ]
+                "set": [(Pull.UP, ValueError), (Pull.DOWN, ValueError), (None, None)],
             },
             "drive_mode": {
                 "get": AttributeError,
                 "set": [
                     (DriveMode.PUSH_PULL, None),
-                    (DriveMode.OPEN_DRAIN, ValueError)
-                ]
+                    (DriveMode.OPEN_DRAIN, ValueError),
+                ],
             },
             "value": {
                 "get": None,
-                "set": [
-                    (True, AttributeError),
-                    (False, AttributeError)
-                ]
+                "set": [(True, AttributeError), (False, AttributeError)],
             },
         },
         "output": {
@@ -90,31 +76,24 @@ def test_DigitalInOut_bidirectional_data_pins():
                 "set": [
                     (Pull.UP, AttributeError),
                     (Pull.DOWN, AttributeError),
-                    (None, AttributeError)
-                ]
+                    (None, AttributeError),
+                ],
             },
             "drive_mode": {
                 "get": None,
                 "set": [
                     (DriveMode.PUSH_PULL, None),
-                    (DriveMode.OPEN_DRAIN, ValueError)
-                ]
+                    (DriveMode.OPEN_DRAIN, ValueError),
+                ],
             },
-            "value": {
-                "get": None,
-                "set": [
-                    (True, None),
-                    (False, None)
-                ]
-            },
-        }
+            "value": {"get": None, "set": [(True, None), (False, None)]},
+        },
     }
 
     dio_test_settings(data_dio_bi, settings)
 
 
 def test_DigitalInOut_status_pins():
-    
     port = parallel64.ports.StandardPort(100, bidirectional=True)
     gpio = parallel64.gpio.GPIO(port)
 
@@ -125,35 +104,27 @@ def test_DigitalInOut_status_pins():
         "input": {
             "pull": {
                 "get": None,
-                "set": [
-                    (Pull.UP, ValueError),
-                    (Pull.DOWN, ValueError),
-                    (None, None)
-                ]
+                "set": [(Pull.UP, ValueError), (Pull.DOWN, ValueError), (None, None)],
             },
             "drive_mode": {
                 "get": AttributeError,
                 "set": [
                     (DriveMode.PUSH_PULL, None),
-                    (DriveMode.OPEN_DRAIN, ValueError)
-                ]
+                    (DriveMode.OPEN_DRAIN, ValueError),
+                ],
             },
             "value": {
                 "get": None,
-                "set": [
-                    (True, AttributeError),
-                    (False, AttributeError)
-                ]
+                "set": [(True, AttributeError), (False, AttributeError)],
             },
         },
-        "output": ValueError
+        "output": ValueError,
     }
 
     dio_test_settings(status_dio, settings)
 
 
 def test_DigitalInOut_control_pins():
-    
     port = parallel64.ports.StandardPort(100, bidirectional=True)
     gpio = parallel64.gpio.GPIO(port)
 
@@ -164,25 +135,18 @@ def test_DigitalInOut_control_pins():
         "input": {
             "pull": {
                 "get": None,
-                "set": [
-                    (Pull.UP, None),
-                    (Pull.DOWN, ValueError),
-                    (None, ValueError)
-                ]
+                "set": [(Pull.UP, None), (Pull.DOWN, ValueError), (None, ValueError)],
             },
             "drive_mode": {
                 "get": AttributeError,
                 "set": [
                     (DriveMode.PUSH_PULL, ValueError),
-                    (DriveMode.OPEN_DRAIN, None)
-                ]
+                    (DriveMode.OPEN_DRAIN, None),
+                ],
             },
             "value": {
                 "get": None,
-                "set": [
-                    (True, AttributeError),
-                    (False, AttributeError)
-                ]
+                "set": [(True, AttributeError), (False, AttributeError)],
             },
         },
         "output": {
@@ -191,24 +155,18 @@ def test_DigitalInOut_control_pins():
                 "set": [
                     (Pull.UP, AttributeError),
                     (Pull.DOWN, AttributeError),
-                    (None, AttributeError)
-                ]
+                    (None, AttributeError),
+                ],
             },
             "drive_mode": {
                 "get": None,
                 "set": [
                     (DriveMode.PUSH_PULL, ValueError),
-                    (DriveMode.OPEN_DRAIN, None)
-                ]
+                    (DriveMode.OPEN_DRAIN, None),
+                ],
             },
-            "value": {
-                "get": None,
-                "set": [
-                    (True, None),
-                    (False, None)
-                ]
-            },
-        }
+            "value": {"get": None, "set": [(True, None), (False, None)]},
+        },
     }
 
     dio_test_settings(control_dio, settings)
