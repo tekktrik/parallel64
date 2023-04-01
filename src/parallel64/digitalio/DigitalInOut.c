@@ -170,18 +170,48 @@ static PyObject* DigitalInOut_set_value(PyObject *self, PyObject *value, void *c
 }
 
 
-// static PyObject* GPIO_blinkatize(PyObject *self, PyObject *args) {
-//     PyObject *sys_mod = PyImport_ImportModule("sys");
-//     PyObject *modules = PyObject_GetAttrString(sys_mod, "modules");
+static PyObject* GPIO_switch_to_output(PyObject *self, PyObject *args, PyObject *kwds) {
 
-//     PyDict_SetItemString(modules, "board", self);
-//     Py_INCREF(self);
+    PyObject *dio_mod = PyImport_AddModule("parallel64.digitalio");
+    PyObject *direction_enum = PyObject_GetAttrString(dio_mod, "Direction");
+    PyObject *drive_mode_enum = PyObject_GetAttrString(dio_mod, "DriveMode");
 
-//     PyObject *hardware_mod = PyImport_ImportModule("parallel64.hardware");
-//     PyDict_SetItemString(modules, "microcontroller", hardware_mod);
+    PyObject *value = Py_False;
+    PyObject *drive_mode = PyObject_GetAttrString(drive_mode_enum, "PUSH_PULL");
 
-//     Py_RETURN_NONE;
-// }
+    static char *keywords[] = {"value", "drive_mode", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "|OO", keywords, &value, &drive_mode)) {
+        return NULL;
+    }
+
+    PyObject_SetAttrString(self, "direction", PyObject_GetAttrString(direction_enum, "OUTPUT"));
+    PyObject_SetAttrString(self, "value", value);
+    PyObject_SetAttrString(self, "drive_mode", drive_mode);
+
+    Py_RETURN_NONE;
+
+}
+
+static PyObject* GPIO_switch_to_input(PyObject *self, PyObject *args, PyObject *kwds) {
+
+    PyObject *dio_mod = PyImport_AddModule("parallel64.digitalio");
+    PyObject *direction_enum = PyObject_GetAttrString(dio_mod, "Direction");
+
+    PyObject *pull = Py_None;
+
+    static char *keywords[] = {"pull", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "|O", keywords, &pull)) {
+        return NULL;
+    }
+
+    PyObject_SetAttrString(self, "direction", PyObject_GetAttrString(direction_enum, "INPUT"));
+    PyObject_SetAttrString(self, "pull", pull);
+
+    Py_RETURN_NONE;
+
+}
 
 
 static PyGetSetDef DigitalInOut_getsetters[] = {
@@ -193,10 +223,11 @@ static PyGetSetDef DigitalInOut_getsetters[] = {
 };
 
 
-// static PyMethodDef GPIO_methods[] = {
-//     {"blinkatize", (PyCFunction)GPIO_blinkatize, METH_NOARGS, "Magically make a Blinka-like import environment"},
-//     {NULL}
-// };
+static PyMethodDef GPIO_methods[] = {
+    {"switch_to_output", (PyCFunctionWithKeywords)GPIO_switch_to_output, METH_VARARGS | METH_KEYWORDS, "Switch the digital pin mode to output"},
+    {"switch_to_input", (PyCFunctionWithKeywords)GPIO_switch_to_input, METH_VARARGS | METH_KEYWORDS, "Switch the digital pin mode to input"},
+    {NULL}
+};
 
 
 PyTypeObject DigitalInOutType = {
@@ -213,5 +244,5 @@ PyTypeObject DigitalInOutType = {
     .tp_init = (initproc)DigitalInOut_init,
     .tp_free = PyObject_GC_Del,
     .tp_getset = DigitalInOut_getsetters,
-    //.tp_methods = GPIO_methods
+    .tp_methods = GPIO_methods
 };
