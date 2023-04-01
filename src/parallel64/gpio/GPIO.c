@@ -106,8 +106,6 @@ static int GPIO_init(GPIOObject *self, PyObject *args, PyObject *kwds) {
     }
     self->pins_init = true;
 
-    PyObject_Dir(self->pinlist[0]);
-
     return 0;
 
 }
