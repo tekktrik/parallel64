@@ -96,7 +96,7 @@ PinObject* create_Pin(
     PyObject *pin_class = PyObject_GetAttrString(hw_mod, "Pin");
     PyObject *pin = PyObject_CallObject(pin_class, args);
 
-    return pin;
+    return (PinObject *)pin;
 
 }
 
