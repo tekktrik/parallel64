@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Tests parallel64.digitalio.DigitalInOut
+Tests parallel64.hardware.Pin
 """
 
 import parallel64.ports
