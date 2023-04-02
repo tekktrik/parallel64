@@ -52,3 +52,23 @@ def test_EnhancedPort_read_epp_address():
 
     assert isinstance(result, bytes)
     assert len(result) == length
+
+
+def test_EnhancedPort_epp_address_address():
+    base_address = 100
+    port = parallel64.ports.EnhancedPort(base_address)
+
+    result = port.epp_address_address
+
+    assert isinstance(result, int)
+    assert result == base_address + 3
+
+
+def test_EnhancedPort_epp_data_address():
+    base_address = 100
+    port = parallel64.ports.EnhancedPort(base_address)
+
+    result = port.epp_data_address
+
+    assert isinstance(result, int)
+    assert result == base_address + 4
