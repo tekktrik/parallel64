@@ -41,7 +41,7 @@ def test_DigitalInOut_switch_io():
         assert False
 
     try:
-        dio.switch_to_output()
+        dio.switch_to_output(value=True)
     except:
         assert False
 
