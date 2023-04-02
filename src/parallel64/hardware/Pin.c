@@ -121,7 +121,7 @@ static void Pin_dealloc(PinObject *self) {
 static Py_hash_t Pin_hash(PyObject *self) {
     Py_hash_t hash_value = 0;
     hash_value |= PIN_REGISTER(self);
-    hash_value <<= 4;
+    hash_value <<= 3;
     hash_value |= PIN_BITINDEX(self);
     return hash_value;
 }
