@@ -170,7 +170,7 @@ static int DigitalInOut_set_value(PyObject *self, PyObject *value, void *closure
 }
 
 
-static PyObject* GPIO_switch_to_output(PyObject *self, PyObject *args, PyObject *kwds) {
+static PyObject* DigitalInOut_switch_to_output(PyObject *self, PyObject *args, PyObject *kwds) {
 
     PyObject *dio_mod = PyImport_AddModule("parallel64.digitalio");
     PyObject *direction_enum = PyObject_GetAttrString(dio_mod, "Direction");
@@ -193,7 +193,7 @@ static PyObject* GPIO_switch_to_output(PyObject *self, PyObject *args, PyObject 
 
 }
 
-static PyObject* GPIO_switch_to_input(PyObject *self, PyObject *args, PyObject *kwds) {
+static PyObject* DigitalInOut_switch_to_input(PyObject *self, PyObject *args, PyObject *kwds) {
 
     PyObject *dio_mod = PyImport_AddModule("parallel64.digitalio");
     PyObject *direction_enum = PyObject_GetAttrString(dio_mod, "Direction");
@@ -224,8 +224,8 @@ static PyGetSetDef DigitalInOut_getsetters[] = {
 
 
 static PyMethodDef GPIO_methods[] = {
-    {"switch_to_output", (PyCFunctionWithKeywords)GPIO_switch_to_output, METH_VARARGS | METH_KEYWORDS, "Switch the digital pin mode to output"},
-    {"switch_to_input", (PyCFunctionWithKeywords)GPIO_switch_to_input, METH_VARARGS | METH_KEYWORDS, "Switch the digital pin mode to input"},
+    {"switch_to_output", (PyCFunctionWithKeywords)DigitalInOut_switch_to_output, METH_VARARGS | METH_KEYWORDS, "Switch the digital pin mode to output"},
+    {"switch_to_input", (PyCFunctionWithKeywords)DigitalInOut_switch_to_input, METH_VARARGS | METH_KEYWORDS, "Switch the digital pin mode to input"},
     {NULL}
 };
 
