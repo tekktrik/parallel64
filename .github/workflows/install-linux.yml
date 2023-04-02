@@ -26,12 +26,13 @@ jobs:
       id: find-pyexec
       run: |
         echo pyexec=$(which python) >> $GITHUB_OUTPUT
-        echo $(where python)
     - name: Install the library
       run: |
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install --upgrade pip
         ${{ steps.find-pyexec.outputs.pyexec }} -m pip install .
-    - name: Run test script
+    - name: Install test requirements
       run: |
-        sudo ${{ steps.find-pyexec.outputs.pyexec }} --version
-        sudo ${{ steps.find-pyexec.outputs.pyexec }} tests/StandardPort.py
+        ${{ steps.find-pyexec.outputs.pyexec }} -m pip install -r requirements-test.txt
+    - name: Run tests
+      run: |
+        sudo pytest
