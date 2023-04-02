@@ -197,7 +197,7 @@ static PyMethodDef StandardPort_methods[] = {
     {"read_control_register", (PyCFunction)StandardPort_read_control_register, METH_NOARGS, "Read data from the SPP control register"},
     {"test_bidirectionality", (PyCFunction)StandardPort_test_bidirectionality, METH_NOARGS, "Test the bidirectionality of the port"},
     {"reset_control_register", (PyCFunction)StandardPort_reset_control_register, METH_NOARGS, "Reset the control register's output pins"},
-    {"write_spp_data", (PyCFunction)StandardPort_write_spp_data, METH_VARARGS | METH_KEYWORDS, "Write data via SPP protocol"},
+    {"write_spp_data", (PyCFunctionWithKeywords)StandardPort_write_spp_data, METH_VARARGS | METH_KEYWORDS, "Write data via SPP protocol"},
     {NULL}
 };
 
