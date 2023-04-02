@@ -9,7 +9,7 @@ Tests parallel64.ports.StandardPort
 import parallel64.ports
 
 
-def test_StandartPort_init():
+def test_StandardPort_init():
     try:
         _ = parallel64.ports.StandardPort(100)
     except:
