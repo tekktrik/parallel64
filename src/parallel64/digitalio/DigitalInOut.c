@@ -155,7 +155,7 @@ static int DigitalInOut_set_drivemode(PyObject *self, PyObject *value, void *clo
     return 0;
 }
 
-static PyObject* DigitalInOut_set_value(PyObject *self, PyObject *value, void *closure) {
+static int DigitalInOut_set_value(PyObject *self, PyObject *value, void *closure) {
     port_dir_t current_dir = DIGINOUT_PIN(self)->direction;
     if (current_dir != PORT_DIR_FORWARD) {
         PyErr_SetString(PyExc_AttributeError, "Not an output");
