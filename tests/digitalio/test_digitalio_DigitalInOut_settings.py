@@ -14,7 +14,7 @@ from digitalio_DigitalInOut_matrix import dio_test_settings
 
 
 def test_DigitalInOut_unidirectional_data_pins():
-    port_uni = parallel64.ports.StandardPort(100, bidirectional=False)
+    port_uni = parallel64.ports.StandardPort(0x378, bidirectional=False)
     gpio_uni = parallel64.gpio.GPIO(port_uni)
 
     data_pin_uni = gpio_uni.D0
@@ -46,7 +46,7 @@ def test_DigitalInOut_unidirectional_data_pins():
 
 
 def test_DigitalInOut_bidirectional_data_pins():
-    port_bi = parallel64.ports.StandardPort(100, bidirectional=True)
+    port_bi = parallel64.ports.StandardPort(0x378, bidirectional=True)
     gpio_bi = parallel64.gpio.GPIO(port_bi)
 
     data_pin_bi = gpio_bi.D0
@@ -94,7 +94,7 @@ def test_DigitalInOut_bidirectional_data_pins():
 
 
 def test_DigitalInOut_status_pins():
-    port = parallel64.ports.StandardPort(100, bidirectional=True)
+    port = parallel64.ports.StandardPort(0x378, bidirectional=True)
     gpio = parallel64.gpio.GPIO(port)
 
     status_pin = gpio.ACK
@@ -125,7 +125,7 @@ def test_DigitalInOut_status_pins():
 
 
 def test_DigitalInOut_control_pins():
-    port = parallel64.ports.StandardPort(100, bidirectional=True)
+    port = parallel64.ports.StandardPort(0x378, bidirectional=True)
     gpio = parallel64.gpio.GPIO(port)
 
     control_pin = gpio.STROBE

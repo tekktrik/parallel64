@@ -11,13 +11,13 @@ import parallel64.ports
 
 def test_EnhancedPort_init():
     try:
-        _ = parallel64.ports.EnhancedPort(100)
+        _ = parallel64.ports.EnhancedPort(0x378)
     except:
         assert False
 
 
 def test_EnhancedPort_write_epp_data():
-    port = parallel64.ports.EnhancedPort(100)
+    port = parallel64.ports.EnhancedPort(0x378)
 
     try:
         port.write_epp_data(b"Test!")
@@ -27,7 +27,7 @@ def test_EnhancedPort_write_epp_data():
 
 def test_EnhancedPort_read_epp_data():
     length = 5
-    port = parallel64.ports.EnhancedPort(100)
+    port = parallel64.ports.EnhancedPort(0x378)
 
     result = port.read_epp_data(length)
 
@@ -36,7 +36,7 @@ def test_EnhancedPort_read_epp_data():
 
 
 def test_EnhancedPort_write_epp_address():
-    port = parallel64.ports.EnhancedPort(100)
+    port = parallel64.ports.EnhancedPort(0x378)
 
     try:
         port.write_epp_address(b"Test!")
@@ -46,7 +46,7 @@ def test_EnhancedPort_write_epp_address():
 
 def test_EnhancedPort_read_epp_address():
     length = 5
-    port = parallel64.ports.EnhancedPort(100)
+    port = parallel64.ports.EnhancedPort(0x378)
 
     result = port.read_epp_address(length)
 
@@ -55,7 +55,7 @@ def test_EnhancedPort_read_epp_address():
 
 
 def test_EnhancedPort_epp_address_address():
-    base_address = 100
+    base_address = 0x378
     port = parallel64.ports.EnhancedPort(base_address)
 
     result = port.epp_address_address
@@ -65,7 +65,7 @@ def test_EnhancedPort_epp_address_address():
 
 
 def test_EnhancedPort_epp_data_address():
-    base_address = 100
+    base_address = 0x378
     port = parallel64.ports.EnhancedPort(base_address)
 
     result = port.epp_data_address

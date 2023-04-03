@@ -12,7 +12,7 @@ import parallel64.digitalio
 
 
 def test_DigitalInOut_init():
-    port = parallel64.ports.StandardPort(100)
+    port = parallel64.ports.StandardPort(0x378)
     gpio = parallel64.gpio.GPIO(port)
 
     try:
@@ -31,7 +31,7 @@ def test_DigitalInOut_init_typeerror():
 
 
 def test_DigitalInOut_switch_io():
-    port = parallel64.ports.StandardPort(100, bidirectional=True)
+    port = parallel64.ports.StandardPort(0x378, bidirectional=True)
     gpio = parallel64.gpio.GPIO(port)
 
     dio = parallel64.digitalio.DigitalInOut(gpio.D0)

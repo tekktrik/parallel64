@@ -13,7 +13,7 @@ import parallel64.digitalio
 
 
 def test_blinkatize_objects():
-    port = parallel64.ports.StandardPort(100)
+    port = parallel64.ports.StandardPort(0x378)
     gpio = parallel64.gpio.GPIO(port)
 
     gpio.blinkatize()

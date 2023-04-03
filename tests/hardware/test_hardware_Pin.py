@@ -12,7 +12,7 @@ import parallel64.digitalio
 
 
 def test_Pin_hash():
-    port = parallel64.ports.StandardPort(100)
+    port = parallel64.ports.StandardPort(0x378)
     gpio = parallel64.gpio.GPIO(port)
     pin = gpio.D0
 
@@ -33,7 +33,7 @@ def test_Pin_register():
 
 
 def test_Pin_bit_index():
-    port = parallel64.ports.StandardPort(100)
+    port = parallel64.ports.StandardPort(0x378)
     gpio = parallel64.gpio.GPIO(port)
     pin = gpio.D2
 
@@ -41,7 +41,7 @@ def test_Pin_bit_index():
 
 
 def test_Pin_input_allowed():
-    port = parallel64.ports.StandardPort(100, bidirectional=False)
+    port = parallel64.ports.StandardPort(0x378, bidirectional=False)
     gpio = parallel64.gpio.GPIO(port)
     input_pin = gpio.PAPER_OUT
     output_pin = gpio.D4
@@ -51,7 +51,7 @@ def test_Pin_input_allowed():
 
 
 def test_Pin_output_allowed():
-    port = parallel64.ports.StandardPort(100, bidirectional=False)
+    port = parallel64.ports.StandardPort(0x378, bidirectional=False)
     gpio = parallel64.gpio.GPIO(port)
     input_pin = gpio.BUSY
     output_pin = gpio.SELECT_PRINTER
@@ -61,7 +61,7 @@ def test_Pin_output_allowed():
 
 
 def test_Pin_in_use():
-    port = parallel64.ports.StandardPort(100, bidirectional=False)
+    port = parallel64.ports.StandardPort(0x378, bidirectional=False)
     gpio = parallel64.gpio.GPIO(port)
     used_pin = gpio.D5
     unused_pin = gpio.D0
