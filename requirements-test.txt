@@ -3,3 +3,4 @@
 # SPDX-License-Identifier: MIT
 
 pytest
+typing-extensions~=4.0
