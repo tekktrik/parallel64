@@ -6,7 +6,8 @@
 Helper functions for testing parallel64.digitalio.DigitalInOut settings
 """
 
-from typing import TypedDict, TypeAlias, Iterable, Literal
+from typing import Iterable
+from typing_extensions import TypedDict, TypeAlias, Literal
 
 from parallel64.digitalio import DigitalInOut, Direction, Pull, DriveMode
 
