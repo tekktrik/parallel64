@@ -6,14 +6,14 @@
 Helper functions for testing parallel64.digitalio.DigitalInOut settings
 """
 
-from typing import Iterable
+from typing import Iterable, Union, Optional
 from typing_extensions import TypedDict, TypeAlias, Literal
 
 from parallel64.digitalio import DigitalInOut, Direction, Pull, DriveMode
 
 SettingOption: TypeAlias = Literal["direction", "pull", "drive_mode", "value"]
-Setting: TypeAlias = Direction | DriveMode | Pull | bool
-SettingResult: TypeAlias = BaseException | None
+Setting: TypeAlias = Union[Direction, DriveMode, Pull, bool]
+SettingResult: TypeAlias = Optional[BaseException]
 SettingRule: TypeAlias = tuple[Setting, SettingResult]
 GetSetOption: Literal["get", "set"]
 
@@ -31,7 +31,7 @@ class SettingRuleSet(TypedDict):
     value: GetSetRules
 
 
-PossibleSettingRuleSet: TypeAlias = SettingRuleSet | BaseException
+PossibleSettingRuleSet: TypeAlias = Union[SettingRuleSet, BaseException]
 
 
 class PinRuleSet(TypedDict):
