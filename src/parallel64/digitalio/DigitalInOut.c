@@ -128,7 +128,7 @@ static int DigitalInOut_set_pull(PyObject *self, PyObject *value, void *closure)
     }
     pull_mode_t pull = DIGINOUT_PIN(self)->pull;
     pull_mode_t pullvalue;
-    if (Py_IsNone(value)) {
+    if (value == Py_None) {
         pullvalue = PULL_NONE;
     }
     else {
