@@ -6,7 +6,7 @@
 Helper functions for testing parallel64.digitalio.DigitalInOut settings
 """
 
-from typing import Iterable, Union, Optional
+from typing import Iterable, Union, Optional, Tuple
 from typing_extensions import TypedDict, TypeAlias, Literal
 
 from parallel64.digitalio import DigitalInOut, Direction, Pull, DriveMode
@@ -14,10 +14,8 @@ from parallel64.digitalio import DigitalInOut, Direction, Pull, DriveMode
 SettingOption: TypeAlias = Literal["direction", "pull", "drive_mode", "value"]
 Setting: TypeAlias = Union[Direction, DriveMode, Pull, bool]
 SettingResult: TypeAlias = Optional[BaseException]
-SettingRule: TypeAlias = tuple[Setting, SettingResult]
+SettingRule: TypeAlias = Tuple[Setting, SettingResult]
 GetSetOption: Literal["get", "set"]
-
-# SetRuleSet: TypeAlias = dict[Literal["set"], SettingRule]
 
 
 class GetSetRules(TypedDict):
