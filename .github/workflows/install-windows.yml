@@ -24,11 +24,12 @@ jobs:
         submodules: true
     - name: Install the library
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install .
+        ${{ steps.find-pyexec.outputs.pyexec }} -m pip install --upgrade pip
+        ${{ steps.find-pyexec.outputs.pyexec }} -m pip install .
     - name: Install test requirements
       run: |
-        pip install -r requirements-test.txt
+        ${{ steps.find-pyexec.outputs.pyexec }} -m pip install -r requirements-test.txt
     - name: Run tests
       run: |
-        pytest
+        $process = Start-Process ${{ steps.find-pyexec.outputs.pyexec }} -Args "-m" "pytest" -PassThru -Wait
+        exit $process.ExitCode
