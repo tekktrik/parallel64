@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "core/portio.h"
+#include "ports/portio.h"
 #include "pyportio.h"
 #include "StandardPort.h"
 

@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "core/portio.h"
+#include "ports/portio.h"
 #include "gpio/GPIO.h"
 #include "hardware/Pin.h"
 

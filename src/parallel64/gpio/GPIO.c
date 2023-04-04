@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "core/portio.h"
+#include "ports/portio.h"
 #include "gpio/GPIO.h"
 #include "ports/StandardPort.h"
 #include "hardware/Pin.h"

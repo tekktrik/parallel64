@@ -11,7 +11,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "core/portio.h"
+#include "ports/portio.h"
 #include "gpio/GPIO.h"
 
 

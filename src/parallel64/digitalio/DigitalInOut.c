@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "core/portio.h"
+#include "ports/portio.h"
 #include "helper/enumfactory.h"
 #include "DigitalInOut.h"
 #include "hardware/Pin.h"

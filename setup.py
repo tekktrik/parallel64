@@ -16,7 +16,7 @@ ports_module = Extension(
         "src/parallel64/ports/StandardPort.c",
         "src/parallel64/ports/EnhancedPort.c",
         "src/parallel64/ports/ExtendedPort.c",
-        "include/core/portio.c",
+        "src/parallel64/ports/portio.c",
     ],
     include_dirs=[
         "include",
@@ -32,7 +32,7 @@ gpio_module = Extension(
         "src/parallel64/hardware/Pin.c",
         "src/parallel64/ports/StandardPort.c",
         "src/parallel64/ports/pyportio.c",
-        "include/core/portio.c",
+        "src/parallel64/ports/portio.c",
     ],
     include_dirs=[
         "include",
@@ -48,7 +48,7 @@ hardware_module = Extension(
         "src/parallel64/gpio/GPIO.c",
         "src/parallel64/ports/StandardPort.c",
         "src/parallel64/ports/pyportio.c",
-        "include/core/portio.c",
+        "src/parallel64/ports/portio.c",
     ],
     include_dirs=[
         "include",
@@ -64,7 +64,7 @@ digitalio_module = Extension(
         "src/parallel64/hardware/Pin.c",
         "src/parallel64/ports/StandardPort.c",
         "src/parallel64/ports/pyportio.c",
-        "include/core/portio.c",
+        "src/parallel64/ports/portio.c",
     ],
     include_dirs=[
         "include",
