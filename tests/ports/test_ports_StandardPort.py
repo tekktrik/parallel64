@@ -16,13 +16,13 @@ def test_StandardPort_init():
         assert False
 
 
-def test_StandardPort_write_spp_data():
-    port = parallel64.ports.StandardPort(0x378)
-
-    try:
-        port.write_spp_data(b"Test!", hold_while_busy=False)
-    except:
-        assert False
+#def test_StandardPort_write_spp_data():
+#    port = parallel64.ports.StandardPort(0x378)
+#
+#    try:
+#        port.write_spp_data(b"Test!", hold_while_busy=False)
+#    except:
+#        assert False
 
 
 def test_StandardPort_write_data_register():

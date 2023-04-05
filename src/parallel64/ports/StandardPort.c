@@ -84,6 +84,7 @@ static void StandardPort_dealloc(StandardPortObject *self) {
 }
 
 
+// TODO: Fix and add test
 static PyObject* StandardPort_write_spp_data(PyObject *self, PyObject *args, PyObject *kwds) {
 
     Py_buffer data;
