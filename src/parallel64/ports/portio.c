@@ -42,7 +42,7 @@ uint8_t readport(uint16_t port) {
 }
 
 void writeport(uint16_t port, uint8_t value) {
-    return writeport_cached(port, value);
+    writeport_cached(port, value);
 }
 #endif
 
