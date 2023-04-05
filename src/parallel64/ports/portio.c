@@ -20,7 +20,7 @@ rport readport_cached;
 
 
 #if defined(_WIN32)
-static init_result_t portio_load_dll(const char *dllpath) {
+init_result_t portio_load_dll(const char *dllpath) {
     HINSTANCE dll = LoadLibraryA(dllpath);
     if (dll == NULL) {
         return INIT_DLLLOAD_ERROR;

@@ -64,7 +64,7 @@ typedef enum {
 
 
 #if defined(_WIN32)
-static init_result_t portio_load_dll(const char *dllpath);
+init_result_t portio_load_dll(const char *dllpath);
 uint8_t readport(uint16_t port);
 void writeport(uint16_t port, uint8_t value);
 #endif
